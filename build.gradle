@@ -20,4 +20,7 @@ dependencies {
         exclude module: 'org.postgresql:postgresql'
     }
     compile 'com.google.code.findbugs:jsr305:3.0.2'
+    compile 'org.liquibase:liquibase-core:3.8.4'
+    compile 'org.yaml:snakeyaml:1.25'
+    compile 'javax.activation:activation:1.1.1'
 }
