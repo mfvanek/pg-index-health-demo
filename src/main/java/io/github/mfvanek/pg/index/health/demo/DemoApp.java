@@ -44,7 +44,7 @@ public class DemoApp {
                     new ClassLoaderResourceAccessor(), database);
             liquibase.update("main");
         } catch (SQLException | LiquibaseException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
         }
     }
 

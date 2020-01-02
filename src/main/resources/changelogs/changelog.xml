@@ -8,4 +8,5 @@
     <include file="buyer.sql" relativeToChangelogFile="true"/>
     <include file="orders.sql" relativeToChangelogFile="true"/>
     <include file="order_item.sql" relativeToChangelogFile="true"/>
+    <include file="payment.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
