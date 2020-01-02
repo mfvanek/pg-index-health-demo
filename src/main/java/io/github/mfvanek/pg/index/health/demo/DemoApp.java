@@ -22,7 +22,6 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -32,7 +31,7 @@ public class DemoApp {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             runMigrations(embeddedPostgres);
             collectHealthData(embeddedPostgres);
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
@@ -58,7 +57,8 @@ public class DemoApp {
                 .withTableSizeThreshold(1, MemoryUnit.MB)
                 .build();
         final IndexesHealthLogger logger = new SimpleHealthLogger(indexesHealth);
-        logger.logAll(exclusions, PgContext.ofPublic())
+        final PgContext context = PgContext.of("demo");
+        logger.logAll(exclusions, context)
                 .forEach(System.out::println);
     }
 }
