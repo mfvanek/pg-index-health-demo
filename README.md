@@ -1,2 +1,2 @@
 # pg-index-health-demo
-Demo app for pg-index-health library
+Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) library

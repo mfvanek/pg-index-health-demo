@@ -1,6 +1,10 @@
+/*
+ * Copyright (c) 2020. Ivan Vakhrushev.
+ * https://github.com/mfvanek
+ */
+
 package io.github.mfvanek.pg.index.health.demo;
 
-import com.opentable.db.postgres.embedded.EmbeddedPostgres;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
 import io.github.mfvanek.pg.connection.PgConnection;
@@ -13,6 +17,7 @@ import io.github.mfvanek.pg.index.health.logger.SimpleHealthLogger;
 import io.github.mfvanek.pg.index.maintenance.MaintenanceFactoryImpl;
 import io.github.mfvanek.pg.model.MemoryUnit;
 import io.github.mfvanek.pg.model.PgContext;
+import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;

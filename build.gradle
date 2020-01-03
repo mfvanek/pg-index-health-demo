@@ -16,11 +16,20 @@ dependencies {
     compile 'ch.qos.logback:logback-classic:1.2.3'
     compile 'io.github.mfvanek:pg-index-health:0.1.3'
     compile 'org.postgresql:postgresql:42.2.9'
-    compile('com.opentable.components:otj-pg-embedded:0.13.3') {
+    compile('io.zonky.test:embedded-postgres:1.2.6') {
         exclude module: 'org.postgresql:postgresql'
     }
+    compile enforcedPlatform('io.zonky.test.postgres:embedded-postgres-binaries-bom:9.6.16')
     compile 'com.google.code.findbugs:jsr305:3.0.2'
     compile 'org.liquibase:liquibase-core:3.8.4'
     compile 'org.yaml:snakeyaml:1.25'
     compile 'javax.activation:activation:1.1.1'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+}
+
+test {
+    useJUnitPlatform()
 }
