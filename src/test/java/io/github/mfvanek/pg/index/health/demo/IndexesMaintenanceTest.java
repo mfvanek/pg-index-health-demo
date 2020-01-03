@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2020. Ivan Vakhrushev.
+ * https://github.com/mfvanek
+ */
+
 package io.github.mfvanek.pg.index.health.demo;
 
 import io.github.mfvanek.pg.connection.PgConnection;
@@ -14,7 +19,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -43,8 +51,8 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
         assertNotNull(invalidIndexes);
         assertEquals(1, invalidIndexes.size());
-
-        // TODO
+        // HOW TO FIX: drop index concurrently, fix data in table, create index concurrently again
+        assertEquals("demo.i_buyer_email", invalidIndexes.get(0).getIndexName());
     }
 
     @Test
@@ -59,11 +67,11 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     void getDuplicatedIndexesShouldReturnOneRowForDemoSchema() {
         final List<DuplicatedIndexes> duplicatedIndexes = indexMaintenance.getDuplicatedIndexes(demoSchema);
 
-        // Assert
         assertNotNull(duplicatedIndexes);
         assertEquals(1, duplicatedIndexes.size());
-
-        // TODO
+        // HOW TO FIX: do not manually create index for column with unique constraint
+        assertThat(duplicatedIndexes.get(0).getIndexNames(), containsInAnyOrder(
+                "demo.i_order_item_sku_order_id_unique", "demo.order_item_sku_order_id_key"));
     }
 
     @Test
@@ -80,8 +88,9 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
         assertNotNull(intersectedIndexes);
         assertEquals(1, intersectedIndexes.size());
-
-        // TODO
+        // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
+        assertThat(intersectedIndexes.get(0).getIndexNames(), containsInAnyOrder(
+                "demo.i_buyer_names", "demo.i_buyer_first_name"));
     }
 
     @Test
@@ -98,6 +107,11 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
         assertNotNull(foreignKeys);
         assertEquals(3, foreignKeys.size());
+        // HOW TO FIX: create indexes on columns under foreign key constraint
+        assertThat(foreignKeys.stream()
+                .map(ForeignKey::getConstraintName)
+                .collect(Collectors.toList()), containsInAnyOrder(
+                "order_item_order_id_fkey", "orders_buyer_id_fkey", "payment_order_id_fkey"));
     }
 
     @Test
@@ -106,6 +120,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
         assertNotNull(tables);
         assertEquals(1, tables.size());
+        // HOW TO FIX: just add liquibase table to exclusions
         assertEquals("databasechangelog", tables.get(0).getTableName());
     }
 
@@ -115,8 +130,8 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
         assertNotNull(tables);
         assertEquals(1, tables.size());
-
-        // TODO
+        // HOW TO FIX: add primary key to the table
+        assertEquals("demo.payment", tables.get(0).getTableName());
     }
 
     @Test
@@ -133,7 +148,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
         assertNotNull(indexesWithNulls);
         assertEquals(1, indexesWithNulls.size());
-
-        // TODO
+        // HOW TO FIX: consider excluding null values from index if it's possible
+        assertEquals("demo.i_buyer_middle_name", indexesWithNulls.get(0).getIndexName());
     }
 }

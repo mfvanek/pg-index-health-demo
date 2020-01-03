@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2020. Ivan Vakhrushev.
+ * https://github.com/mfvanek
+ */
+
 package io.github.mfvanek.pg.index.health.demo;
 
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
