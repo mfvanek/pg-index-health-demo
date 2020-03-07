@@ -9,12 +9,13 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.2.3'
-    compile 'io.github.mfvanek:pg-index-health:0.1.5'
+    compile 'io.github.mfvanek:pg-index-health:0.1.7'
     compile 'org.postgresql:postgresql:42.2.9'
     compile('io.zonky.test:embedded-postgres:1.2.6') {
         exclude module: 'org.postgresql:postgresql'
