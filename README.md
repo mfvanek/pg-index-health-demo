@@ -1,8 +1,8 @@
 # pg-index-health-demo
 Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) library.
 
-![Java CI](https://github.com/mfvanek/pg-index-health-demo/workflows/Java%20CI/badge.svg)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/mfvanek/pg-index-health-demo/blob/master/LICENSE)
+[![Java CI](https://github.com/mfvanek/pg-index-health-demo/workflows/Java%20CI/badge.svg)](https://github.com/mfvanek/pg-index-health-demo/actions "Java CI")
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/mfvanek/pg-index-health-demo/blob/master/LICENSE "Apache License 2.0")
 
 ## Advantages
 With **pg-index-health** library you will be able to:
