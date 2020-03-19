@@ -6,6 +6,6 @@ Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) l
 
 ## Advantages
 With **pg-index-health** library you will be able to:
-1. collect indexes health data in production environment;
-1. analyze your database structure in functional tests and prevent many of typical errors;
-1. analyze your database configuration to prevent using of default values for important options.
+1. [collect indexes health data](https://github.com/mfvanek/pg-index-health-demo/blob/master/src/main/java/io/github/mfvanek/pg/index/health/demo/DemoApp.java) in production environment;
+1. [analyze your database structure in functional tests](https://github.com/mfvanek/pg-index-health-demo/blob/master/src/test/java/io/github/mfvanek/pg/index/health/demo/IndexesMaintenanceTest.java) and prevent many of typical errors;
+1. [analyze your database configuration](https://github.com/mfvanek/pg-index-health-demo/blob/master/src/main/java/io/github/mfvanek/pg/index/health/demo/ConfigurationDemoApp.java) to prevent using of default values for important options.
