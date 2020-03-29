@@ -29,3 +29,7 @@ values ('John', 'Smith', '89201213456', 'john@example.com'),
 
 --changeset ivan.vakhrushev:2020.01.02:create.unique.index.on.email runInTransaction:false failOnError:false
 create unique index concurrently if not exists i_buyer_email on demo.buyer (email);
+
+--changeset ivan.vakhrushev:2020.03.29:create.index.on.phone runInTransaction:false
+create index concurrently if not exists i_buyer_id_phone on demo.buyer (id, phone);
+create index concurrently if not exists i_buyer_id_phone_without_ip on demo.buyer (id, phone) where ip_address is null;

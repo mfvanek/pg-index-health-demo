@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -89,10 +90,12 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         final List<DuplicatedIndexes> intersectedIndexes = indexMaintenance.getIntersectedIndexes(demoSchema);
 
         assertNotNull(intersectedIndexes);
-        assertEquals(1, intersectedIndexes.size());
+        assertEquals(2, intersectedIndexes.size());
         // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
-        assertThat(intersectedIndexes.get(0).getIndexNames(), containsInAnyOrder(
-                "demo.i_buyer_names", "demo.i_buyer_first_name"));
+        assertThat(intersectedIndexes.get(0).getIndexNames(), contains(
+                "demo.buyer_pkey", "demo.i_buyer_id_phone"));
+        assertThat(intersectedIndexes.get(1).getIndexNames(), contains(
+                "demo.i_buyer_first_name", "demo.i_buyer_names"));
     }
 
     @Test
