@@ -18,14 +18,20 @@ import io.github.mfvanek.pg.model.IndexWithNulls;
 import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.model.Table;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -38,6 +44,19 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     static void setUp() {
         final PgConnection pgConnection = PgConnectionImpl.ofMaster(embeddedPostgres.getTestDatabase());
         indexMaintenance = new IndexMaintenanceImpl(pgConnection);
+    }
+
+    @Test
+    @DisplayName("Always check PostgreSQL version in your tests")
+    void checkPostgresVersion() throws SQLException {
+        try (final Connection connection = embeddedPostgres.getTestDatabase().getConnection();
+             final Statement statement = connection.createStatement()) {
+            try (final ResultSet resultSet = statement.executeQuery("select version();")) {
+                resultSet.next();
+                final String pgVersion = resultSet.getString(1);
+                assertThat(pgVersion, startsWith("PostgreSQL 9.6.16"));
+            }
+        }
     }
 
     @Test
