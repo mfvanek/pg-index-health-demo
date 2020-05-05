@@ -9,14 +9,16 @@ package io.github.mfvanek.pg.index.health.demo;
 
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
-import io.github.mfvanek.pg.index.maintenance.IndexMaintenance;
-import io.github.mfvanek.pg.index.maintenance.IndexMaintenanceImpl;
-import io.github.mfvanek.pg.model.DuplicatedIndexes;
-import io.github.mfvanek.pg.model.ForeignKey;
-import io.github.mfvanek.pg.model.Index;
-import io.github.mfvanek.pg.model.IndexWithNulls;
+import io.github.mfvanek.pg.index.maintenance.IndexMaintenanceOnHostImpl;
+import io.github.mfvanek.pg.index.maintenance.IndexesMaintenanceOnHost;
 import io.github.mfvanek.pg.model.PgContext;
-import io.github.mfvanek.pg.model.Table;
+import io.github.mfvanek.pg.model.index.DuplicatedIndexes;
+import io.github.mfvanek.pg.model.index.ForeignKey;
+import io.github.mfvanek.pg.model.index.Index;
+import io.github.mfvanek.pg.model.index.IndexWithNulls;
+import io.github.mfvanek.pg.model.table.Table;
+import io.github.mfvanek.pg.table.maintenance.TablesMaintenanceOnHost;
+import io.github.mfvanek.pg.table.maintenance.TablesMaintenanceOnHostImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,13 +39,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
-    private static IndexMaintenance indexMaintenance;
+    private static IndexesMaintenanceOnHost indexesMaintenance;
+    private static TablesMaintenanceOnHost tablesMaintenance;
     private final PgContext demoSchema = PgContext.of("demo");
 
     @BeforeAll
     static void setUp() {
-        final PgConnection pgConnection = PgConnectionImpl.ofMaster(embeddedPostgres.getTestDatabase());
-        indexMaintenance = new IndexMaintenanceImpl(pgConnection);
+        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(embeddedPostgres.getTestDatabase());
+        indexesMaintenance = new IndexMaintenanceOnHostImpl(pgConnection);
+        tablesMaintenance = new TablesMaintenanceOnHostImpl(pgConnection);
     }
 
     @Test
@@ -61,7 +65,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getInvalidIndexesShouldReturnNothingForPublicSchema() {
-        final List<Index> invalidIndexes = indexMaintenance.getInvalidIndexes();
+        final List<Index> invalidIndexes = indexesMaintenance.getInvalidIndexes();
 
         assertNotNull(invalidIndexes);
         assertEquals(0, invalidIndexes.size());
@@ -69,7 +73,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getInvalidIndexesShouldReturnOneRowForDemoSchema() {
-        final List<Index> invalidIndexes = indexMaintenance.getInvalidIndexes(demoSchema);
+        final List<Index> invalidIndexes = indexesMaintenance.getInvalidIndexes(demoSchema);
 
         assertNotNull(invalidIndexes);
         assertEquals(1, invalidIndexes.size());
@@ -79,7 +83,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getDuplicatedIndexesShouldReturnNothingForPublicSchema() {
-        final List<DuplicatedIndexes> duplicatedIndexes = indexMaintenance.getDuplicatedIndexes();
+        final List<DuplicatedIndexes> duplicatedIndexes = indexesMaintenance.getDuplicatedIndexes();
 
         assertNotNull(duplicatedIndexes);
         assertEquals(0, duplicatedIndexes.size());
@@ -87,7 +91,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getDuplicatedIndexesShouldReturnOneRowForDemoSchema() {
-        final List<DuplicatedIndexes> duplicatedIndexes = indexMaintenance.getDuplicatedIndexes(demoSchema);
+        final List<DuplicatedIndexes> duplicatedIndexes = indexesMaintenance.getDuplicatedIndexes(demoSchema);
 
         assertNotNull(duplicatedIndexes);
         assertEquals(1, duplicatedIndexes.size());
@@ -98,7 +102,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getIntersectedIndexesShouldReturnNothingForPublicSchema() {
-        final List<DuplicatedIndexes> intersectedIndexes = indexMaintenance.getIntersectedIndexes();
+        final List<DuplicatedIndexes> intersectedIndexes = indexesMaintenance.getIntersectedIndexes();
 
         assertNotNull(intersectedIndexes);
         assertEquals(0, intersectedIndexes.size());
@@ -106,7 +110,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getIntersectedIndexesShouldReturnOneRowForDemoSchema() {
-        final List<DuplicatedIndexes> intersectedIndexes = indexMaintenance.getIntersectedIndexes(demoSchema);
+        final List<DuplicatedIndexes> intersectedIndexes = indexesMaintenance.getIntersectedIndexes(demoSchema);
 
         assertNotNull(intersectedIndexes);
         assertEquals(2, intersectedIndexes.size());
@@ -119,7 +123,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getForeignKeysNotCoveredWithIndexShouldReturnNothingForPublicSchema() {
-        final List<ForeignKey> foreignKeys = indexMaintenance.getForeignKeysNotCoveredWithIndex();
+        final List<ForeignKey> foreignKeys = indexesMaintenance.getForeignKeysNotCoveredWithIndex();
 
         assertNotNull(foreignKeys);
         assertEquals(0, foreignKeys.size());
@@ -127,7 +131,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getForeignKeysNotCoveredWithIndexShouldReturnThreeRowsForDemoSchema() {
-        final List<ForeignKey> foreignKeys = indexMaintenance.getForeignKeysNotCoveredWithIndex(demoSchema);
+        final List<ForeignKey> foreignKeys = indexesMaintenance.getForeignKeysNotCoveredWithIndex(demoSchema);
 
         assertNotNull(foreignKeys);
         assertEquals(3, foreignKeys.size());
@@ -140,7 +144,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getTablesWithoutPrimaryKeyShouldReturnOneRowForPublicSchema() {
-        final List<Table> tables = indexMaintenance.getTablesWithoutPrimaryKey();
+        final List<Table> tables = tablesMaintenance.getTablesWithoutPrimaryKey();
 
         assertNotNull(tables);
         assertEquals(1, tables.size());
@@ -150,7 +154,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getTablesWithoutPrimaryKeyShouldReturnOneRowForDemoSchema() {
-        final List<Table> tables = indexMaintenance.getTablesWithoutPrimaryKey(demoSchema);
+        final List<Table> tables = tablesMaintenance.getTablesWithoutPrimaryKey(demoSchema);
 
         assertNotNull(tables);
         assertEquals(1, tables.size());
@@ -160,7 +164,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getIndexesWithNullValuesShouldReturnNothingForPublicSchema() {
-        final List<IndexWithNulls> indexesWithNulls = indexMaintenance.getIndexesWithNullValues();
+        final List<IndexWithNulls> indexesWithNulls = indexesMaintenance.getIndexesWithNullValues();
 
         assertNotNull(indexesWithNulls);
         assertEquals(0, indexesWithNulls.size());
@@ -168,7 +172,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getIndexesWithNullValuesShouldReturnOneRowForDemoSchema() {
-        final List<IndexWithNulls> indexesWithNulls = indexMaintenance.getIndexesWithNullValues(demoSchema);
+        final List<IndexWithNulls> indexesWithNulls = indexesMaintenance.getIndexesWithNullValues(demoSchema);
 
         assertNotNull(indexesWithNulls);
         assertEquals(1, indexesWithNulls.size());

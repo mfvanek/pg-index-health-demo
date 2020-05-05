@@ -7,16 +7,17 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
-import io.github.mfvanek.pg.connection.PgConnection;
-import io.github.mfvanek.pg.connection.PgConnectionImpl;
-import io.github.mfvanek.pg.index.health.IndexesHealth;
-import io.github.mfvanek.pg.index.health.IndexesHealthImpl;
-import io.github.mfvanek.pg.index.health.logger.Exclusions;
-import io.github.mfvanek.pg.index.health.logger.IndexesHealthLogger;
-import io.github.mfvanek.pg.index.health.logger.SimpleHealthLogger;
-import io.github.mfvanek.pg.index.maintenance.MaintenanceFactoryImpl;
+import io.github.mfvanek.pg.common.health.DatabaseHealthFactory;
+import io.github.mfvanek.pg.common.health.DatabaseHealthFactoryImpl;
+import io.github.mfvanek.pg.common.health.logger.Exclusions;
+import io.github.mfvanek.pg.common.health.logger.HealthLogger;
+import io.github.mfvanek.pg.common.health.logger.SimpleHealthLogger;
+import io.github.mfvanek.pg.common.maintenance.MaintenanceFactoryImpl;
+import io.github.mfvanek.pg.connection.ConnectionCredentials;
+import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
+import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactoryImpl;
+import io.github.mfvanek.pg.connection.PgConnectionFactoryImpl;
+import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
 import io.github.mfvanek.pg.model.MemoryUnit;
 import io.github.mfvanek.pg.model.PgContext;
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
@@ -56,14 +57,16 @@ public class DemoApp {
     }
 
     private static void collectHealthData(@Nonnull final EmbeddedPostgres embeddedPostgres) {
-        final PgConnection pgConnection = PgConnectionImpl.ofMaster(embeddedPostgres.getPostgresDatabase());
-        final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);
-        final IndexesHealth indexesHealth = new IndexesHealthImpl(haPgConnection, new MaintenanceFactoryImpl());
+        final String url = String.format("jdbc:postgresql://localhost:%d/postgres", embeddedPostgres.getPort());
+        final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(url, "postgres", "postgres");
+        final HighAvailabilityPgConnectionFactory connectionFactory = new HighAvailabilityPgConnectionFactoryImpl(
+                new PgConnectionFactoryImpl(), new PrimaryHostDeterminerImpl());
+        final DatabaseHealthFactory databaseHealthFactory = new DatabaseHealthFactoryImpl(new MaintenanceFactoryImpl());
         final Exclusions exclusions = Exclusions.builder()
                 .withIndexSizeThreshold(1, MemoryUnit.MB)
                 .withTableSizeThreshold(1, MemoryUnit.MB)
                 .build();
-        final IndexesHealthLogger logger = new SimpleHealthLogger(indexesHealth);
+        final HealthLogger logger = new SimpleHealthLogger(credentials, connectionFactory, databaseHealthFactory);
         final PgContext context = PgContext.of("demo");
         logger.logAll(exclusions, context)
                 .forEach(System.out::println);
