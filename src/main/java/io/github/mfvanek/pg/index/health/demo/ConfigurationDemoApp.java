@@ -10,10 +10,10 @@ package io.github.mfvanek.pg.index.health.demo;
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.model.MemoryUnit;
-import io.github.mfvanek.pg.settings.ConfigurationMaintenance;
-import io.github.mfvanek.pg.settings.ConfigurationMaintenanceImpl;
 import io.github.mfvanek.pg.settings.PgParam;
 import io.github.mfvanek.pg.settings.ServerSpecification;
+import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHost;
+import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 
 import javax.annotation.Nonnull;
@@ -30,8 +30,8 @@ public class ConfigurationDemoApp {
     }
 
     private static void checkConfig(@Nonnull final EmbeddedPostgres embeddedPostgres) {
-        final PgConnection pgConnection = PgConnectionImpl.ofMaster(embeddedPostgres.getPostgresDatabase());
-        final ConfigurationMaintenance configurationMaintenance = new ConfigurationMaintenanceImpl(pgConnection);
+        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(embeddedPostgres.getPostgresDatabase());
+        final ConfigurationMaintenanceOnHost configurationMaintenance = new ConfigurationMaintenanceOnHostImpl(pgConnection);
         final ServerSpecification serverSpecification = ServerSpecification.builder()
                 .withCpuCores(Runtime.getRuntime().availableProcessors())
                 .withMemoryAmount(16, MemoryUnit.GB)
