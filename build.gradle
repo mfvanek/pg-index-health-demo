@@ -21,7 +21,7 @@ dependencies {
     implementation('io.zonky.test:embedded-postgres:1.2.10') {
         exclude module: 'org.postgresql:postgresql'
     }
-    implementation enforcedPlatform('io.zonky.test.postgres:embedded-postgres-binaries-bom:13.2.0')
+    implementation enforcedPlatform('io.zonky.test.postgres:embedded-postgres-binaries-bom:12.6.0')
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'org.liquibase:liquibase-core:4.3.5'
     implementation 'org.yaml:snakeyaml:1.28'
