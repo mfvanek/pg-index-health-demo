@@ -58,7 +58,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
             try (final ResultSet resultSet = statement.executeQuery("select version();")) {
                 resultSet.next();
                 final String pgVersion = resultSet.getString(1);
-                assertThat(pgVersion, startsWith("PostgreSQL 11.5"));
+                assertThat(pgVersion, startsWith("PostgreSQL 13.2"));
             }
         }
     }
