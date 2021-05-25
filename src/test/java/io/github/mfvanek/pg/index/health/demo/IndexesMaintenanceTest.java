@@ -58,7 +58,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
             try (final ResultSet resultSet = statement.executeQuery("select version();")) {
                 resultSet.next();
                 final String pgVersion = resultSet.getString(1);
-                assertThat(pgVersion, startsWith("PostgreSQL 9.6.16"));
+                assertThat(pgVersion, startsWith("PostgreSQL 13.2"));
             }
         }
     }
@@ -115,9 +115,9 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         assertNotNull(intersectedIndexes);
         assertEquals(2, intersectedIndexes.size());
         // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
-        assertThat(intersectedIndexes.get(0).getIndexNames(), contains(
-                "demo.buyer_pkey", "demo.i_buyer_id_phone"));
         assertThat(intersectedIndexes.get(1).getIndexNames(), contains(
+                "demo.buyer_pkey", "demo.i_buyer_id_phone"));
+        assertThat(intersectedIndexes.get(0).getIndexNames(), contains(
                 "demo.i_buyer_first_name", "demo.i_buyer_names"));
     }
 
