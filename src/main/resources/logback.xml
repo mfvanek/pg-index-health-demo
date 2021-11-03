@@ -5,11 +5,28 @@
         </encoder>
     </appender>
 
+    <appender name="kv-log" class="ch.qos.logback.core.FileAppender">
+        <file>key-value.log</file>
+        <append>true</append>
+        <immediateFlush>true</immediateFlush>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="io.github.mfvanek" level="debug" additivity="false">
         <appender-ref ref="console"/>
     </logger>
 
+    <logger name="key-value.log" level="info" additivity="false">
+        <appender-ref ref="kv-log"/>
+    </logger>
+
     <root level="error">
         <appender-ref ref="console"/>
+    </root>
+
+    <root level="error">
+        <appender-ref ref="kv-log" />
     </root>
 </configuration>
