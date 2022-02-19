@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021. Ivan Vakhrushev and others.
+ * Copyright (c) 2019-2022. Ivan Vakhrushev and others.
  * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
@@ -29,9 +29,9 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
-import javax.annotation.Nonnull;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.annotation.Nonnull;
 
 public class DemoApp {
 

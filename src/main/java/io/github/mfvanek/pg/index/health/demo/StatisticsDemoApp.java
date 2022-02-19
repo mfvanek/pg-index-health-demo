@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021. Ivan Vakhrushev and others.
+ * Copyright (c) 2019-2022. Ivan Vakhrushev and others.
  * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
@@ -16,13 +16,13 @@ import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 
-import javax.annotation.Nonnull;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import javax.annotation.Nonnull;
 
 public class StatisticsDemoApp {
 

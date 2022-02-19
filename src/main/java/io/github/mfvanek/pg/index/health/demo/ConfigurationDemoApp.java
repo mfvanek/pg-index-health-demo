@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021. Ivan Vakhrushev and others.
+ * Copyright (c) 2019-2022. Ivan Vakhrushev and others.
  * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
@@ -16,8 +16,8 @@ import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHost;
 import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 
-import javax.annotation.Nonnull;
 import java.util.Set;
+import javax.annotation.Nonnull;
 
 public class ConfigurationDemoApp {
 
