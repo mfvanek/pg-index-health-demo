@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <Match>
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE"/>
+        <Or>
+            <Class name="io.github.mfvanek.pg.index.health.demo.StatisticsDemoApp"/>
+            <Class name="io.github.mfvanek.pg.index.health.demo.IndexesMaintenanceTest"/>
+        </Or>
+    </Match>
+</FindBugsFilter>
