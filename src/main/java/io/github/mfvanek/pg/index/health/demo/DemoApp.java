@@ -11,7 +11,7 @@ import io.github.mfvanek.pg.common.health.DatabaseHealthFactory;
 import io.github.mfvanek.pg.common.health.DatabaseHealthFactoryImpl;
 import io.github.mfvanek.pg.common.health.logger.Exclusions;
 import io.github.mfvanek.pg.common.health.logger.HealthLogger;
-import io.github.mfvanek.pg.common.health.logger.SimpleHealthLogger;
+import io.github.mfvanek.pg.common.health.logger.KeyValueFileHealthLogger;
 import io.github.mfvanek.pg.common.maintenance.MaintenanceFactoryImpl;
 import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
@@ -66,7 +66,7 @@ public class DemoApp {
                 .withIndexSizeThreshold(1, MemoryUnit.MB)
                 .withTableSizeThreshold(1, MemoryUnit.MB)
                 .build();
-        final HealthLogger logger = new SimpleHealthLogger(credentials, connectionFactory, databaseHealthFactory);
+        final HealthLogger logger = new KeyValueFileHealthLogger(credentials, connectionFactory, databaseHealthFactory);
         final PgContext context = PgContext.of("demo");
         logger.logAll(exclusions, context)
                 .forEach(System.out::println);
