@@ -62,16 +62,18 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     void getInvalidIndexesShouldReturnNothingForPublicSchema() {
         final List<Index> invalidIndexes = indexesMaintenance.getInvalidIndexes();
 
-        assertThat(invalidIndexes).isNotNull();
-        assertThat(invalidIndexes).hasSize(0);
+        assertThat(invalidIndexes)
+                .isNotNull()
+                .isEmpty();
     }
 
     @Test
     void getInvalidIndexesShouldReturnOneRowForDemoSchema() {
         final List<Index> invalidIndexes = indexesMaintenance.getInvalidIndexes(demoSchema);
 
-        assertThat(invalidIndexes).isNotNull();
-        assertThat(invalidIndexes).hasSize(1);
+        assertThat(invalidIndexes)
+                .isNotNull()
+                .hasSize(1);
         // HOW TO FIX: drop index concurrently, fix data in table, then create index concurrently again
         assertThat(invalidIndexes.get(0).getIndexName()).isEqualTo("demo.i_buyer_email");
     }
@@ -80,16 +82,18 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     void getDuplicatedIndexesShouldReturnNothingForPublicSchema() {
         final List<DuplicatedIndexes> duplicatedIndexes = indexesMaintenance.getDuplicatedIndexes();
 
-        assertThat(duplicatedIndexes).isNotNull();
-        assertThat(duplicatedIndexes).hasSize(0);
+        assertThat(duplicatedIndexes)
+                .isNotNull()
+                .isEmpty();
     }
 
     @Test
     void getDuplicatedIndexesShouldReturnOneRowForDemoSchema() {
         final List<DuplicatedIndexes> duplicatedIndexes = indexesMaintenance.getDuplicatedIndexes(demoSchema);
 
-        assertThat(duplicatedIndexes).isNotNull();
-        assertThat(duplicatedIndexes).hasSize(1);
+        assertThat(duplicatedIndexes)
+                .isNotNull()
+                .hasSize(1);
         // HOW TO FIX: do not manually create index for column with unique constraint
         assertThat(duplicatedIndexes.get(0).getIndexNames())
                 .containsExactlyInAnyOrder("demo.i_order_item_sku_order_id_unique", "demo.order_item_sku_order_id_key");
@@ -99,16 +103,18 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     void getIntersectedIndexesShouldReturnNothingForPublicSchema() {
         final List<DuplicatedIndexes> intersectedIndexes = indexesMaintenance.getIntersectedIndexes();
 
-        assertThat(intersectedIndexes).isNotNull();
-        assertThat(intersectedIndexes).hasSize(0);
+        assertThat(intersectedIndexes)
+                .isNotNull()
+                .isEmpty();
     }
 
     @Test
     void getIntersectedIndexesShouldReturnOneRowForDemoSchema() {
         final List<DuplicatedIndexes> intersectedIndexes = indexesMaintenance.getIntersectedIndexes(demoSchema);
 
-        assertThat(intersectedIndexes).isNotNull();
-        assertThat(intersectedIndexes).hasSize(2);
+        assertThat(intersectedIndexes)
+                .isNotNull()
+                .hasSize(2);
         // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
         assertThat(intersectedIndexes.get(1).getIndexNames())
                 .containsExactlyInAnyOrder("demo.buyer_pkey", "demo.i_buyer_id_phone");
@@ -120,16 +126,18 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     void getForeignKeysNotCoveredWithIndexShouldReturnNothingForPublicSchema() {
         final List<ForeignKey> foreignKeys = indexesMaintenance.getForeignKeysNotCoveredWithIndex();
 
-        assertThat(foreignKeys).isNotNull();
-        assertThat(foreignKeys).hasSize(0);
+        assertThat(foreignKeys)
+                .isNotNull()
+                .isEmpty();
     }
 
     @Test
     void getForeignKeysNotCoveredWithIndexShouldReturnThreeRowsForDemoSchema() {
         final List<ForeignKey> foreignKeys = indexesMaintenance.getForeignKeysNotCoveredWithIndex(demoSchema);
 
-        assertThat(foreignKeys).isNotNull();
-        assertThat(foreignKeys).hasSize(3);
+        assertThat(foreignKeys)
+                .isNotNull()
+                .hasSize(3);
         // HOW TO FIX: create indexes on columns under foreign key constraint
         assertThat(foreignKeys.stream()
                 .map(ForeignKey::getConstraintName)
@@ -141,8 +149,9 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     void getTablesWithoutPrimaryKeyShouldReturnOneRowForPublicSchema() {
         final List<Table> tables = tablesMaintenance.getTablesWithoutPrimaryKey();
 
-        assertThat(tables).isNotNull();
-        assertThat(tables).hasSize(1);
+        assertThat(tables)
+                .isNotNull()
+                .hasSize(1);
         // HOW TO FIX: just add liquibase table to exclusions
         assertThat(tables.get(0).getTableName()).isEqualTo("databasechangelog");
     }
@@ -151,8 +160,9 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     void getTablesWithoutPrimaryKeyShouldReturnOneRowForDemoSchema() {
         final List<Table> tables = tablesMaintenance.getTablesWithoutPrimaryKey(demoSchema);
 
-        assertThat(tables).isNotNull();
-        assertThat(tables).hasSize(1);
+        assertThat(tables)
+                .isNotNull()
+                .hasSize(1);
         // HOW TO FIX: add primary key to the table
         assertThat(tables.get(0).getTableName()).isEqualTo("demo.payment");
     }
@@ -161,16 +171,18 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     void getIndexesWithNullValuesShouldReturnNothingForPublicSchema() {
         final List<IndexWithNulls> indexesWithNulls = indexesMaintenance.getIndexesWithNullValues();
 
-        assertThat(indexesWithNulls).isNotNull();
-        assertThat(indexesWithNulls).hasSize(0);
+        assertThat(indexesWithNulls)
+                .isNotNull()
+                .isEmpty();
     }
 
     @Test
     void getIndexesWithNullValuesShouldReturnOneRowForDemoSchema() {
         final List<IndexWithNulls> indexesWithNulls = indexesMaintenance.getIndexesWithNullValues(demoSchema);
 
-        assertThat(indexesWithNulls).isNotNull();
-        assertThat(indexesWithNulls).hasSize(1);
+        assertThat(indexesWithNulls)
+                .isNotNull()
+                .hasSize(1);
         // HOW TO FIX: consider excluding null values from index if it's possible
         assertThat(indexesWithNulls.get(0).getIndexName()).isEqualTo("demo.i_buyer_middle_name");
     }

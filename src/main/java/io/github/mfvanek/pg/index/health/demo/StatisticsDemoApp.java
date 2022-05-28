@@ -37,7 +37,7 @@ public class StatisticsDemoApp {
             resetTimestamp.ifPresent(offsetDateTime ->
                     System.out.println("Last statistics reset was " + offsetDateTime.atZoneSameInstant(ZoneId.systemDefault())));
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -46,8 +46,11 @@ public class StatisticsDemoApp {
              Statement statement = connection.createStatement()) {
             statement.execute("vacuum analyze;");
             Thread.sleep(1000L);
-        } catch (SQLException | InterruptedException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             System.err.println(e.getMessage());
+            Thread.currentThread().interrupt();
         }
     }
 }
