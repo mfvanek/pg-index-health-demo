@@ -51,7 +51,7 @@ public class StatisticsDemoApp {
             statement.execute("vacuum analyze;");
             Thread.sleep(1000L);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
             Thread.currentThread().interrupt();
