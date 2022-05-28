@@ -15,6 +15,8 @@ import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -26,6 +28,8 @@ import javax.annotation.Nonnull;
 
 public class StatisticsDemoApp {
 
+    private static final Logger logger = LoggerFactory.getLogger(StatisticsDemoApp.class);
+
     public static void main(String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             final PgConnection pgConnection = PgConnectionImpl.ofPrimary(embeddedPostgres.getPostgresDatabase());
@@ -35,9 +39,9 @@ public class StatisticsDemoApp {
             waitForStatisticsCollector(embeddedPostgres);
             final Optional<OffsetDateTime> resetTimestamp = databaseManagement.getLastStatsResetTimestamp();
             resetTimestamp.ifPresent(offsetDateTime ->
-                    System.out.println("Last statistics reset was " + offsetDateTime.atZoneSameInstant(ZoneId.systemDefault())));
+                    logger.info("Last statistics reset was at {}", offsetDateTime.atZoneSameInstant(ZoneId.systemDefault())));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -49,7 +53,7 @@ public class StatisticsDemoApp {
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage(), e);
             Thread.currentThread().interrupt();
         }
     }

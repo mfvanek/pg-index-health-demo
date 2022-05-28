@@ -28,6 +28,8 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -35,12 +37,14 @@ import javax.annotation.Nonnull;
 
 public class DemoApp {
 
+    private static final Logger logger = LoggerFactory.getLogger(DemoApp.class);
+
     public static void main(String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             runMigrations(embeddedPostgres);
             collectHealthData(embeddedPostgres);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -52,7 +56,7 @@ public class DemoApp {
                     new ClassLoaderResourceAccessor(), database);
             liquibase.update("main");
         } catch (SQLException | LiquibaseException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -66,9 +70,9 @@ public class DemoApp {
                 .withIndexSizeThreshold(1, MemoryUnit.MB)
                 .withTableSizeThreshold(1, MemoryUnit.MB)
                 .build();
-        final HealthLogger logger = new KeyValueFileHealthLogger(credentials, connectionFactory, databaseHealthFactory);
+        final HealthLogger healthLogger = new KeyValueFileHealthLogger(credentials, connectionFactory, databaseHealthFactory);
         final PgContext context = PgContext.of("demo");
-        logger.logAll(exclusions, context)
-                .forEach(System.out::println);
+        healthLogger.logAll(exclusions, context)
+                .forEach(s -> logger.info("{}", s));
     }
 }
