@@ -28,7 +28,7 @@ public class ConfigurationDemoApp {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationDemoApp.class);
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             checkConfig(embeddedPostgres);
         } catch (Exception e) {

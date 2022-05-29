@@ -19,17 +19,18 @@ import java.sql.Statement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JsonbTest extends DatabaseAwareTestBase {
+@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+class JsonbTest extends DatabaseAwareTestBase {
 
     @Test
     void readingAndWritingJsonb() throws SQLException {
-        try (final Connection connection = embeddedPostgres.getTestDatabase().getConnection();
-             final Statement statement = connection.createStatement();
-             final PreparedStatement updateStatement = connection.prepareStatement("update demo.payment set info = ? where id = ?")) {
+        try (Connection connection = EMBEDDED_POSTGRES.getTestDatabase().getConnection();
+             Statement statement = connection.createStatement();
+             PreparedStatement updateStatement = connection.prepareStatement("update demo.payment set info = ? where id = ?")) {
             connection.setAutoCommit(false);
-            try (final ResultSet resultSet = statement.executeQuery("select * from demo.payment order by id limit 10")) {
+            try (ResultSet resultSet = statement.executeQuery("select * from demo.payment order by id limit 10")) {
                 while (resultSet.next()) {
-                    final long id = resultSet.getLong("id");
+                    final long paymentId = resultSet.getLong("id");
                     final PGobject infoAsObject = (PGobject) resultSet.getObject("info");
                     final String infoAsString = resultSet.getString("info");
                     assertThat(infoAsObject).isNotNull();
@@ -44,7 +45,7 @@ public class JsonbTest extends DatabaseAwareTestBase {
                     fixedInfoObject.setType("jsonb");
                     fixedInfoObject.setValue(withoutWhitespaces);
                     updateStatement.setObject(1, fixedInfoObject);
-                    updateStatement.setLong(2, id);
+                    updateStatement.setLong(2, paymentId);
                     final int result = updateStatement.executeUpdate();
                     assertThat(result).isEqualTo(1);
                 }
