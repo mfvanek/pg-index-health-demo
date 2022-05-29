@@ -40,7 +40,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @BeforeAll
     static void setUp() {
-        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(embeddedPostgres.getTestDatabase());
+        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(EMBEDDED_POSTGRES.getTestDatabase());
         indexesMaintenance = new IndexMaintenanceOnHostImpl(pgConnection);
         tablesMaintenance = new TablesMaintenanceOnHostImpl(pgConnection);
     }
@@ -48,9 +48,9 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     @Test
     @DisplayName("Always check PostgreSQL version in your tests")
     void checkPostgresVersion() throws SQLException {
-        try (final Connection connection = embeddedPostgres.getTestDatabase().getConnection();
-             final Statement statement = connection.createStatement()) {
-            try (final ResultSet resultSet = statement.executeQuery("select version();")) {
+        try (Connection connection = EMBEDDED_POSTGRES.getTestDatabase().getConnection();
+             Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery("select version();")) {
                 resultSet.next();
                 final String pgVersion = resultSet.getString(1);
                 assertThat(pgVersion).startsWith("PostgreSQL 13.2");

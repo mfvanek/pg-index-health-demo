@@ -30,7 +30,7 @@ public class StatisticsDemoApp {
 
     private static final Logger logger = LoggerFactory.getLogger(StatisticsDemoApp.class);
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             final PgConnection pgConnection = PgConnectionImpl.ofPrimary(embeddedPostgres.getPostgresDatabase());
             final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);

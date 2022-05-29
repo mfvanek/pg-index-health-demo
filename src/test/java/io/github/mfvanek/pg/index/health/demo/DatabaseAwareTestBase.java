@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 abstract class DatabaseAwareTestBase {
 
     @RegisterExtension
-    static final PreparedDbExtension embeddedPostgres =
+    static final PreparedDbExtension EMBEDDED_POSTGRES =
             EmbeddedPostgresExtension.preparedDatabase(
                     LiquibasePreparer.forClasspathLocation("changelogs/changelog.xml"));
 }

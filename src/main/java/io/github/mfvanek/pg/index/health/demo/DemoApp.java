@@ -39,7 +39,7 @@ public class DemoApp {
 
     private static final Logger logger = LoggerFactory.getLogger(DemoApp.class);
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             runMigrations(embeddedPostgres);
             collectHealthData(embeddedPostgres);
@@ -52,9 +52,10 @@ public class DemoApp {
         try (Connection connection = embeddedPostgres.getPostgresDatabase().getConnection()) {
             final DatabaseConnection dbConnection = new JdbcConnection(connection);
             final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(dbConnection);
-            final Liquibase liquibase = new Liquibase("changelogs/changelog.xml",
-                    new ClassLoaderResourceAccessor(), database);
-            liquibase.update("main");
+            try (Liquibase liquibase = new Liquibase("changelogs/changelog.xml",
+                    new ClassLoaderResourceAccessor(), database)) {
+                liquibase.update("main");
+            }
         } catch (SQLException | LiquibaseException e) {
             logger.error(e.getMessage(), e);
         }
