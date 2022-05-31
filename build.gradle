@@ -2,7 +2,9 @@ plugins {
     id 'java'
     id 'com.github.spotbugs' version '5.0.6'
     id 'checkstyle'
+    id 'jacoco'
     id 'pmd'
+    id 'org.sonarqube' version '3.3'
 }
 
 group 'io.github.mfvanek'
@@ -39,6 +41,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestCoverageVerification
 }
 
 spotbugsMain {
@@ -70,9 +74,60 @@ checkstyleTest {
     source ='src/test/java'
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+jacocoTestCoverageVerification {
+    dependsOn test
+    violationRules {
+        rule {
+            limit {
+                counter = 'CLASS'
+                value = 'MISSEDCOUNT'
+                maximum = 3
+            }
+        }
+        rule {
+            limit {
+                counter = 'METHOD'
+                value = 'MISSEDCOUNT'
+                maximum = 16
+            }
+        }
+        rule {
+            limit {
+                counter = 'LINE'
+                value = 'MISSEDCOUNT'
+                maximum = 76
+            }
+        }
+        rule {
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 0.0
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
+
 pmd {
     consoleOutput = true
     toolVersion = "6.42.0"
     ruleSetFiles = files("config/pmd/pmd.xml")
     ruleSets = []
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "mfvanek_pg-index-health-demo"
+        property "sonar.organization", "mfvanek"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
