@@ -7,19 +7,29 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
+import io.github.mfvanek.pg.common.health.DatabaseHealth;
 import io.github.mfvanek.pg.common.health.DatabaseHealthFactory;
 import io.github.mfvanek.pg.common.health.DatabaseHealthFactoryImpl;
+import io.github.mfvanek.pg.common.health.DatabaseHealthImpl;
 import io.github.mfvanek.pg.common.health.logger.Exclusions;
 import io.github.mfvanek.pg.common.health.logger.HealthLogger;
 import io.github.mfvanek.pg.common.health.logger.KeyValueFileHealthLogger;
 import io.github.mfvanek.pg.common.maintenance.MaintenanceFactoryImpl;
 import io.github.mfvanek.pg.connection.ConnectionCredentials;
+import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactoryImpl;
+import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
+import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionFactoryImpl;
+import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
+import io.github.mfvanek.pg.generator.DbMigrationGenerator;
+import io.github.mfvanek.pg.generator.DbMigrationGeneratorImpl;
+import io.github.mfvanek.pg.generator.GeneratingOptions;
 import io.github.mfvanek.pg.model.MemoryUnit;
 import io.github.mfvanek.pg.model.PgContext;
+import io.github.mfvanek.pg.model.index.ForeignKey;
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import liquibase.Liquibase;
 import liquibase.database.Database;
@@ -33,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import javax.annotation.Nonnull;
 
 public class DemoApp {
@@ -43,6 +54,7 @@ public class DemoApp {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             runMigrations(embeddedPostgres);
             collectHealthData(embeddedPostgres);
+            generateMigrations(embeddedPostgres);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -74,6 +86,17 @@ public class DemoApp {
         final HealthLogger healthLogger = new KeyValueFileHealthLogger(credentials, connectionFactory, databaseHealthFactory);
         final PgContext context = PgContext.of("demo");
         healthLogger.logAll(exclusions, context)
-                .forEach(s -> logger.info("{}", s));
+                .forEach(logger::info);
+    }
+
+    private static void generateMigrations(@Nonnull final EmbeddedPostgres embeddedPostgres) {
+        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(embeddedPostgres.getPostgresDatabase());
+        final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);
+        final DatabaseHealth databaseHealth = new DatabaseHealthImpl(haPgConnection, new MaintenanceFactoryImpl());
+        final PgContext context = PgContext.of("demo");
+        final List<ForeignKey> foreignKeys = databaseHealth.getForeignKeysNotCoveredWithIndex(context);
+        final DbMigrationGenerator generator = new DbMigrationGeneratorImpl();
+        logger.info(generator.generate(foreignKeys, GeneratingOptions.builder().build()));
+        // TODO apply migrations and run check again
     }
 }
