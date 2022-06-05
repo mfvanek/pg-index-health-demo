@@ -23,16 +23,16 @@ import io.github.mfvanek.pg.model.PgContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import javax.annotation.Nonnull;
-import javax.sql.DataSource;
 
 public final class HealthDataCollector {
 
     private static final Logger logger = LoggerFactory.getLogger(HealthDataCollector.class);
+
+    private HealthDataCollector() {
+        throw new UnsupportedOperationException();
+    }
 
     @Nonnull
     public static List<String> collectHealthData(@Nonnull final String databaseName, final int port) {
@@ -50,18 +50,5 @@ public final class HealthDataCollector {
         final List<String> healthData = healthLogger.logAll(exclusions, context);
         healthData.forEach(logger::info);
         return healthData;
-    }
-
-    public static void waitForStatisticsCollector(@Nonnull final DataSource dataSource) {
-        try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.execute("vacuum analyze;");
-            Thread.sleep(1000L);
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            logger.error(e.getMessage(), e);
-            Thread.currentThread().interrupt();
-        }
     }
 }

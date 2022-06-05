@@ -26,6 +26,10 @@ public final class MigrationRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(MigrationRunner.class);
 
+    private MigrationRunner() {
+        throw new UnsupportedOperationException();
+    }
+
     public static void runMigrations(@Nonnull final EmbeddedPostgres embeddedPostgres) {
         try (Connection connection = embeddedPostgres.getPostgresDatabase().getConnection()) {
             final DatabaseConnection dbConnection = new JdbcConnection(connection);
