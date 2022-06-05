@@ -2,10 +2,5 @@
 <FindBugsFilter>
     <Match>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE"/>
-        <Or>
-            <Class name="io.github.mfvanek.pg.index.health.demo.StatisticsDemoApp"/>
-            <Class name="io.github.mfvanek.pg.index.health.demo.IndexesMaintenanceTest"/>
-            <Class name="io.github.mfvanek.pg.index.health.demo.JsonbTest"/>
-        </Or>
     </Match>
 </FindBugsFilter>
