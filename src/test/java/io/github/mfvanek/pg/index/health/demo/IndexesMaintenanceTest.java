@@ -7,11 +7,13 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
+import io.github.mfvanek.pg.checks.host.ColumnsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.DuplicatedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ForeignKeysNotCoveredWithIndexCheckOnHost;
 import io.github.mfvanek.pg.checks.host.IndexesWithNullValuesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.IntersectedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.InvalidIndexesCheckOnHost;
+import io.github.mfvanek.pg.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
@@ -21,6 +23,7 @@ import io.github.mfvanek.pg.model.index.ForeignKey;
 import io.github.mfvanek.pg.model.index.Index;
 import io.github.mfvanek.pg.model.index.IndexWithNulls;
 import io.github.mfvanek.pg.model.index.IndexWithSize;
+import io.github.mfvanek.pg.model.table.Column;
 import io.github.mfvanek.pg.model.table.Table;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,8 +37,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class IndexesMaintenanceTest extends DatabaseAwareTestBase {
-    
+
     private static final String BUYER_TABLE = "demo.buyer";
+    private static final String ORDER_ITEM_TABLE = "demo.order_item";
 
     private final PgContext demoSchema = PgContext.of("demo");
     private final PgConnection pgConnection;
@@ -91,8 +95,8 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                 .hasSize(1)
                 // HOW TO FIX: do not manually create index for column with unique constraint
                 .containsExactly(DuplicatedIndexes.of(
-                        IndexWithSize.of("demo.order_item", "demo.i_order_item_sku_order_id_unique", 8_192L),
-                        IndexWithSize.of("demo.order_item", "demo.order_item_sku_order_id_key", 8_192L)));
+                        IndexWithSize.of(ORDER_ITEM_TABLE, "demo.i_order_item_sku_order_id_unique", 8_192L),
+                        IndexWithSize.of(ORDER_ITEM_TABLE, "demo.order_item_sku_order_id_key", 8_192L)));
     }
 
     @Test
@@ -135,7 +139,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                 .hasSize(3)
                 // HOW TO FIX: create indexes on columns under foreign key constraint
                 .containsExactlyInAnyOrder(
-                        ForeignKey.ofNotNullColumn("demo.order_item", "order_item_order_id_fkey", "order_id"),
+                        ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fkey", "order_id"),
                         ForeignKey.ofNotNullColumn("demo.orders", "orders_buyer_id_fkey", "buyer_id"),
                         ForeignKey.ofNullableColumn("demo.payment", "payment_order_id_fkey", "order_id"));
     }
@@ -176,5 +180,49 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                 .hasSize(1)
                 // HOW TO FIX: consider excluding null values from index if it's possible
                 .containsExactly(IndexWithNulls.of(BUYER_TABLE, "demo.i_buyer_middle_name", 1L, "middle_name"));
+    }
+
+    @Test
+    void getTablesWithoutDescriptionShouldReturnTwoRowsForPublicSchema() {
+        final List<Table> tables = new TablesWithoutDescriptionCheckOnHost(pgConnection).check();
+
+        assertThat(tables)
+                .hasSize(2)
+                // HOW TO FIX: just add liquibase table to exclusions
+                .containsExactlyInAnyOrder(
+                        Table.of("databasechangelog", 16_384L),
+                        Table.of("databasechangeloglock", 8_192L));
+    }
+
+    @Test
+    void getTablesWithoutDescriptionShouldReturnOneRowForDemoSchema() {
+        final List<Table> tables = new TablesWithoutDescriptionCheckOnHost(pgConnection).check(demoSchema);
+
+        assertThat(tables)
+                .hasSize(4)
+                // HOW TO FIX: just add comment on tables
+                .containsExactlyInAnyOrder(Table.of("demo.buyer", 16_384L),
+                        Table.of(ORDER_ITEM_TABLE, 0L),
+                        Table.of("demo.orders", 0L),
+                        Table.of("demo.payment", 4_276_224L));
+    }
+
+    @Test
+    void getColumnsWithoutDescriptionShouldReturnSeveralRowsForPublicSchema() {
+        final List<Column> columns = new ColumnsWithoutDescriptionCheckOnHost(pgConnection).check();
+
+        assertThat(columns)
+                // HOW TO FIX: just add liquibase table to exclusions
+                .hasSize(18)
+                .allMatch(c -> "databasechangelog".equals(c.getTableName()) || "databasechangeloglock".equals(c.getTableName()));
+    }
+
+    @Test
+    void getColumnsWithoutDescriptionShouldReturnSeveralRowsForDemoSchema() {
+        final List<Column> columns = new ColumnsWithoutDescriptionCheckOnHost(pgConnection).check(demoSchema);
+
+        assertThat(columns)
+                // HOW TO FIX: just add comment on columns
+                .hasSize(26);
     }
 }
