@@ -17,3 +17,12 @@ create table if not exists demo.order_item
 
 --changeset ivan.vakhrushev:2020.01.01:order_item.unique_index
 create unique index if not exists i_order_item_sku_order_id_unique on demo.order_item (sku, order_id);
+
+--changeset ivan.vakhrushev:2022.07.10:order_item.comments.on.table.and.columns
+comment on table demo.order_item is 'Information about the items in the order';
+comment on column demo.order_item.id is 'Unique identifier of the record in the current table';
+comment on column demo.order_item.order_id is 'Identifier of the buyer''s order';
+comment on column demo.order_item.price is 'The cost of a unit of goods';
+comment on column demo.order_item.amount is 'The number of units of the product in the position';
+comment on column demo.order_item.sku is 'Stock keeping unit ';
+comment on column demo.order_item.warehouse_id is 'Warehouse ID';
