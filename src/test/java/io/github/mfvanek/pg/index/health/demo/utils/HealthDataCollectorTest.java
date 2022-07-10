@@ -31,8 +31,8 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
                 "db_indexes_health\tindexes_with_null_values\t1",
                 "db_indexes_health\tindexes_with_bloat\t0",
                 "db_indexes_health\ttables_with_bloat\t0",
-                "db_indexes_health\ttables_without_description\t4",
-                "db_indexes_health\tcolumns_without_description\t26");
+                "db_indexes_health\ttables_without_description\t0",
+                "db_indexes_health\tcolumns_without_description\t0");
         final ConnectionInfo info = EMBEDDED_POSTGRES.getConnectionInfo();
         final List<String> healthData = HealthDataCollector.collectHealthData(info.getDbName(), info.getPort());
         assertThat(healthData)

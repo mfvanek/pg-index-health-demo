@@ -199,12 +199,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         final List<Table> tables = new TablesWithoutDescriptionCheckOnHost(pgConnection).check(demoSchema);
 
         assertThat(tables)
-                .hasSize(4)
-                // HOW TO FIX: just add comment on tables
-                .containsExactlyInAnyOrder(Table.of("demo.buyer", 16_384L),
-                        Table.of(ORDER_ITEM_TABLE, 0L),
-                        Table.of("demo.orders", 0L),
-                        Table.of("demo.payment", 4_276_224L));
+                .isEmpty();
     }
 
     @Test
@@ -222,7 +217,6 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         final List<Column> columns = new ColumnsWithoutDescriptionCheckOnHost(pgConnection).check(demoSchema);
 
         assertThat(columns)
-                // HOW TO FIX: just add comment on columns
-                .hasSize(26);
+                .isEmpty();
     }
 }
