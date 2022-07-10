@@ -7,9 +7,8 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
-import io.github.mfvanek.pg.common.health.DatabaseHealth;
-import io.github.mfvanek.pg.common.health.DatabaseHealthImpl;
-import io.github.mfvanek.pg.common.maintenance.MaintenanceFactoryImpl;
+import io.github.mfvanek.pg.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
+import io.github.mfvanek.pg.common.maintenance.AbstractCheckOnCluster;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
 import io.github.mfvanek.pg.connection.PgConnection;
@@ -25,6 +24,7 @@ import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -40,7 +40,7 @@ public class DemoApp {
             MigrationRunner.runMigrations(embeddedPostgres);
             HealthDataCollector.collectHealthData("postgres", embeddedPostgres.getPort());
             generateMigrations(embeddedPostgres);
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
     }
@@ -48,9 +48,9 @@ public class DemoApp {
     private static void generateMigrations(@Nonnull final EmbeddedPostgres embeddedPostgres) {
         final PgConnection pgConnection = PgConnectionImpl.ofPrimary(embeddedPostgres.getPostgresDatabase());
         final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);
-        final DatabaseHealth databaseHealth = new DatabaseHealthImpl(haPgConnection, new MaintenanceFactoryImpl());
+        final AbstractCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex = new ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection);
         final PgContext context = PgContext.of("demo");
-        final List<ForeignKey> foreignKeys = databaseHealth.getForeignKeysNotCoveredWithIndex(context);
+        final List<ForeignKey> foreignKeys = foreignKeysNotCoveredWithIndex.check(context);
         final DbMigrationGenerator generator = new DbMigrationGeneratorImpl();
         final String generatedMigrations = generator.generate(foreignKeys, GeneratingOptions.builder().build());
         logger.info(generatedMigrations);
@@ -60,7 +60,7 @@ public class DemoApp {
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
         }
-        final List<ForeignKey> afterMigrations = databaseHealth.getForeignKeysNotCoveredWithIndex(context);
+        final List<ForeignKey> afterMigrations = foreignKeysNotCoveredWithIndex.check(context);
         if (!afterMigrations.isEmpty()) {
             throw new IllegalStateException("There should be no foreign keys not covered by the index");
         }

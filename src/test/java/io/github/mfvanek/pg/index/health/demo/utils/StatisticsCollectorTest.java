@@ -21,7 +21,6 @@ class StatisticsCollectorTest extends DatabaseAwareTestBase {
         final ZonedDateTime beforeTest = ZonedDateTime.now();
         final ZonedDateTime zonedDateTime = StatisticsCollector.resetStatistics(EMBEDDED_POSTGRES.getTestDatabase());
         assertThat(zonedDateTime)
-                .isNotNull()
                 .isAfter(beforeTest);
     }
 }
