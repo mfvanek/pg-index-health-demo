@@ -33,3 +33,13 @@ create unique index concurrently if not exists i_buyer_email on demo.buyer (emai
 --changeset ivan.vakhrushev:2020.03.29:create.index.on.phone runInTransaction:false
 create index concurrently if not exists i_buyer_id_phone on demo.buyer (id, phone);
 create index concurrently if not exists i_buyer_id_phone_without_ip on demo.buyer (id, phone) where ip_address is null;
+
+--changeset ivan.vakhrushev:2022.07.10:buyer.comments.on.table.and.columns
+comment on table demo.buyer is 'Information about the buyer';
+comment on column demo.buyer.id is 'Unique identifier of the record in the current table';
+comment on column demo.buyer.first_name is 'Buyer''s given name';
+comment on column demo.buyer.last_name is 'Buyer''s last name';
+comment on column demo.buyer.middle_name is 'Patronymic of the buyer';
+comment on column demo.buyer.phone is 'Buyer''s phone number';
+comment on column demo.buyer.email is 'Buyer''s email address';
+comment on column demo.buyer.ip_address is 'Buyer''s IP address';
