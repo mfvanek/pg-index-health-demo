@@ -23,7 +23,6 @@ import io.github.mfvanek.pg.model.index.ForeignKey;
 import io.github.mfvanek.pg.model.index.Index;
 import io.github.mfvanek.pg.model.index.IndexWithNulls;
 import io.github.mfvanek.pg.model.index.IndexWithSize;
-import io.github.mfvanek.pg.model.table.Column;
 import io.github.mfvanek.pg.model.table.Table;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,10 +40,25 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
 
     private final PgContext demoSchema = PgContext.of("demo");
-    private final PgConnection pgConnection;
+    private final InvalidIndexesCheckOnHost invalidIndexesCheck;
+    private final DuplicatedIndexesCheckOnHost duplicatedIndexesCheck;
+    private final IntersectedIndexesCheckOnHost intersectedIndexesCheck;
+    private final ForeignKeysNotCoveredWithIndexCheckOnHost foreignKeysNotCoveredWithIndexCheck;
+    private final TablesWithoutPrimaryKeyCheckOnHost tablesWithoutPrimaryKeyCheck;
+    private final IndexesWithNullValuesCheckOnHost indexesWithNullValuesCheck;
+    private final TablesWithoutDescriptionCheckOnHost tablesWithoutDescriptionCheck;
+    private final ColumnsWithoutDescriptionCheckOnHost columnsWithoutDescriptionCheck;
 
     IndexesMaintenanceTest() {
-        this.pgConnection = PgConnectionImpl.ofPrimary(EMBEDDED_POSTGRES.getTestDatabase());
+        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(EMBEDDED_POSTGRES.getTestDatabase());
+        this.invalidIndexesCheck = new InvalidIndexesCheckOnHost(pgConnection);
+        this.duplicatedIndexesCheck = new DuplicatedIndexesCheckOnHost(pgConnection);
+        this.intersectedIndexesCheck = new IntersectedIndexesCheckOnHost(pgConnection);
+        this.foreignKeysNotCoveredWithIndexCheck = new ForeignKeysNotCoveredWithIndexCheckOnHost(pgConnection);
+        this.tablesWithoutPrimaryKeyCheck = new TablesWithoutPrimaryKeyCheckOnHost(pgConnection);
+        this.indexesWithNullValuesCheck = new IndexesWithNullValuesCheckOnHost(pgConnection);
+        this.tablesWithoutDescriptionCheck = new TablesWithoutDescriptionCheckOnHost(pgConnection);
+        this.columnsWithoutDescriptionCheck = new ColumnsWithoutDescriptionCheckOnHost(pgConnection);
     }
 
     @Test
@@ -63,17 +76,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getInvalidIndexesShouldReturnNothingForPublicSchema() {
-        final List<Index> invalidIndexes = new InvalidIndexesCheckOnHost(pgConnection).check();
-
-        assertThat(invalidIndexes)
+        assertThat(invalidIndexesCheck.check())
                 .isEmpty();
     }
 
     @Test
     void getInvalidIndexesShouldReturnOneRowForDemoSchema() {
-        final List<Index> invalidIndexes = new InvalidIndexesCheckOnHost(pgConnection).check(demoSchema);
-
-        assertThat(invalidIndexes)
+        assertThat(invalidIndexesCheck.check(demoSchema))
                 .hasSize(1)
                 // HOW TO FIX: drop index concurrently, fix data in table, then create index concurrently again
                 .containsExactly(Index.of(BUYER_TABLE, "demo.i_buyer_email"));
@@ -81,17 +90,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getDuplicatedIndexesShouldReturnNothingForPublicSchema() {
-        final List<DuplicatedIndexes> duplicatedIndexes = new DuplicatedIndexesCheckOnHost(pgConnection).check();
-
-        assertThat(duplicatedIndexes)
+        assertThat(duplicatedIndexesCheck.check())
                 .isEmpty();
     }
 
     @Test
     void getDuplicatedIndexesShouldReturnOneRowForDemoSchema() {
-        final List<DuplicatedIndexes> duplicatedIndexes = new DuplicatedIndexesCheckOnHost(pgConnection).check(demoSchema);
-
-        assertThat(duplicatedIndexes)
+        assertThat(duplicatedIndexesCheck.check(demoSchema))
                 .hasSize(1)
                 // HOW TO FIX: do not manually create index for column with unique constraint
                 .containsExactly(DuplicatedIndexes.of(
@@ -101,17 +106,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getIntersectedIndexesShouldReturnNothingForPublicSchema() {
-        final List<DuplicatedIndexes> intersectedIndexes = new IntersectedIndexesCheckOnHost(pgConnection).check();
-
-        assertThat(intersectedIndexes)
+        assertThat(intersectedIndexesCheck.check())
                 .isEmpty();
     }
 
     @Test
     void getIntersectedIndexesShouldReturnOneRowForDemoSchema() {
-        final List<DuplicatedIndexes> intersectedIndexes = new IntersectedIndexesCheckOnHost(pgConnection).check(demoSchema);
-
-        assertThat(intersectedIndexes)
+        assertThat(intersectedIndexesCheck.check(demoSchema))
                 .hasSize(2)
                 // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
                 .containsExactlyInAnyOrder(
@@ -125,17 +126,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getForeignKeysNotCoveredWithIndexShouldReturnNothingForPublicSchema() {
-        final List<ForeignKey> foreignKeys = new ForeignKeysNotCoveredWithIndexCheckOnHost(pgConnection).check();
-
-        assertThat(foreignKeys)
+        assertThat(foreignKeysNotCoveredWithIndexCheck.check())
                 .isEmpty();
     }
 
     @Test
     void getForeignKeysNotCoveredWithIndexShouldReturnThreeRowsForDemoSchema() {
-        final List<ForeignKey> foreignKeys = new ForeignKeysNotCoveredWithIndexCheckOnHost(pgConnection).check(demoSchema);
-
-        assertThat(foreignKeys)
+        assertThat(foreignKeysNotCoveredWithIndexCheck.check(demoSchema))
                 .hasSize(3)
                 // HOW TO FIX: create indexes on columns under foreign key constraint
                 .containsExactlyInAnyOrder(
@@ -146,9 +143,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getTablesWithoutPrimaryKeyShouldReturnOneRowForPublicSchema() {
-        final List<Table> tables = new TablesWithoutPrimaryKeyCheckOnHost(pgConnection).check();
-
-        assertThat(tables)
+        assertThat(tablesWithoutPrimaryKeyCheck.check())
                 .hasSize(1)
                 // HOW TO FIX: just add liquibase table to exclusions
                 .containsExactly(Table.of("databasechangelog", 1L));
@@ -156,9 +151,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getTablesWithoutPrimaryKeyShouldReturnOneRowForDemoSchema() {
-        final List<Table> tables = new TablesWithoutPrimaryKeyCheckOnHost(pgConnection).check(demoSchema);
-
-        assertThat(tables)
+        assertThat(tablesWithoutPrimaryKeyCheck.check(demoSchema))
                 .hasSize(1)
                 // HOW TO FIX: add primary key to the table
                 .containsExactly(Table.of("demo.payment", 1L));
@@ -166,17 +159,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getIndexesWithNullValuesShouldReturnNothingForPublicSchema() {
-        final List<IndexWithNulls> indexesWithNulls = new IndexesWithNullValuesCheckOnHost(pgConnection).check();
-
-        assertThat(indexesWithNulls)
+        assertThat(indexesWithNullValuesCheck.check())
                 .isEmpty();
     }
 
     @Test
     void getIndexesWithNullValuesShouldReturnOneRowForDemoSchema() {
-        final List<IndexWithNulls> indexesWithNulls = new IndexesWithNullValuesCheckOnHost(pgConnection).check(demoSchema);
-
-        assertThat(indexesWithNulls)
+        assertThat(indexesWithNullValuesCheck.check(demoSchema))
                 .hasSize(1)
                 // HOW TO FIX: consider excluding null values from index if it's possible
                 .containsExactly(IndexWithNulls.of(BUYER_TABLE, "demo.i_buyer_middle_name", 1L, "middle_name"));
@@ -184,9 +173,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getTablesWithoutDescriptionShouldReturnTwoRowsForPublicSchema() {
-        final List<Table> tables = new TablesWithoutDescriptionCheckOnHost(pgConnection).check();
-
-        assertThat(tables)
+        assertThat(tablesWithoutDescriptionCheck.check())
                 .hasSize(2)
                 // HOW TO FIX: just add liquibase table to exclusions
                 .containsExactlyInAnyOrder(
@@ -196,17 +183,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getTablesWithoutDescriptionShouldReturnOneRowForDemoSchema() {
-        final List<Table> tables = new TablesWithoutDescriptionCheckOnHost(pgConnection).check(demoSchema);
-
-        assertThat(tables)
+        assertThat(tablesWithoutDescriptionCheck.check(demoSchema))
                 .isEmpty();
     }
 
     @Test
     void getColumnsWithoutDescriptionShouldReturnSeveralRowsForPublicSchema() {
-        final List<Column> columns = new ColumnsWithoutDescriptionCheckOnHost(pgConnection).check();
-
-        assertThat(columns)
+        assertThat(columnsWithoutDescriptionCheck.check())
                 // HOW TO FIX: just add liquibase table to exclusions
                 .hasSize(18)
                 .allMatch(c -> "databasechangelog".equals(c.getTableName()) || "databasechangeloglock".equals(c.getTableName()));
@@ -214,9 +197,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void getColumnsWithoutDescriptionShouldReturnSeveralRowsForDemoSchema() {
-        final List<Column> columns = new ColumnsWithoutDescriptionCheckOnHost(pgConnection).check(demoSchema);
-
-        assertThat(columns)
+        assertThat(columnsWithoutDescriptionCheck.check(demoSchema))
                 .isEmpty();
     }
 }
