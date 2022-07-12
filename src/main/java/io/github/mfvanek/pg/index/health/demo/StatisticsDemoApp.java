@@ -11,6 +11,8 @@ import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 import static io.github.mfvanek.pg.index.health.demo.utils.StatisticsCollector.resetStatistics;
 
 public class StatisticsDemoApp {
@@ -20,7 +22,7 @@ public class StatisticsDemoApp {
     public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             resetStatistics(embeddedPostgres.getPostgresDatabase());
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
     }

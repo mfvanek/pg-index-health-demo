@@ -33,8 +33,10 @@ class JsonbTest extends DatabaseAwareTestBase {
                     final long paymentId = resultSet.getLong("id");
                     final PGobject infoAsObject = (PGobject) resultSet.getObject("info");
                     final String infoAsString = resultSet.getString("info");
-                    assertThat(infoAsObject).isNotNull();
-                    assertThat(infoAsString).isNotBlank();
+                    assertThat(infoAsObject)
+                            .isNotNull();
+                    assertThat(infoAsString)
+                            .isNotBlank();
                     assertThat(infoAsObject.getValue())
                             .isEqualTo("{\" payment\": {\"date\": \"2022-05-27T18:31:42\", \"result\": \"success\"}}")
                             .isEqualTo(infoAsString);

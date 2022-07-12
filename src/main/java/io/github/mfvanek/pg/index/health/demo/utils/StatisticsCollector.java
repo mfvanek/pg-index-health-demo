@@ -7,13 +7,14 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
-import io.github.mfvanek.pg.common.maintenance.MaintenanceFactoryImpl;
 import io.github.mfvanek.pg.common.management.DatabaseManagement;
 import io.github.mfvanek.pg.common.management.DatabaseManagementImpl;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
+import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
+import io.github.mfvanek.pg.statistics.maintenance.StatisticsMaintenanceOnHostImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public final class StatisticsCollector {
     public static ZonedDateTime resetStatistics(@Nonnull final DataSource dataSource) {
         final PgConnection pgConnection = PgConnectionImpl.ofPrimary(dataSource);
         final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);
-        final DatabaseManagement databaseManagement = new DatabaseManagementImpl(haPgConnection, new MaintenanceFactoryImpl());
+        final DatabaseManagement databaseManagement = new DatabaseManagementImpl(haPgConnection, StatisticsMaintenanceOnHostImpl::new, ConfigurationMaintenanceOnHostImpl::new);
         databaseManagement.resetStatistics();
         waitForStatisticsCollector(dataSource);
         final Optional<OffsetDateTime> resetTimestamp = databaseManagement.getLastStatsResetTimestamp();
