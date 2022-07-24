@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 
 public final class MigrationRunner {
 
-    private static final Logger logger = LoggerFactory.getLogger(MigrationRunner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MigrationRunner.class);
 
     private MigrationRunner() {
         throw new UnsupportedOperationException();
@@ -39,7 +39,7 @@ public final class MigrationRunner {
                 liquibase.update("main");
             }
         } catch (SQLException | LiquibaseException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 }

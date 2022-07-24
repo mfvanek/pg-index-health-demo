@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'com.github.spotbugs' version '5.0.6'
+    id 'com.github.spotbugs' version '5.0.9'
     id 'checkstyle'
     id 'jacoco'
     id 'pmd'
@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'io.github.mfvanek'
-version '0.6.0-SNAPSHOT'
+version '0.6.1-SNAPSHOT'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -41,6 +41,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    dependsOn checkstyleMain, checkstyleTest, pmdMain, pmdTest, spotbugsMain, spotbugsTest
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
     finalizedBy jacocoTestReport
     finalizedBy jacocoTestCoverageVerification
 }
@@ -63,7 +65,7 @@ spotbugs {
 }
 
 checkstyle {
-    toolVersion '8.45'
+    toolVersion '10.3.1'
     configFile file("config/checkstyle/checkstyle.xml")
     ignoreFailures = false
     maxWarnings = 0
@@ -116,12 +118,11 @@ jacocoTestCoverageVerification {
     }
 }
 
-check.dependsOn jacocoTestReport
-check.dependsOn jacocoTestCoverageVerification
+check.dependsOn jacocoTestReport, jacocoTestCoverageVerification
 
 pmd {
     consoleOutput = true
-    toolVersion = "6.42.0"
+    toolVersion = "6.47.0"
     ruleSetFiles = files("config/pmd/pmd.xml")
     ruleSets = []
 }

@@ -30,7 +30,7 @@ import javax.sql.DataSource;
 
 public final class StatisticsCollector {
 
-    private static final Logger logger = LoggerFactory.getLogger(StatisticsCollector.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatisticsCollector.class);
 
     private StatisticsCollector() {
         throw new UnsupportedOperationException();
@@ -47,7 +47,7 @@ public final class StatisticsCollector {
         final ZonedDateTime zonedDateTime = resetTimestamp
                 .orElseThrow(IllegalStateException::new)
                 .atZoneSameInstant(ZoneId.systemDefault());
-        logger.info("Last statistics reset was at {}", zonedDateTime);
+        LOGGER.info("Last statistics reset was at {}", zonedDateTime);
         return zonedDateTime;
     }
 
@@ -57,9 +57,9 @@ public final class StatisticsCollector {
             statement.execute("vacuum analyze;");
             Thread.sleep(1000L);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         } catch (InterruptedException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             Thread.currentThread().interrupt();
         }
     }
