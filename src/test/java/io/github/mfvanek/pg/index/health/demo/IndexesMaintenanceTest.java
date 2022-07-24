@@ -34,6 +34,7 @@ import java.sql.Statement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("checkstyle:ClassDataAbstractionCoupling")
 class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     private static final String BUYER_TABLE = "demo.buyer";

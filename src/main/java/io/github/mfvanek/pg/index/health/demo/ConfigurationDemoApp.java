@@ -28,13 +28,13 @@ import javax.annotation.Nonnull;
 
 public class ConfigurationDemoApp {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConfigurationDemoApp.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationDemoApp.class);
 
     public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             checkConfig(embeddedPostgres);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -49,6 +49,6 @@ public class ConfigurationDemoApp {
                 .withSSD()
                 .build();
         final Set<PgParam> paramsWithDefaultValues = databaseManagement.getParamsWithDefaultValues(serverSpecification);
-        paramsWithDefaultValues.forEach(p -> logger.info("Parameter with default value {}", p));
+        paramsWithDefaultValues.forEach(p -> LOGGER.info("Parameter with default value {}", p));
     }
 }

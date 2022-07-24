@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 
 public class DemoApp {
 
-    private static final Logger logger = LoggerFactory.getLogger(DemoApp.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DemoApp.class);
 
     public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
@@ -41,7 +41,7 @@ public class DemoApp {
             HealthDataCollector.collectHealthData("postgres", embeddedPostgres.getPort());
             generateMigrations(embeddedPostgres);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -53,12 +53,12 @@ public class DemoApp {
         final List<ForeignKey> foreignKeys = foreignKeysNotCoveredWithIndex.check(context);
         final DbMigrationGenerator generator = new DbMigrationGeneratorImpl();
         final String generatedMigrations = generator.generate(foreignKeys, GeneratingOptions.builder().build());
-        logger.info(generatedMigrations);
+        LOGGER.info(generatedMigrations);
         try (Connection connection = embeddedPostgres.getPostgresDatabase().getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute(generatedMigrations);
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
         final List<ForeignKey> afterMigrations = foreignKeysNotCoveredWithIndex.check(context);
         if (!afterMigrations.isEmpty()) {

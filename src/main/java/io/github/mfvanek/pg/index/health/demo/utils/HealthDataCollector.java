@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 
 public final class HealthDataCollector {
 
-    private static final Logger logger = LoggerFactory.getLogger(HealthDataCollector.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HealthDataCollector.class);
 
     private HealthDataCollector() {
         throw new UnsupportedOperationException();
@@ -45,7 +45,7 @@ public final class HealthDataCollector {
         final HealthLogger healthLogger = new KeyValueFileHealthLogger(credentials, connectionFactory, DatabaseChecks::new);
         final PgContext context = PgContext.of("demo");
         final List<String> healthData = healthLogger.logAll(exclusions, context);
-        healthData.forEach(logger::info);
+        healthData.forEach(LOGGER::info);
         return healthData;
     }
 }

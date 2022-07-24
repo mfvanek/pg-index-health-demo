@@ -17,13 +17,13 @@ import static io.github.mfvanek.pg.index.health.demo.utils.StatisticsCollector.r
 
 public class StatisticsDemoApp {
 
-    private static final Logger logger = LoggerFactory.getLogger(StatisticsDemoApp.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatisticsDemoApp.class);
 
     public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             resetStatistics(embeddedPostgres.getPostgresDatabase());
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 }
