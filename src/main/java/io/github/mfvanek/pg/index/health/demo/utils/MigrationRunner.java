@@ -31,8 +31,8 @@ public final class MigrationRunner {
     }
 
     public static void runMigrations(@Nonnull final EmbeddedPostgres embeddedPostgres) {
-        try (Connection connection = embeddedPostgres.getPostgresDatabase().getConnection()) {
-            final DatabaseConnection dbConnection = new JdbcConnection(connection);
+        try (Connection connection = embeddedPostgres.getPostgresDatabase().getConnection();
+             DatabaseConnection dbConnection = new JdbcConnection(connection)) {
             final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(dbConnection);
             try (Liquibase liquibase = new Liquibase("changelogs/changelog.xml",
                     new ClassLoaderResourceAccessor(), database)) {
