@@ -19,22 +19,20 @@ import io.github.mfvanek.pg.settings.ServerSpecification;
 import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.statistics.maintenance.StatisticsMaintenanceOnHostImpl;
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Set;
 import javax.annotation.Nonnull;
 
+@Slf4j
 public class ConfigurationDemoApp {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationDemoApp.class);
 
     public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             checkConfig(embeddedPostgres);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -49,6 +47,6 @@ public class ConfigurationDemoApp {
                 .withSSD()
                 .build();
         final Set<PgParam> paramsWithDefaultValues = databaseManagement.getParamsWithDefaultValues(serverSpecification);
-        paramsWithDefaultValues.forEach(p -> LOGGER.info("Parameter with default value {}", p));
+        paramsWithDefaultValues.forEach(p -> log.info("Parameter with default value {}", p));
     }
 }

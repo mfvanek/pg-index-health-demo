@@ -16,15 +16,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.annotation.Nonnull;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
 class JsonbTest extends DatabaseAwareTestBase {
 
     @Test
     void readingAndWritingJsonb() throws SQLException {
-        try (Connection connection = EMBEDDED_POSTGRES.getTestDatabase().getConnection();
+        try (Connection connection = getDataSource().getConnection();
              Statement statement = connection.createStatement();
              PreparedStatement updateStatement = connection.prepareStatement("update demo.payment set info = ? where id = ?")) {
             connection.setAutoCommit(false);
@@ -43,9 +43,7 @@ class JsonbTest extends DatabaseAwareTestBase {
 
                     final String withoutWhitespaces = StringUtils.deleteWhitespace(infoAsString);
                     assertThat(withoutWhitespaces).isEqualTo("{\"payment\":{\"date\":\"2022-05-27T18:31:42\",\"result\":\"success\"}}");
-                    final PGobject fixedInfoObject = new PGobject();
-                    fixedInfoObject.setType("jsonb");
-                    fixedInfoObject.setValue(withoutWhitespaces);
+                    final PGobject fixedInfoObject = preparePgObject(withoutWhitespaces);
                     updateStatement.setObject(1, fixedInfoObject);
                     updateStatement.setLong(2, paymentId);
                     final int result = updateStatement.executeUpdate();
@@ -54,5 +52,13 @@ class JsonbTest extends DatabaseAwareTestBase {
             }
             connection.commit();
         }
+    }
+
+    @Nonnull
+    private static PGobject preparePgObject(@Nonnull final String withoutWhitespaces) throws SQLException {
+        final PGobject fixedInfoObject = new PGobject();
+        fixedInfoObject.setType("jsonb");
+        fixedInfoObject.setValue(withoutWhitespaces);
+        return fixedInfoObject;
     }
 }

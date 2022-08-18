@@ -5,10 +5,11 @@ plugins {
     id 'jacoco'
     id 'pmd'
     id 'org.sonarqube' version '3.3'
+    id 'io.freefair.lombok' version '6.5.0.3'
 }
 
 group 'io.github.mfvanek'
-version '0.6.1-SNAPSHOT'
+version '0.6.2-SNAPSHOT'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -23,7 +24,7 @@ repositories {
 def junitVersion = '5.9.0'
 dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.11'
-    implementation 'io.github.mfvanek:pg-index-health:0.6.0'
+    implementation 'io.github.mfvanek:pg-index-health:0.6.1'
     implementation 'org.postgresql:postgresql:42.4.1'
     implementation('io.zonky.test:embedded-postgres:2.0.0') {
         exclude module: 'org.postgresql:postgresql'
@@ -36,13 +37,14 @@ dependencies {
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testImplementation 'org.assertj:assertj-core:3.23.1'
 }
 
 test {
     useJUnitPlatform()
     dependsOn checkstyleMain, checkstyleTest, pmdMain, pmdTest, spotbugsMain, spotbugsTest
-    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    maxParallelForks = 1
     finalizedBy jacocoTestReport
     finalizedBy jacocoTestCoverageVerification
 }
@@ -91,28 +93,28 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'CLASS'
                 value = 'MISSEDCOUNT'
-                maximum = 4
+                maximum = 3
             }
         }
         rule {
             limit {
                 counter = 'METHOD'
                 value = 'MISSEDCOUNT'
-                maximum = 17
+                maximum = 12
             }
         }
         rule {
             limit {
                 counter = 'LINE'
                 value = 'MISSEDCOUNT'
-                maximum = 76
+                maximum = 61
             }
         }
         rule {
             limit {
                 counter = 'INSTRUCTION'
                 value = 'COVEREDRATIO'
-                minimum = 0.33
+                minimum = 0.45
             }
         }
     }

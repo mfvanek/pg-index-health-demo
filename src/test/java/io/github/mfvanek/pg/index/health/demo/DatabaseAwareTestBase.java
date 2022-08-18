@@ -7,15 +7,37 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
-import io.zonky.test.db.postgres.embedded.LiquibasePreparer;
+import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
 import io.zonky.test.db.postgres.junit5.EmbeddedPostgresExtension;
 import io.zonky.test.db.postgres.junit5.PreparedDbExtension;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
+import javax.annotation.Nonnull;
+import javax.sql.DataSource;
 
 public abstract class DatabaseAwareTestBase {
 
     @RegisterExtension
-    protected static final PreparedDbExtension EMBEDDED_POSTGRES =
-            EmbeddedPostgresExtension.preparedDatabase(
-                    LiquibasePreparer.forClasspathLocation("changelogs/changelog.xml"));
+    private static final PreparedDbExtension EMBEDDED_POSTGRES = EmbeddedPostgresExtension.preparedDatabase(ds -> {
+    });
+
+    @BeforeAll
+    static void runMigrations() {
+        MigrationRunner.runMigrations(getDataSource());
+    }
+
+    @Nonnull
+    protected static DataSource getDataSource() {
+        return EMBEDDED_POSTGRES.getTestDatabase();
+    }
+
+    @Nonnull
+    protected static String getDatabaseName() {
+        return EMBEDDED_POSTGRES.getConnectionInfo().getDbName();
+    }
+
+    protected static int getPort() {
+        return EMBEDDED_POSTGRES.getConnectionInfo().getPort();
+    }
 }

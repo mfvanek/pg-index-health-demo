@@ -7,7 +7,6 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
-import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
@@ -15,23 +14,20 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.annotation.Nonnull;
+import javax.sql.DataSource;
 
+@Slf4j
+@UtilityClass
 public final class MigrationRunner {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MigrationRunner.class);
-
-    private MigrationRunner() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static void runMigrations(@Nonnull final EmbeddedPostgres embeddedPostgres) {
-        try (Connection connection = embeddedPostgres.getPostgresDatabase().getConnection();
+    public static void runMigrations(@Nonnull final DataSource dataSource) {
+        try (Connection connection = dataSource.getConnection();
              DatabaseConnection dbConnection = new JdbcConnection(connection)) {
             final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(dbConnection);
             try (Liquibase liquibase = new Liquibase("changelogs/changelog.xml",
@@ -39,7 +35,7 @@ public final class MigrationRunner {
                 liquibase.update("main");
             }
         } catch (SQLException | LiquibaseException e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 }

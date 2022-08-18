@@ -8,7 +8,6 @@
 package io.github.mfvanek.pg.index.health.demo.utils;
 
 import io.github.mfvanek.pg.index.health.demo.DatabaseAwareTestBase;
-import io.zonky.test.db.postgres.embedded.ConnectionInfo;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -32,11 +31,11 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
                 "db_indexes_health\tindexes_with_bloat\t0",
                 "db_indexes_health\ttables_with_bloat\t0",
                 "db_indexes_health\ttables_without_description\t0",
-                "db_indexes_health\tcolumns_without_description\t0");
-        final ConnectionInfo info = EMBEDDED_POSTGRES.getConnectionInfo();
-        final List<String> healthData = HealthDataCollector.collectHealthData(info.getDbName(), info.getPort());
+                "db_indexes_health\tcolumns_without_description\t0",
+                "db_indexes_health\tcolumns_with_json_type\t0");
+        final List<String> healthData = HealthDataCollector.collectHealthData(getDatabaseName(), getPort());
         assertThat(healthData)
-                .hasSize(12)
+                .hasSize(13)
                 .matches(l -> l.stream().allMatch(s -> expected.stream().anyMatch(s::contains)));
     }
 }

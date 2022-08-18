@@ -19,7 +19,7 @@ class StatisticsCollectorTest extends DatabaseAwareTestBase {
     @Test
     void resetStatisticsShouldWork() {
         final ZonedDateTime beforeTest = ZonedDateTime.now();
-        final ZonedDateTime zonedDateTime = StatisticsCollector.resetStatistics(EMBEDDED_POSTGRES.getTestDatabase());
+        final ZonedDateTime zonedDateTime = StatisticsCollector.resetStatistics(getDataSource());
         assertThat(zonedDateTime)
                 .isAfter(beforeTest);
     }
