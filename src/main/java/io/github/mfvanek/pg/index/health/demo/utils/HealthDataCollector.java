@@ -18,19 +18,15 @@ import io.github.mfvanek.pg.connection.PgConnectionFactoryImpl;
 import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
 import io.github.mfvanek.pg.model.MemoryUnit;
 import io.github.mfvanek.pg.model.PgContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import javax.annotation.Nonnull;
 
+@Slf4j
+@UtilityClass
 public final class HealthDataCollector {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(HealthDataCollector.class);
-
-    private HealthDataCollector() {
-        throw new UnsupportedOperationException();
-    }
 
     @Nonnull
     public static List<String> collectHealthData(@Nonnull final String databaseName, final int port) {
@@ -45,7 +41,7 @@ public final class HealthDataCollector {
         final HealthLogger healthLogger = new KeyValueFileHealthLogger(credentials, connectionFactory, DatabaseChecks::new);
         final PgContext context = PgContext.of("demo");
         final List<String> healthData = healthLogger.logAll(exclusions, context);
-        healthData.forEach(LOGGER::info);
+        healthData.forEach(log::info);
         return healthData;
     }
 }

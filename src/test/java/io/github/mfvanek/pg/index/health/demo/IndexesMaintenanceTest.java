@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
+import io.github.mfvanek.pg.checks.host.ColumnsWithJsonTypeCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ColumnsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.DuplicatedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ForeignKeysNotCoveredWithIndexCheckOnHost;
@@ -26,15 +27,18 @@ import io.github.mfvanek.pg.model.index.IndexWithSize;
 import io.github.mfvanek.pg.model.table.Table;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.annotation.Nonnull;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressWarnings("checkstyle:ClassDataAbstractionCoupling")
+@SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
 class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     private static final String BUYER_TABLE = "demo.buyer";
@@ -49,9 +53,10 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     private final IndexesWithNullValuesCheckOnHost indexesWithNullValuesCheck;
     private final TablesWithoutDescriptionCheckOnHost tablesWithoutDescriptionCheck;
     private final ColumnsWithoutDescriptionCheckOnHost columnsWithoutDescriptionCheck;
+    private final ColumnsWithJsonTypeCheckOnHost columnsWithJsonTypeCheckOnHost;
 
     IndexesMaintenanceTest() {
-        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(EMBEDDED_POSTGRES.getTestDatabase());
+        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(getDataSource());
         this.invalidIndexesCheck = new InvalidIndexesCheckOnHost(pgConnection);
         this.duplicatedIndexesCheck = new DuplicatedIndexesCheckOnHost(pgConnection);
         this.intersectedIndexesCheck = new IntersectedIndexesCheckOnHost(pgConnection);
@@ -60,12 +65,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         this.indexesWithNullValuesCheck = new IndexesWithNullValuesCheckOnHost(pgConnection);
         this.tablesWithoutDescriptionCheck = new TablesWithoutDescriptionCheckOnHost(pgConnection);
         this.columnsWithoutDescriptionCheck = new ColumnsWithoutDescriptionCheckOnHost(pgConnection);
+        this.columnsWithJsonTypeCheckOnHost = new ColumnsWithJsonTypeCheckOnHost(pgConnection);
     }
 
     @Test
     @DisplayName("Always check PostgreSQL version in your tests")
     void checkPostgresVersion() throws SQLException {
-        try (Connection connection = EMBEDDED_POSTGRES.getTestDatabase().getConnection();
+        try (Connection connection = getDataSource().getConnection();
              Statement statement = connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery("select version();")) {
                 resultSet.next();
@@ -199,6 +205,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     @Test
     void getColumnsWithoutDescriptionShouldReturnSeveralRowsForDemoSchema() {
         assertThat(columnsWithoutDescriptionCheck.check(demoSchema))
+                .isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"public", "demo"})
+    void getColumnsWithJsonTypeShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
+        assertThat(columnsWithJsonTypeCheckOnHost.check(PgContext.of(schemaName)))
                 .isEmpty();
     }
 }

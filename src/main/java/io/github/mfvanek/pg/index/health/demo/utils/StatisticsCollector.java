@@ -15,8 +15,8 @@ import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.statistics.maintenance.StatisticsMaintenanceOnHostImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,13 +28,9 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
+@Slf4j
+@UtilityClass
 public final class StatisticsCollector {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatisticsCollector.class);
-
-    private StatisticsCollector() {
-        throw new UnsupportedOperationException();
-    }
 
     @Nonnull
     public static ZonedDateTime resetStatistics(@Nonnull final DataSource dataSource) {
@@ -47,7 +43,7 @@ public final class StatisticsCollector {
         final ZonedDateTime zonedDateTime = resetTimestamp
                 .orElseThrow(IllegalStateException::new)
                 .atZoneSameInstant(ZoneId.systemDefault());
-        LOGGER.info("Last statistics reset was at {}", zonedDateTime);
+        log.info("Last statistics reset was at {}", zonedDateTime);
         return zonedDateTime;
     }
 
@@ -57,9 +53,9 @@ public final class StatisticsCollector {
             statement.execute("vacuum analyze;");
             Thread.sleep(1000L);
         } catch (SQLException e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         } catch (InterruptedException e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             Thread.currentThread().interrupt();
         }
     }

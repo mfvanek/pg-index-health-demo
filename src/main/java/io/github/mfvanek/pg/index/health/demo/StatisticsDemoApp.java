@@ -8,22 +8,20 @@
 package io.github.mfvanek.pg.index.health.demo;
 
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 import static io.github.mfvanek.pg.index.health.demo.utils.StatisticsCollector.resetStatistics;
 
+@Slf4j
 public class StatisticsDemoApp {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatisticsDemoApp.class);
 
     public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             resetStatistics(embeddedPostgres.getPostgresDatabase());
         } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 }

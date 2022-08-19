@@ -5,18 +5,22 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo;
+package io.github.mfvanek.pg.index.health.demo.utils;
 
-import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
+import io.github.mfvanek.pg.model.index.ForeignKey;
 import io.zonky.test.db.postgres.junit5.EmbeddedPostgresExtension;
 import io.zonky.test.db.postgres.junit5.PreparedDbExtension;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
-public abstract class DatabaseAwareTestBase {
+import static org.assertj.core.api.Assertions.assertThat;
+
+class MigrationsGeneratorTest {
 
     @RegisterExtension
     private static final PreparedDbExtension EMBEDDED_POSTGRES = EmbeddedPostgresExtension.preparedDatabase(ds -> {
@@ -28,16 +32,17 @@ public abstract class DatabaseAwareTestBase {
     }
 
     @Nonnull
-    protected static DataSource getDataSource() {
+    private static DataSource getDataSource() {
         return EMBEDDED_POSTGRES.getTestDatabase();
     }
 
-    @Nonnull
-    protected static String getDatabaseName() {
-        return EMBEDDED_POSTGRES.getConnectionInfo().getDbName();
-    }
-
-    protected static int getPort() {
-        return EMBEDDED_POSTGRES.getConnectionInfo().getPort();
+    @Test
+    void generateMigrationsShouldWork() {
+        final List<ForeignKey> foreignKeys = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(getDataSource());
+        assertThat(foreignKeys)
+                .hasSize(3);
+        MigrationsGenerator.generateMigrations(getDataSource(), foreignKeys);
+        assertThat(MigrationsGenerator.getForeignKeysNotCoveredWithIndex(getDataSource()))
+                .isEmpty();
     }
 }
