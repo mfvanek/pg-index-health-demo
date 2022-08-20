@@ -15,11 +15,11 @@ import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.statistics.maintenance.StatisticsMaintenanceOnHostImpl;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -47,16 +47,12 @@ public final class StatisticsCollector {
         return zonedDateTime;
     }
 
+    @SneakyThrows
     static void waitForStatisticsCollector(@Nonnull final DataSource dataSource) {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute("vacuum analyze;");
             Thread.sleep(1000L);
-        } catch (SQLException e) {
-            log.error(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-            Thread.currentThread().interrupt();
         }
     }
 }

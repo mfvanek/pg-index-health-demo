@@ -100,21 +100,21 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'METHOD'
                 value = 'MISSEDCOUNT'
-                maximum = 9
+                maximum = 7
             }
         }
         rule {
             limit {
                 counter = 'LINE'
                 value = 'MISSEDCOUNT'
-                maximum = 39
+                maximum = 23
             }
         }
         rule {
             limit {
                 counter = 'INSTRUCTION'
                 value = 'COVEREDRATIO'
-                minimum = 0.68
+                minimum = 0.75
             }
         }
     }

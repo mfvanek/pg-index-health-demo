@@ -12,15 +12,16 @@ import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationsGenerator;
 import io.github.mfvanek.pg.model.index.ForeignKey;
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.util.List;
 import javax.sql.DataSource;
 
 @Slf4j
 public class DemoApp {
 
+    @SneakyThrows
     public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             final DataSource dataSource = embeddedPostgres.getPostgresDatabase();
@@ -32,8 +33,6 @@ public class DemoApp {
             if (!afterMigrations.isEmpty()) {
                 throw new IllegalStateException("There should be no foreign keys not covered by the index");
             }
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
         }
     }
 }

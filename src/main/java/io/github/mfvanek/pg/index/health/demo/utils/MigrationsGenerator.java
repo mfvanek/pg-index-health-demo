@@ -17,11 +17,11 @@ import io.github.mfvanek.pg.generator.DbMigrationGeneratorImpl;
 import io.github.mfvanek.pg.generator.GeneratingOptions;
 import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.model.index.ForeignKey;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -37,6 +37,7 @@ public class MigrationsGenerator {
         return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
     }
 
+    @SneakyThrows
     public static void generateMigrations(@Nonnull final DataSource dataSource, @Nonnull final List<ForeignKey> foreignKeys) {
         final DbMigrationGenerator generator = new DbMigrationGeneratorImpl();
         final String generatedMigrations = generator.generate(foreignKeys, GeneratingOptions.builder().build());
@@ -44,8 +45,6 @@ public class MigrationsGenerator {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute(generatedMigrations);
-        } catch (SQLException e) {
-            log.error(e.getMessage(), e);
         }
     }
 }
