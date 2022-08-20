@@ -24,13 +24,15 @@ import javax.sql.DataSource;
 @UtilityClass
 public class DemoApp {
 
+    private static final String PG_NAME = "postgres";
+
     @SneakyThrows
     public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             final DataSource dataSource = embeddedPostgres.getPostgresDatabase();
             MigrationRunner.runMigrations(dataSource);
-            final String url = String.format("jdbc:postgresql://localhost:%d/%s", embeddedPostgres.getPort(), "postgres");
-            final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(url, "postgres", "postgres");
+            final String url = String.format("jdbc:postgresql://localhost:%d/%s", embeddedPostgres.getPort(), PG_NAME);
+            final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(url, PG_NAME, PG_NAME);
             HealthDataCollector.collectHealthData(credentials);
             final List<ForeignKey> foreignKeys = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(dataSource);
             MigrationsGenerator.generateMigrations(dataSource, foreignKeys);
