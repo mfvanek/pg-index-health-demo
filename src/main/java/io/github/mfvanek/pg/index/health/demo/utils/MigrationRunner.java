@@ -38,6 +38,7 @@ public final class MigrationRunner {
                 final Liquibase liquibase = new Liquibase("changelogs/changelog.xml", new ClassLoaderResourceAccessor(), database);
                 liquibase.update("main");
             });
+            log.info("Migrations have been successfully executed");
         }
     }
 }

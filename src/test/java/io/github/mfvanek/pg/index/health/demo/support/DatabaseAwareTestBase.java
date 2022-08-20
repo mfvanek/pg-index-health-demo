@@ -5,7 +5,7 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo;
+package io.github.mfvanek.pg.index.health.demo.support;
 
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
 import io.zonky.test.db.postgres.junit5.EmbeddedPostgresExtension;

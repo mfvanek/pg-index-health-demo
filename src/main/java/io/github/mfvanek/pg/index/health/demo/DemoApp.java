@@ -13,12 +13,14 @@ import io.github.mfvanek.pg.index.health.demo.utils.MigrationsGenerator;
 import io.github.mfvanek.pg.model.index.ForeignKey;
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import javax.sql.DataSource;
 
 @Slf4j
+@UtilityClass
 public class DemoApp {
 
     @SneakyThrows

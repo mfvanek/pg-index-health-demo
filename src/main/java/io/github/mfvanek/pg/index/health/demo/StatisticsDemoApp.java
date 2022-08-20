@@ -9,9 +9,11 @@ package io.github.mfvanek.pg.index.health.demo;
 
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 
 import static io.github.mfvanek.pg.index.health.demo.utils.StatisticsCollector.resetStatistics;
 
+@UtilityClass
 public class StatisticsDemoApp {
 
     @SneakyThrows

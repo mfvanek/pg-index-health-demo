@@ -51,6 +51,7 @@ public final class StatisticsCollector {
     static void waitForStatisticsCollector(@Nonnull final DataSource dataSource) {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
+            log.info("Waiting for statistics collector via executing 'vacuum analyze' command");
             statement.execute("vacuum analyze;");
             Thread.sleep(1000L);
         }

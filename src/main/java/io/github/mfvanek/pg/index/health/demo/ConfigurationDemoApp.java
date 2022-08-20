@@ -10,7 +10,9 @@ package io.github.mfvanek.pg.index.health.demo;
 import io.github.mfvanek.pg.index.health.demo.utils.ConfigurationCollector;
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class ConfigurationDemoApp {
 
     @SneakyThrows

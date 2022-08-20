@@ -7,7 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
-import io.github.mfvanek.pg.index.health.demo.DatabaseAwareTestBase;
+import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
 import io.github.mfvanek.pg.settings.PgParamImpl;
 import org.junit.jupiter.api.Test;
 
