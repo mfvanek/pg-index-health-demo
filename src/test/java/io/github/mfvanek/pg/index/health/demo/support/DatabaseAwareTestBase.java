@@ -7,20 +7,22 @@
 
 package io.github.mfvanek.pg.index.health.demo.support;
 
+import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
-import io.zonky.test.db.postgres.junit5.EmbeddedPostgresExtension;
-import io.zonky.test.db.postgres.junit5.PreparedDbExtension;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.extension.RegisterExtension;
 
+import java.util.Collections;
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
 public abstract class DatabaseAwareTestBase {
 
-    @RegisterExtension
-    private static final PreparedDbExtension EMBEDDED_POSTGRES = EmbeddedPostgresExtension.preparedDatabase(ds -> {
-    });
+    private static final PostgreSqlContainerWrapper POSTGRES = new PostgreSqlContainerWrapper(Collections.emptyList());
+
+    @Nonnull
+    protected static DataSource getDataSource() {
+        return POSTGRES.getDataSource();
+    }
 
     @BeforeAll
     static void runMigrations() {
@@ -28,16 +30,7 @@ public abstract class DatabaseAwareTestBase {
     }
 
     @Nonnull
-    protected static DataSource getDataSource() {
-        return EMBEDDED_POSTGRES.getTestDatabase();
-    }
-
-    @Nonnull
-    protected static String getDatabaseName() {
-        return EMBEDDED_POSTGRES.getConnectionInfo().getDbName();
-    }
-
-    protected static int getPort() {
-        return EMBEDDED_POSTGRES.getConnectionInfo().getPort();
+    protected static ConnectionCredentials getConnectionCredentials() {
+        return ConnectionCredentials.ofUrl(POSTGRES.getUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
     }
 }

@@ -7,33 +7,28 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
+import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
 import io.github.mfvanek.pg.model.index.ForeignKey;
-import io.zonky.test.db.postgres.junit5.EmbeddedPostgresExtension;
-import io.zonky.test.db.postgres.junit5.PreparedDbExtension;
-import org.junit.jupiter.api.BeforeAll;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.List;
-import javax.annotation.Nonnull;
-import javax.sql.DataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MigrationsGeneratorTest {
+class MigrationsGeneratorTest extends DatabaseAwareTestBase {
 
-    @RegisterExtension
-    private static final PreparedDbExtension EMBEDDED_POSTGRES = EmbeddedPostgresExtension.preparedDatabase(ds -> {
-    });
-
-    @BeforeAll
-    static void runMigrations() {
+    @AfterAll
+    @SneakyThrows
+    static void restoreSchema() {
+        try (Connection connection = getDataSource().getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.execute("drop schema if exists demo cascade");
+        }
         MigrationRunner.runMigrations(getDataSource());
-    }
-
-    @Nonnull
-    private static DataSource getDataSource() {
-        return EMBEDDED_POSTGRES.getTestDatabase();
     }
 
     @Test

@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
+import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.index.health.demo.utils.HealthDataCollector;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationsGenerator;
@@ -28,7 +29,9 @@ public class DemoApp {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             final DataSource dataSource = embeddedPostgres.getPostgresDatabase();
             MigrationRunner.runMigrations(dataSource);
-            HealthDataCollector.collectHealthData("postgres", embeddedPostgres.getPort());
+            final String url = String.format("jdbc:postgresql://localhost:%d/%s", embeddedPostgres.getPort(), "postgres");
+            final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(url, "postgres", "postgres");
+            HealthDataCollector.collectHealthData(credentials);
             final List<ForeignKey> foreignKeys = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(dataSource);
             MigrationsGenerator.generateMigrations(dataSource, foreignKeys);
             final List<ForeignKey> afterMigrations = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(dataSource);
