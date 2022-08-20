@@ -6,6 +6,7 @@ plugins {
     id 'pmd'
     id 'org.sonarqube' version '3.3'
     id 'io.freefair.lombok' version '6.5.0.3'
+    id 'info.solidsoft.pitest' version '1.9.0'
 }
 
 group 'io.github.mfvanek'
@@ -47,6 +48,7 @@ test {
     maxParallelForks = 1
     finalizedBy jacocoTestReport
     finalizedBy jacocoTestCoverageVerification
+    finalizedBy 'pitest'
 }
 
 spotbugsMain {
@@ -136,3 +138,14 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io"
     }
 }
+
+pitest {
+    junit5PluginVersion = '1.0.0'
+    pitestVersion = '1.9.4'
+    threads = 4
+    outputFormats = ['XML', 'HTML']
+    timestampedReports = false
+    mutationThreshold = 92
+}
+
+build.dependsOn 'pitest'
