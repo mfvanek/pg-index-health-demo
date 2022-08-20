@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
+import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.postgresql.util.PGobject;

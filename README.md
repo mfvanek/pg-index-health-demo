@@ -10,6 +10,7 @@ Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) l
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=coverage)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
 
 ## Advantages
 With **pg-index-health** library you will be able to:

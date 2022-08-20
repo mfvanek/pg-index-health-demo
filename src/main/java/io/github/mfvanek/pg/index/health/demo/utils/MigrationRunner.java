@@ -8,17 +8,19 @@
 package io.github.mfvanek.pg.index.health.demo.utils;
 
 import liquibase.Liquibase;
+import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
@@ -26,16 +28,17 @@ import javax.sql.DataSource;
 @UtilityClass
 public final class MigrationRunner {
 
+    @SneakyThrows
     public static void runMigrations(@Nonnull final DataSource dataSource) {
-        try (Connection connection = dataSource.getConnection();
-             DatabaseConnection dbConnection = new JdbcConnection(connection)) {
-            final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(dbConnection);
-            try (Liquibase liquibase = new Liquibase("changelogs/changelog.xml",
-                    new ClassLoaderResourceAccessor(), database)) {
+        try (Connection connection = dataSource.getConnection()) {
+            final Map<String, Object> config = new HashMap<>();
+            Scope.child(config, () -> {
+                final DatabaseConnection dbConnection = new JdbcConnection(connection);
+                final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(dbConnection);
+                final Liquibase liquibase = new Liquibase("changelogs/changelog.xml", new ClassLoaderResourceAccessor(), database);
                 liquibase.update("main");
-            }
-        } catch (SQLException | LiquibaseException e) {
-            log.error(e.getMessage(), e);
+            });
+            log.info("Migrations have been successfully executed");
         }
     }
 }

@@ -8,20 +8,18 @@
 package io.github.mfvanek.pg.index.health.demo;
 
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
-import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
+import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 
 import static io.github.mfvanek.pg.index.health.demo.utils.StatisticsCollector.resetStatistics;
 
-@Slf4j
+@UtilityClass
 public class StatisticsDemoApp {
 
+    @SneakyThrows
     public static void main(final String[] args) {
         try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
             resetStatistics(embeddedPostgres.getPostgresDatabase());
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
         }
     }
 }
