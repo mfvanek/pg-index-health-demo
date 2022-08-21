@@ -9,15 +9,15 @@ package io.github.mfvanek.pg.index.health.demo.support;
 
 import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
+import io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper;
 import org.junit.jupiter.api.BeforeAll;
 
-import java.util.Collections;
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
 public abstract class DatabaseAwareTestBase {
 
-    private static final PostgreSqlContainerWrapper POSTGRES = new PostgreSqlContainerWrapper(Collections.emptyList());
+    private static final PostgreSqlContainerWrapper POSTGRES = new PostgreSqlContainerWrapper("13.7");
 
     @Nonnull
     protected static DataSource getDataSource() {

@@ -7,7 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
-import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
+import io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -18,8 +18,8 @@ public class StatisticsDemoApp {
 
     @SneakyThrows
     public static void main(final String[] args) {
-        try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
-            resetStatistics(embeddedPostgres.getPostgresDatabase());
+        try (PostgreSqlContainerWrapper postgres = new PostgreSqlContainerWrapper("13.7")) {
+            resetStatistics(postgres.getDataSource());
         }
     }
 }
