@@ -40,3 +40,8 @@ jobs:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
                     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
                 run: ./gradlew build sonarqube --info
+            -   name: Upload coverage to Codecov
+                uses: codecov/codecov-action@v2
+                with:
+                    fail_ci_if_error: true
+                    verbose: false
