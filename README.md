@@ -8,6 +8,7 @@ please take a look at release [0.6.1](https://github.com/mfvanek/pg-index-health
 
 [![Java CI](https://github.com/mfvanek/pg-index-health-demo/workflows/Java%20CI/badge.svg)](https://github.com/mfvanek/pg-index-health-demo/actions "Java CI")
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/mfvanek/pg-index-health-demo/blob/master/LICENSE "Apache License 2.0")
+[![codecov](https://codecov.io/gh/mfvanek/pg-index-health-demo/branch/master/graph/badge.svg?token=TA13I5NCK4)](https://codecov.io/gh/mfvanek/pg-index-health-demo)
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=bugs)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
