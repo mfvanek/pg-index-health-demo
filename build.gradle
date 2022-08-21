@@ -23,23 +23,25 @@ repositories {
 }
 
 def junitVersion = '5.9.0'
+def testContainersVersion = '1.17.3'
 dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation 'io.github.mfvanek:pg-index-health:0.6.1'
-    implementation 'org.postgresql:postgresql:42.4.1'
-    implementation('io.zonky.test:embedded-postgres:2.0.1') {
-        exclude module: 'org.postgresql:postgresql'
-    }
-    implementation enforcedPlatform('io.zonky.test.postgres:embedded-postgres-binaries-bom:14.5.0')
+    implementation 'org.postgresql:postgresql:42.4.2'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'org.liquibase:liquibase-core:4.15.0'
     implementation 'org.yaml:snakeyaml:1.30'
     implementation 'javax.activation:activation:1.1.1'
+    implementation 'org.apache.commons:commons-dbcp2:2.9.0'
+    implementation "org.testcontainers:testcontainers:$testContainersVersion"
+    implementation "org.testcontainers:postgresql:$testContainersVersion"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testImplementation 'org.assertj:assertj-core:3.23.1'
+    testImplementation "org.testcontainers:junit-jupiter:$testContainersVersion"
+    testImplementation 'org.mockito:mockito-core:4.6.1'
 }
 
 test {
@@ -48,7 +50,6 @@ test {
     maxParallelForks = 1
     finalizedBy jacocoTestReport
     finalizedBy jacocoTestCoverageVerification
-    finalizedBy 'pitest' // ordering tasks
 }
 
 spotbugsMain {
@@ -116,7 +117,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'INSTRUCTION'
                 value = 'COVEREDRATIO'
-                minimum = 0.92
+                minimum = 0.94
             }
         }
     }
@@ -146,6 +147,10 @@ pitest {
     outputFormats = ['XML', 'HTML']
     timestampedReports = false
     mutationThreshold = 100
+    excludedClasses = ['io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper']
 }
 
+tasks.named('pitest').configure {
+    shouldRunAfter test
+}
 build.dependsOn 'pitest'

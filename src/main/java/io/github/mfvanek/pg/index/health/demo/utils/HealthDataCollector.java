@@ -29,9 +29,7 @@ import javax.annotation.Nonnull;
 public final class HealthDataCollector {
 
     @Nonnull
-    public static List<String> collectHealthData(@Nonnull final String databaseName, final int port) {
-        final String url = String.format("jdbc:postgresql://localhost:%d/%s", port, databaseName);
-        final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(url, "postgres", "postgres");
+    public static List<String> collectHealthData(@Nonnull final ConnectionCredentials credentials) {
         final HighAvailabilityPgConnectionFactory connectionFactory = new HighAvailabilityPgConnectionFactoryImpl(
                 new PgConnectionFactoryImpl(), new PrimaryHostDeterminerImpl());
         final Exclusions exclusions = Exclusions.builder()

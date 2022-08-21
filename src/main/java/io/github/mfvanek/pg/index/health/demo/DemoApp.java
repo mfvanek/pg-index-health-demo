@@ -7,17 +7,17 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
+import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.index.health.demo.utils.HealthDataCollector;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationsGenerator;
+import io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper;
 import io.github.mfvanek.pg.model.index.ForeignKey;
-import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import javax.sql.DataSource;
 
 @Slf4j
 @UtilityClass
@@ -25,13 +25,13 @@ public class DemoApp {
 
     @SneakyThrows
     public static void main(final String[] args) {
-        try (EmbeddedPostgres embeddedPostgres = EmbeddedPostgres.start()) {
-            final DataSource dataSource = embeddedPostgres.getPostgresDatabase();
-            MigrationRunner.runMigrations(dataSource);
-            HealthDataCollector.collectHealthData("postgres", embeddedPostgres.getPort());
-            final List<ForeignKey> foreignKeys = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(dataSource);
-            MigrationsGenerator.generateMigrations(dataSource, foreignKeys);
-            final List<ForeignKey> afterMigrations = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(dataSource);
+        try (PostgreSqlContainerWrapper postgres = new PostgreSqlContainerWrapper("14.5")) {
+            MigrationRunner.runMigrations(postgres.getDataSource());
+            final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(postgres.getUrl(), postgres.getUsername(), postgres.getPassword());
+            HealthDataCollector.collectHealthData(credentials);
+            final List<ForeignKey> foreignKeys = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(postgres.getDataSource());
+            MigrationsGenerator.generateMigrations(postgres.getDataSource(), foreignKeys);
+            final List<ForeignKey> afterMigrations = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(postgres.getDataSource());
             if (!afterMigrations.isEmpty()) {
                 throw new IllegalStateException("There should be no foreign keys not covered by the index");
             }

@@ -33,7 +33,7 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
                 "db_indexes_health\ttables_without_description\t0",
                 "db_indexes_health\tcolumns_without_description\t0",
                 "db_indexes_health\tcolumns_with_json_type\t0");
-        final List<String> healthData = HealthDataCollector.collectHealthData(getDatabaseName(), getPort());
+        final List<String> healthData = HealthDataCollector.collectHealthData(getConnectionCredentials());
         assertThat(healthData)
                 .hasSize(13)
                 .matches(l -> l.stream().allMatch(s -> expected.stream().anyMatch(s::contains)));
