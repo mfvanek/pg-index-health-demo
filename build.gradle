@@ -27,7 +27,7 @@ def testContainersVersion = '1.17.3'
 dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation 'io.github.mfvanek:pg-index-health:0.6.1'
-    implementation 'org.postgresql:postgresql:42.4.1'
+    implementation 'org.postgresql:postgresql:42.4.2'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'org.liquibase:liquibase-core:4.15.0'
     implementation 'org.yaml:snakeyaml:1.30'
@@ -50,7 +50,6 @@ test {
     maxParallelForks = 1
     finalizedBy jacocoTestReport
     finalizedBy jacocoTestCoverageVerification
-    finalizedBy 'pitest' // ordering tasks
 }
 
 spotbugsMain {
@@ -151,4 +150,7 @@ pitest {
     excludedClasses = ['io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper']
 }
 
+tasks.named('pitest').configure {
+    shouldRunAfter test
+}
 build.dependsOn 'pitest'

@@ -1,7 +1,10 @@
 # pg-index-health-demo
 Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) library.
-* With Embedded PostgreSQL
-* Without Spring and Spring Boot
+* With Testcontainers
+* Without Spring/Spring Boot
+
+If you search for version with [Embedded PostgreSQL](https://github.com/mfvanek/pg-index-health-demo/blob/4269907dc3e5be92fbe90346755bd107260c0c55/src/main/java/io/github/mfvanek/pg/index/health/demo/DemoApp.java#L28) 
+please take a look at release [0.6.1](https://github.com/mfvanek/pg-index-health-demo/releases/tag/v.0.6.1)
 
 [![Java CI](https://github.com/mfvanek/pg-index-health-demo/workflows/Java%20CI/badge.svg)](https://github.com/mfvanek/pg-index-health-demo/actions "Java CI")
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/mfvanek/pg-index-health-demo/blob/master/LICENSE "Apache License 2.0")

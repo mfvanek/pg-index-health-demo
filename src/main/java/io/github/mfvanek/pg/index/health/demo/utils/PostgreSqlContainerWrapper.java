@@ -18,12 +18,15 @@ import javax.sql.DataSource;
 
 public class PostgreSqlContainerWrapper implements AutoCloseable {
 
+    private static final long SIZE_512_MB = 512L * 1024L * 1024L;
+
     private final PostgreSQLContainer<?> container;
     private final DataSource dataSource;
 
+    @SuppressWarnings("java:S2095") // Resources should be closed
     public PostgreSqlContainerWrapper(@Nonnull final String pgVersion) {
         this(new PostgreSQLContainer<>(DockerImageName.parse("postgres").withTag(pgVersion))
-                .withSharedMemorySize(512L * 1024L * 1024L)
+                .withSharedMemorySize(SIZE_512_MB)
                 .withTmpFs(Collections.singletonMap("/var/lib/postgresql/data", "rw")));
     }
 
