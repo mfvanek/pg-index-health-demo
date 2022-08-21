@@ -18,7 +18,7 @@ public class StatisticsDemoApp {
 
     @SneakyThrows
     public static void main(final String[] args) {
-        try (PostgreSqlContainerWrapper postgres = new PostgreSqlContainerWrapper("13.7")) {
+        try (PostgreSqlContainerWrapper postgres = new PostgreSqlContainerWrapper("14.5")) {
             resetStatistics(postgres.getDataSource());
         }
     }

@@ -49,6 +49,7 @@ test {
     maxParallelForks = 1
     finalizedBy jacocoTestReport
     finalizedBy jacocoTestCoverageVerification
+    finalizedBy 'pitest' // ordering tasks
 }
 
 spotbugsMain {
@@ -145,7 +146,7 @@ pitest {
     threads = 4
     outputFormats = ['XML', 'HTML']
     timestampedReports = false
-    mutationThreshold = 92
+    mutationThreshold = 100
 }
 
 build.dependsOn 'pitest'

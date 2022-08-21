@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 
 public abstract class DatabaseAwareTestBase {
 
-    private static final PostgreSqlContainerWrapper POSTGRES = new PostgreSqlContainerWrapper("13.7");
+    private static final PostgreSqlContainerWrapper POSTGRES = new PostgreSqlContainerWrapper("14.5");
 
     @Nonnull
     protected static DataSource getDataSource() {

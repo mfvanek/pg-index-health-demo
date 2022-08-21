@@ -25,7 +25,7 @@ public class DemoApp {
 
     @SneakyThrows
     public static void main(final String[] args) {
-        try (PostgreSqlContainerWrapper postgres = new PostgreSqlContainerWrapper("13.7")) {
+        try (PostgreSqlContainerWrapper postgres = new PostgreSqlContainerWrapper("14.5")) {
             MigrationRunner.runMigrations(postgres.getDataSource());
             final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(postgres.getUrl(), postgres.getUsername(), postgres.getPassword());
             HealthDataCollector.collectHealthData(credentials);

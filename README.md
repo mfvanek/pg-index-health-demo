@@ -12,6 +12,8 @@ Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) l
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=coverage)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
 
+[![Mutation score](https://img.shields.io/badge/Mutation%20score-100%25-green)](https://pitest.org/ "Mutation score 100%")
+
 ## Advantages
 With **pg-index-health** library you will be able to:
 1. [collect indexes health data](https://github.com/mfvanek/pg-index-health-demo/blob/master/src/main/java/io/github/mfvanek/pg/index/health/demo/DemoApp.java) in production environment;
