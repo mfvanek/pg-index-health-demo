@@ -151,6 +151,6 @@ pitest {
 }
 
 tasks.named('pitest').configure {
-    shouldRunAfter test
+    mustRunAfter test
 }
 build.dependsOn 'pitest'
