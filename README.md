@@ -16,7 +16,7 @@ please take a look at release [0.6.1](https://github.com/mfvanek/pg-index-health
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=coverage)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
 
-[![Mutation score](https://img.shields.io/badge/Mutation%20score-100%25-green)](https://pitest.org/ "Mutation score 100%")
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmfvanek%2Fpg-index-health-demo%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/mfvanek/pg-index-health-demo/master)
 
 ## Advantages
 With **pg-index-health** library you will be able to:
