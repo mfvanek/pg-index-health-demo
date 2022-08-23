@@ -146,7 +146,7 @@ pitest {
     junit5PluginVersion = '1.0.0'
     pitestVersion = '1.9.4'
     threads = 4
-    outputFormats = ['stryker-dashboard', 'HTML']
+    outputFormats = System.getenv('STRYKER_DASHBOARD_API_KEY') != null ? ['stryker-dashboard'] : ['HTML']
     timestampedReports = false
     mutationThreshold = 100
     excludedClasses = ['io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper']
