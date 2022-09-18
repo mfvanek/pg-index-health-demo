@@ -8,12 +8,12 @@
 package io.github.mfvanek.pg.index.health.demo.utils;
 
 import io.github.mfvanek.pg.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
-import io.github.mfvanek.pg.common.maintenance.AbstractCheckOnCluster;
+import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnCluster;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
-import io.github.mfvanek.pg.generator.DbMigrationGeneratorImpl;
+import io.github.mfvanek.pg.generator.ForeignKeyMigrationGenerator;
 import io.github.mfvanek.pg.generator.GeneratingOptions;
 import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.model.index.ForeignKey;
@@ -33,14 +33,14 @@ public class MigrationsGenerator {
 
     public static List<ForeignKey> getForeignKeysNotCoveredWithIndex(@Nonnull final DataSource dataSource) {
         final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(PgConnectionImpl.ofPrimary(dataSource));
-        final AbstractCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex = new ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection);
+        final DatabaseCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex = new ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection);
         return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
     }
 
     @SneakyThrows
     public static void generateMigrations(@Nonnull final DataSource dataSource, @Nonnull final List<ForeignKey> foreignKeys) {
-        final DbMigrationGenerator generator = new DbMigrationGeneratorImpl();
-        final String generatedMigrations = generator.generate(foreignKeys, GeneratingOptions.builder().build());
+        final DbMigrationGenerator<ForeignKey> generator = new ForeignKeyMigrationGenerator(GeneratingOptions.builder().build());
+        final String generatedMigrations = generator.generate(foreignKeys);
         log.info(generatedMigrations);
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
