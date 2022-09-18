@@ -8,6 +8,7 @@
 package io.github.mfvanek.pg.index.health.demo;
 
 import io.github.mfvanek.pg.checks.host.ColumnsWithJsonTypeCheckOnHost;
+import io.github.mfvanek.pg.checks.host.ColumnsWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ColumnsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.DuplicatedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ForeignKeysNotCoveredWithIndexCheckOnHost;
@@ -55,6 +56,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     private final TablesWithoutDescriptionCheckOnHost tablesWithoutDescriptionCheck;
     private final ColumnsWithoutDescriptionCheckOnHost columnsWithoutDescriptionCheck;
     private final ColumnsWithJsonTypeCheckOnHost columnsWithJsonTypeCheckOnHost;
+    private final ColumnsWithSerialTypesCheckOnHost columnsWithSerialTypesCheckOnHost;
 
     IndexesMaintenanceTest() {
         final PgConnection pgConnection = PgConnectionImpl.ofPrimary(getDataSource());
@@ -67,6 +69,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         this.tablesWithoutDescriptionCheck = new TablesWithoutDescriptionCheckOnHost(pgConnection);
         this.columnsWithoutDescriptionCheck = new ColumnsWithoutDescriptionCheckOnHost(pgConnection);
         this.columnsWithJsonTypeCheckOnHost = new ColumnsWithJsonTypeCheckOnHost(pgConnection);
+        this.columnsWithSerialTypesCheckOnHost = new ColumnsWithSerialTypesCheckOnHost(pgConnection);
     }
 
     @Test
@@ -213,6 +216,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     @ValueSource(strings = {"public", "demo"})
     void getColumnsWithJsonTypeShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
         assertThat(columnsWithJsonTypeCheckOnHost.check(PgContext.of(schemaName)))
+                .isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"public", "demo"})
+    void getColumnsWithSerialTypesShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
+        assertThat(columnsWithSerialTypesCheckOnHost.check(PgContext.of(schemaName)))
                 .isEmpty();
     }
 }
