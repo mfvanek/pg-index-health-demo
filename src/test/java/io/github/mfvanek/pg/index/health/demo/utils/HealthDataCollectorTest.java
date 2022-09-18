@@ -10,7 +10,6 @@ package io.github.mfvanek.pg.index.health.demo.utils;
 import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +18,7 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
 
     @Test
     void shouldCollectHealthData() {
-        final List<String> expected = Arrays.asList(
+        final List<String> expected = List.of(
                 "db_indexes_health\tinvalid_indexes\t1",
                 "db_indexes_health\tduplicated_indexes\t1",
                 "db_indexes_health\tintersected_indexes\t2",

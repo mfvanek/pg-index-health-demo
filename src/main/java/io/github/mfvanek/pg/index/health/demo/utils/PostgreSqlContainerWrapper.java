@@ -11,7 +11,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
-import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.sql.DataSource;
@@ -27,7 +27,7 @@ public class PostgreSqlContainerWrapper implements AutoCloseable {
     public PostgreSqlContainerWrapper(@Nonnull final String pgVersion) {
         this(new PostgreSQLContainer<>(DockerImageName.parse("postgres").withTag(pgVersion))
                 .withSharedMemorySize(SIZE_512_MB)
-                .withTmpFs(Collections.singletonMap("/var/lib/postgresql/data", "rw")));
+                .withTmpFs(Map.of("/var/lib/postgresql/data", "rw")));
     }
 
     PostgreSqlContainerWrapper(@Nonnull final PostgreSQLContainer<?> container) {
