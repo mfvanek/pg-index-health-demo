@@ -122,7 +122,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     }
 
     @Test
-    void getIntersectedIndexesShouldReturnOneRowForDemoSchema() {
+    void getIntersectedIndexesShouldReturnTwoRowsForDemoSchema() {
         assertThat(intersectedIndexesCheck.check(demoSchema))
                 .hasSize(2)
                 // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
@@ -193,7 +193,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     }
 
     @Test
-    void getTablesWithoutDescriptionShouldReturnOneRowForDemoSchema() {
+    void getTablesWithoutDescriptionShouldReturnNothingForDemoSchema() {
         assertThat(tablesWithoutDescriptionCheck.check(demoSchema))
                 .isEmpty();
     }
@@ -207,7 +207,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     }
 
     @Test
-    void getColumnsWithoutDescriptionShouldReturnSeveralRowsForDemoSchema() {
+    void getColumnsWithoutDescriptionShouldReturnNothingForDemoSchema() {
         assertThat(columnsWithoutDescriptionCheck.check(demoSchema))
                 .isEmpty();
     }
