@@ -16,7 +16,7 @@ import io.github.mfvanek.pg.generator.DbMigrationGenerator;
 import io.github.mfvanek.pg.generator.ForeignKeyMigrationGenerator;
 import io.github.mfvanek.pg.generator.GeneratingOptions;
 import io.github.mfvanek.pg.model.PgContext;
-import io.github.mfvanek.pg.model.index.ForeignKey;
+import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;

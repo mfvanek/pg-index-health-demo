@@ -12,6 +12,7 @@ import io.github.mfvanek.pg.checks.host.ColumnsWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ColumnsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.DuplicatedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ForeignKeysNotCoveredWithIndexCheckOnHost;
+import io.github.mfvanek.pg.checks.host.FunctionsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.IndexesWithNullValuesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.IntersectedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.InvalidIndexesCheckOnHost;
@@ -21,8 +22,8 @@ import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
 import io.github.mfvanek.pg.model.PgContext;
+import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import io.github.mfvanek.pg.model.index.DuplicatedIndexes;
-import io.github.mfvanek.pg.model.index.ForeignKey;
 import io.github.mfvanek.pg.model.index.Index;
 import io.github.mfvanek.pg.model.index.IndexWithNulls;
 import io.github.mfvanek.pg.model.index.IndexWithSize;
@@ -40,7 +41,7 @@ import javax.annotation.Nonnull;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
+@SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity", "PMD.AvoidDuplicateLiterals"})
 class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     private static final String BUYER_TABLE = "demo.buyer";
@@ -57,6 +58,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     private final ColumnsWithoutDescriptionCheckOnHost columnsWithoutDescriptionCheck;
     private final ColumnsWithJsonTypeCheckOnHost columnsWithJsonTypeCheckOnHost;
     private final ColumnsWithSerialTypesCheckOnHost columnsWithSerialTypesCheckOnHost;
+    private final FunctionsWithoutDescriptionCheckOnHost functionsWithoutDescriptionCheckOnHost;
 
     IndexesMaintenanceTest() {
         final PgConnection pgConnection = PgConnectionImpl.ofPrimary(getDataSource());
@@ -70,6 +72,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         this.columnsWithoutDescriptionCheck = new ColumnsWithoutDescriptionCheckOnHost(pgConnection);
         this.columnsWithJsonTypeCheckOnHost = new ColumnsWithJsonTypeCheckOnHost(pgConnection);
         this.columnsWithSerialTypesCheckOnHost = new ColumnsWithSerialTypesCheckOnHost(pgConnection);
+        this.functionsWithoutDescriptionCheckOnHost = new FunctionsWithoutDescriptionCheckOnHost(pgConnection);
     }
 
     @Test
@@ -223,6 +226,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     @ValueSource(strings = {"public", "demo"})
     void getColumnsWithSerialTypesShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
         assertThat(columnsWithSerialTypesCheckOnHost.check(PgContext.of(schemaName)))
+                .isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"public", "demo"})
+    void getFunctionsWithoutDescriptionShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
+        assertThat(functionsWithoutDescriptionCheckOnHost.check(PgContext.of(schemaName)))
                 .isEmpty();
     }
 }

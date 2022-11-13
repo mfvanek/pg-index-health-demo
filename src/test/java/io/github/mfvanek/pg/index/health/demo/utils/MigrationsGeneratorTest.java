@@ -8,7 +8,7 @@
 package io.github.mfvanek.pg.index.health.demo.utils;
 
 import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
-import io.github.mfvanek.pg.model.index.ForeignKey;
+import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
