@@ -12,7 +12,7 @@ import io.github.mfvanek.pg.index.health.demo.utils.HealthDataCollector;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationsGenerator;
 import io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper;
-import io.github.mfvanek.pg.model.index.ForeignKey;
+import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;

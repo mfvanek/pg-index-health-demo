@@ -10,7 +10,7 @@ plugins {
 }
 
 group 'io.github.mfvanek'
-version '0.6.3'
+version '0.7.0'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -24,10 +24,10 @@ repositories {
 
 dependencies {
     implementation 'ch.qos.logback:logback-classic:1.4.4'
-    implementation 'io.github.mfvanek:pg-index-health:0.6.3'
+    implementation 'io.github.mfvanek:pg-index-health:0.7.0'
     implementation 'org.postgresql:postgresql:42.5.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation 'org.liquibase:liquibase-core:4.17.0'
+    implementation 'org.liquibase:liquibase-core:4.17.2'
     implementation 'org.apache.commons:commons-dbcp2:2.9.0'
     implementation enforcedPlatform('org.testcontainers:testcontainers-bom:1.17.5')
     implementation 'org.testcontainers:testcontainers'
