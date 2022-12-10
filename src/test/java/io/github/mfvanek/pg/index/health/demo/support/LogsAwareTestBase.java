@@ -18,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 
@@ -60,6 +59,6 @@ public abstract class LogsAwareTestBase {
 
     @Nonnull
     protected static List<ILoggingEvent> getLogs() {
-        return Collections.unmodifiableList(new ArrayList<>(logAppender.list));
+        return List.copyOf(logAppender.list);
     }
 }
