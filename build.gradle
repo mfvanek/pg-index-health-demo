@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
     implementation 'ch.qos.logback:logback-classic:1.4.5'
-    implementation 'io.github.mfvanek:pg-index-health:0.7.0'
+    implementation 'io.github.mfvanek:pg-index-health:0.8.0'
     implementation 'org.postgresql:postgresql:42.5.1'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'org.liquibase:liquibase-core:4.17.2'
