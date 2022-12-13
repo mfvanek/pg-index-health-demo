@@ -8,6 +8,9 @@ Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) l
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/mfvanek/pg-index-health-demo/blob/master/LICENSE "Apache License 2.0")
 [![codecov](https://codecov.io/gh/mfvanek/pg-index-health-demo/branch/master/graph/badge.svg?token=TA13I5NCK4)](https://codecov.io/gh/mfvanek/pg-index-health-demo)
 
+[![Total lines](https://tokei.rs/b1/github/mfvanek/pg-index-health-demo)](https://github.com/mfvanek/pg-index-health-demo)
+[![Files](https://tokei.rs/b1/github/mfvanek/pg-index-health-demo?category=files)](https://github.com/mfvanek/pg-index-health-demo)
+
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=bugs)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=mfvanek_pg-index-health-demo&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=mfvanek_pg-index-health-demo)
