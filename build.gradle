@@ -27,7 +27,7 @@ dependencies {
     implementation 'io.github.mfvanek:pg-index-health:0.8.0'
     implementation 'org.postgresql:postgresql:42.5.1'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation 'org.liquibase:liquibase-core:4.18.0'
+    implementation 'org.liquibase:liquibase-core:4.19.0'
     implementation 'org.apache.commons:commons-dbcp2:2.9.0'
     implementation enforcedPlatform('org.testcontainers:testcontainers-bom:1.17.6')
     implementation 'org.testcontainers:testcontainers'
@@ -71,7 +71,7 @@ spotbugs {
 }
 
 checkstyle {
-    toolVersion '10.6.0'
+    toolVersion '10.7.0'
     configFile file("config/checkstyle/checkstyle.xml")
     ignoreFailures = false
     maxWarnings = 0
@@ -128,7 +128,7 @@ check.dependsOn jacocoTestReport, jacocoTestCoverageVerification
 
 pmd {
     consoleOutput = true
-    toolVersion = '6.53.0'
+    toolVersion = '6.54.0'
     ruleSetFiles = files("config/pmd/pmd.xml")
     ruleSets = []
 }
