@@ -15,6 +15,7 @@ import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.statistics.maintenance.StatisticsMaintenanceOnHostImpl;
+import io.github.mfvanek.pg.utils.ClockHolder;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import javax.annotation.Nonnull;
@@ -42,7 +42,7 @@ public final class StatisticsCollector {
         final Optional<OffsetDateTime> resetTimestamp = databaseManagement.getLastStatsResetTimestamp();
         final ZonedDateTime zonedDateTime = resetTimestamp
                 .orElseThrow(IllegalStateException::new)
-                .atZoneSameInstant(ZoneId.systemDefault());
+                .atZoneSameInstant(ClockHolder.clock().getZone());
         log.info("Last statistics reset was at {}", zonedDateTime);
         return zonedDateTime;
     }
