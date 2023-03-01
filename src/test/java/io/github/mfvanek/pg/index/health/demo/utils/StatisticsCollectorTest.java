@@ -8,8 +8,10 @@
 package io.github.mfvanek.pg.index.health.demo.utils;
 
 import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
+import io.github.mfvanek.pg.utils.ClockHolder;
 import org.junit.jupiter.api.Test;
 
+import java.time.Clock;
 import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +20,8 @@ class StatisticsCollectorTest extends DatabaseAwareTestBase {
 
     @Test
     void resetStatisticsShouldWork() {
-        final ZonedDateTime beforeTest = ZonedDateTime.now();
+        final Clock clock = ClockHolder.clock();
+        final ZonedDateTime beforeTest = ZonedDateTime.now(clock);
         final ZonedDateTime zonedDateTime = StatisticsCollector.resetStatistics(getDataSource());
         assertThat(zonedDateTime)
                 .isAfter(beforeTest);
