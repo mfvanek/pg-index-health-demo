@@ -8,7 +8,7 @@ plugins {
     id 'pmd'
     id 'org.sonarqube' version '3.5.0.2730'
     id 'info.solidsoft.pitest' version '1.9.11'
-    id 'io.freefair.lombok' version '6.6.1'
+    id 'io.freefair.lombok' version '6.6.3'
     id 'nebula.lint' version '18.0.3'
     id 'net.ltgt.errorprone' version '3.0.1'
 }
@@ -33,7 +33,7 @@ repositories {
 
 def pgihVersion = '0.8.0'
 def logbackVersion = '1.4.5'
-def postgresqlVersion = '42.5.1'
+def postgresqlVersion = '42.5.4'
 dependencies {
     runtimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
     implementation "io.github.mfvanek:pg-index-health:${pgihVersion}"
