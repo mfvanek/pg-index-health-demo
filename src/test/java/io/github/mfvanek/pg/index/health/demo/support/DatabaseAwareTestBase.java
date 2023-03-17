@@ -8,6 +8,12 @@
 package io.github.mfvanek.pg.index.health.demo.support;
 
 import io.github.mfvanek.pg.connection.ConnectionCredentials;
+import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
+import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactoryImpl;
+import io.github.mfvanek.pg.connection.PgConnectionFactoryImpl;
+import io.github.mfvanek.pg.connection.PgHost;
+import io.github.mfvanek.pg.connection.PgHostImpl;
+import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
 import io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,6 +30,16 @@ public abstract class DatabaseAwareTestBase {
         return POSTGRES.getDataSource();
     }
 
+    @Nonnull
+    protected static PgHost getHost() {
+        return PgHostImpl.ofUrl(POSTGRES.getUrl());
+    }
+
+    @Nonnull
+    protected static String getUrl() {
+        return POSTGRES.getUrl();
+    }
+
     @BeforeAll
     static void runMigrations() {
         MigrationRunner.runMigrations(getDataSource());
@@ -32,5 +48,12 @@ public abstract class DatabaseAwareTestBase {
     @Nonnull
     protected static ConnectionCredentials getConnectionCredentials() {
         return ConnectionCredentials.ofUrl(POSTGRES.getUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
+    }
+
+    @Nonnull
+    protected static HighAvailabilityPgConnectionFactory getConnectionFactory() {
+        return new HighAvailabilityPgConnectionFactoryImpl(
+                new PgConnectionFactoryImpl(),
+                new PrimaryHostDeterminerImpl());
     }
 }

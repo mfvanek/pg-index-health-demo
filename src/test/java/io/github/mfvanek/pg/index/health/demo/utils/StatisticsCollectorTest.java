@@ -22,7 +22,7 @@ class StatisticsCollectorTest extends DatabaseAwareTestBase {
     void resetStatisticsShouldWork() {
         final Clock clock = ClockHolder.clock();
         final ZonedDateTime beforeTest = ZonedDateTime.now(clock);
-        final ZonedDateTime zonedDateTime = StatisticsCollector.resetStatistics(getDataSource());
+        final ZonedDateTime zonedDateTime = StatisticsCollector.resetStatistics(getDataSource(), getUrl());
         assertThat(zonedDateTime)
                 .isAfter(beforeTest);
     }

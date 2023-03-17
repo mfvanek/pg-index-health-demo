@@ -8,6 +8,10 @@
 package io.github.mfvanek.pg.index.health.demo;
 
 import io.github.mfvanek.pg.connection.ConnectionCredentials;
+import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
+import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactoryImpl;
+import io.github.mfvanek.pg.connection.PgConnectionFactoryImpl;
+import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
 import io.github.mfvanek.pg.index.health.demo.utils.HealthDataCollector;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationsGenerator;
@@ -27,11 +31,13 @@ public class DemoApp {
     public static void main(final String[] args) {
         try (PostgreSqlContainerWrapper postgres = new PostgreSqlContainerWrapper("14.5")) {
             MigrationRunner.runMigrations(postgres.getDataSource());
+            final HighAvailabilityPgConnectionFactory connectionFactory = new HighAvailabilityPgConnectionFactoryImpl(
+                    new PgConnectionFactoryImpl(), new PrimaryHostDeterminerImpl());
             final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(postgres.getUrl(), postgres.getUsername(), postgres.getPassword());
-            HealthDataCollector.collectHealthData(credentials);
-            final List<ForeignKey> foreignKeys = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(postgres.getDataSource());
+            HealthDataCollector.collectHealthData(connectionFactory, credentials);
+            final List<ForeignKey> foreignKeys = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(connectionFactory, credentials);
             MigrationsGenerator.generateMigrations(postgres.getDataSource(), foreignKeys);
-            final List<ForeignKey> afterMigrations = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(postgres.getDataSource());
+            final List<ForeignKey> afterMigrations = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(connectionFactory, credentials);
             if (!afterMigrations.isEmpty()) {
                 throw new IllegalStateException("There should be no foreign keys not covered by the index");
             }
