@@ -13,9 +13,6 @@ import io.github.mfvanek.pg.common.health.logger.KeyValueFileHealthLogger;
 import io.github.mfvanek.pg.common.maintenance.DatabaseChecks;
 import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactoryImpl;
-import io.github.mfvanek.pg.connection.PgConnectionFactoryImpl;
-import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
 import io.github.mfvanek.pg.model.MemoryUnit;
 import io.github.mfvanek.pg.model.PgContext;
 import lombok.experimental.UtilityClass;
@@ -29,9 +26,8 @@ import javax.annotation.Nonnull;
 public final class HealthDataCollector {
 
     @Nonnull
-    public static List<String> collectHealthData(@Nonnull final ConnectionCredentials credentials) {
-        final HighAvailabilityPgConnectionFactory connectionFactory = new HighAvailabilityPgConnectionFactoryImpl(
-                new PgConnectionFactoryImpl(), new PrimaryHostDeterminerImpl());
+    public static List<String> collectHealthData(@Nonnull final HighAvailabilityPgConnectionFactory connectionFactory,
+                                                 @Nonnull final ConnectionCredentials credentials) {
         final Exclusions exclusions = Exclusions.builder()
                 .withIndexSizeThreshold(1, MemoryUnit.MB)
                 .withTableSizeThreshold(1, MemoryUnit.MB)

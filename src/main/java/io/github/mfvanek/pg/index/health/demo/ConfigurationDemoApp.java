@@ -18,7 +18,7 @@ public class ConfigurationDemoApp {
     @SneakyThrows
     public static void main(final String[] args) {
         try (PostgreSqlContainerWrapper postgres = new PostgreSqlContainerWrapper("14.5")) {
-            ConfigurationCollector.checkConfig(postgres.getDataSource());
+            ConfigurationCollector.checkConfig(postgres.getDataSource(), postgres.getUrl());
         }
     }
 }

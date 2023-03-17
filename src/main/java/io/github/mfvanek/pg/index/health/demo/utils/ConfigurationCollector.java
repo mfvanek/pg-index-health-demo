@@ -13,6 +13,7 @@ import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
+import io.github.mfvanek.pg.connection.PgHostImpl;
 import io.github.mfvanek.pg.model.MemoryUnit;
 import io.github.mfvanek.pg.settings.PgParam;
 import io.github.mfvanek.pg.settings.ServerSpecification;
@@ -30,8 +31,9 @@ import javax.sql.DataSource;
 public class ConfigurationCollector {
 
     @Nonnull
-    public static Set<PgParam> checkConfig(@Nonnull final DataSource dataSource) {
-        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(dataSource);
+    public static Set<PgParam> checkConfig(@Nonnull final DataSource dataSource,
+                                           @Nonnull final String databaseUrl) {
+        final PgConnection pgConnection = PgConnectionImpl.of(dataSource, PgHostImpl.ofUrl(databaseUrl));
         final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);
         final DatabaseManagement databaseManagement = new DatabaseManagementImpl(
                 haPgConnection, StatisticsMaintenanceOnHostImpl::new, ConfigurationMaintenanceOnHostImpl::new);

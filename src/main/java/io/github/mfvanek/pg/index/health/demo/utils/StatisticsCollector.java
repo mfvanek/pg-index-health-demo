@@ -13,6 +13,7 @@ import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
+import io.github.mfvanek.pg.connection.PgHostImpl;
 import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.statistics.maintenance.StatisticsMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.utils.ClockHolder;
@@ -33,8 +34,9 @@ import javax.sql.DataSource;
 public final class StatisticsCollector {
 
     @Nonnull
-    public static ZonedDateTime resetStatistics(@Nonnull final DataSource dataSource) {
-        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(dataSource);
+    public static ZonedDateTime resetStatistics(@Nonnull final DataSource dataSource,
+                                                @Nonnull final String databaseUrl) {
+        final PgConnection pgConnection = PgConnectionImpl.of(dataSource, PgHostImpl.ofUrl(databaseUrl));
         final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);
         final DatabaseManagement databaseManagement = new DatabaseManagementImpl(haPgConnection, StatisticsMaintenanceOnHostImpl::new, ConfigurationMaintenanceOnHostImpl::new);
         databaseManagement.resetStatistics();

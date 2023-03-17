@@ -61,7 +61,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     private final FunctionsWithoutDescriptionCheckOnHost functionsWithoutDescriptionCheckOnHost;
 
     IndexesMaintenanceTest() {
-        final PgConnection pgConnection = PgConnectionImpl.ofPrimary(getDataSource());
+        final PgConnection pgConnection = PgConnectionImpl.of(getDataSource(), getHost());
         this.invalidIndexesCheck = new InvalidIndexesCheckOnHost(pgConnection);
         this.duplicatedIndexesCheck = new DuplicatedIndexesCheckOnHost(pgConnection);
         this.intersectedIndexesCheck = new IntersectedIndexesCheckOnHost(pgConnection);

@@ -17,7 +17,7 @@ class ConfigurationCollectorTest extends DatabaseAwareTestBase {
 
     @Test
     void checkConfigShouldWork() {
-        assertThat(ConfigurationCollector.checkConfig(getDataSource()))
+        assertThat(ConfigurationCollector.checkConfig(getDataSource(), getUrl()))
                 .hasSize(10)
                 .containsExactly(
                         PgParamImpl.of("maintenance_work_mem", "64MB"),

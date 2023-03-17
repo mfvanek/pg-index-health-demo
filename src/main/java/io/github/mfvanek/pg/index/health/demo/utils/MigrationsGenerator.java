@@ -9,9 +9,9 @@ package io.github.mfvanek.pg.index.health.demo.utils;
 
 import io.github.mfvanek.pg.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
 import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnCluster;
+import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
-import io.github.mfvanek.pg.connection.PgConnectionImpl;
+import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
 import io.github.mfvanek.pg.generator.ForeignKeyMigrationGenerator;
 import io.github.mfvanek.pg.generator.GeneratingOptions;
@@ -31,8 +31,9 @@ import javax.sql.DataSource;
 @UtilityClass
 public class MigrationsGenerator {
 
-    public static List<ForeignKey> getForeignKeysNotCoveredWithIndex(@Nonnull final DataSource dataSource) {
-        final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(PgConnectionImpl.ofPrimary(dataSource));
+    public static List<ForeignKey> getForeignKeysNotCoveredWithIndex(@Nonnull final HighAvailabilityPgConnectionFactory connectionFactory,
+                                                                     @Nonnull final ConnectionCredentials credentials) {
+        final HighAvailabilityPgConnection haPgConnection = connectionFactory.of(credentials);
         final DatabaseCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex = new ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection);
         return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
     }

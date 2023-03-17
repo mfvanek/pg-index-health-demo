@@ -8,10 +8,9 @@
 package io.github.mfvanek.pg.index.health.demo;
 
 import io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper;
+import io.github.mfvanek.pg.index.health.demo.utils.StatisticsCollector;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-
-import static io.github.mfvanek.pg.index.health.demo.utils.StatisticsCollector.resetStatistics;
 
 @UtilityClass
 public class StatisticsDemoApp {
@@ -19,7 +18,7 @@ public class StatisticsDemoApp {
     @SneakyThrows
     public static void main(final String[] args) {
         try (PostgreSqlContainerWrapper postgres = new PostgreSqlContainerWrapper("14.5")) {
-            resetStatistics(postgres.getDataSource());
+            StatisticsCollector.resetStatistics(postgres.getDataSource(), postgres.getUrl());
         }
     }
 }
