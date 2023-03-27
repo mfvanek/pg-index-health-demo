@@ -2,7 +2,7 @@ import com.github.spotbugs.snom.SpotBugsTask
 
 plugins {
     id 'java'
-    id 'com.github.spotbugs' version '5.0.13'
+    id 'com.github.spotbugs' version '5.0.14'
     id 'checkstyle'
     id 'jacoco'
     id 'pmd'
