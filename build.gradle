@@ -33,7 +33,7 @@ repositories {
 
 def pgihVersion = '0.9.0'
 def logbackVersion = '1.4.6'
-def postgresqlVersion = '42.5.4'
+def postgresqlVersion = '42.6.0'
 dependencies {
     runtimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
     implementation "io.github.mfvanek:pg-index-health:${pgihVersion}"
