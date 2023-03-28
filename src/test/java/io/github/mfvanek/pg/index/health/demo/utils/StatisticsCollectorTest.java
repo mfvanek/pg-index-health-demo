@@ -21,9 +21,13 @@ class StatisticsCollectorTest extends DatabaseAwareTestBase {
     @Test
     void resetStatisticsShouldWork() {
         final Clock clock = ClockHolder.clock();
-        final ZonedDateTime beforeTest = ZonedDateTime.now(clock);
+        final long beforeTest = System.nanoTime();
         final ZonedDateTime zonedDateTime = StatisticsCollector.resetStatistics(getDataSource(), getUrl());
+        assertThat(System.nanoTime() - beforeTest)
+                .as("Execution time should be greater than 1 second due to delay")
+                .isGreaterThanOrEqualTo(1_000_000_000L);
         assertThat(zonedDateTime)
-                .isAfter(beforeTest);
+                .isNotNull()
+                .isBefore(ZonedDateTime.now(clock));
     }
 }

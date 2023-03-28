@@ -9,7 +9,6 @@ plugins {
     id 'org.sonarqube' version '4.0.0.2929'
     id 'info.solidsoft.pitest' version '1.9.11'
     id 'io.freefair.lombok' version '6.6.3'
-    id 'nebula.lint' version '18.0.3'
     id 'net.ltgt.errorprone' version '3.0.1'
 }
 
@@ -77,12 +76,8 @@ spotbugs {
 }
 tasks.withType(SpotBugsTask).configureEach {
     reports {
-        xml {
-            required.set(true)
-        }
-        html {
-            required.set(true)
-        }
+        xml.required = true
+        html.required = true
     }
 }
 
@@ -102,8 +97,8 @@ checkstyleTest {
 
 jacocoTestReport {
     reports {
-        xml.enabled true
-        html.enabled true
+        xml.required = true
+        html.required = true
     }
 }
 jacocoTestCoverageVerification {
@@ -155,12 +150,6 @@ sonarqube {
         property "sonar.organization", "mfvanek"
         property "sonar.host.url", "https://sonarcloud.io"
     }
-}
-
-gradleLint {
-    rules = ['all-dependency']
-    alwaysRun = false
-    autoLintAfterFailure = false
 }
 
 pitest {
