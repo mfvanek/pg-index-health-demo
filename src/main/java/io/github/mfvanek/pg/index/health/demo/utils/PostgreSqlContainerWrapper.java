@@ -9,6 +9,7 @@ package io.github.mfvanek.pg.index.health.demo.utils;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.Map;
@@ -27,7 +28,8 @@ public class PostgreSqlContainerWrapper implements AutoCloseable {
     public PostgreSqlContainerWrapper(@Nonnull final String pgVersion) {
         this(new PostgreSQLContainer<>(DockerImageName.parse("postgres").withTag(pgVersion))
                 .withSharedMemorySize(SIZE_512_MB)
-                .withTmpFs(Map.of("/var/lib/postgresql/data", "rw")));
+                .withTmpFs(Map.of("/var/lib/postgresql/data", "rw"))
+                .waitingFor(Wait.defaultWaitStrategy()));
     }
 
     PostgreSqlContainerWrapper(@Nonnull final PostgreSQLContainer<?> container) {
