@@ -57,7 +57,7 @@ dependencies {
 
     pitest 'it.mulders.stryker:pit-dashboard-reporter:0.1.5'
     checkstyle 'com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1'
-    errorprone 'com.google.errorprone:error_prone_core:2.18.0'
+    errorprone 'com.google.errorprone:error_prone_core:2.19.1'
 }
 
 test {
