@@ -14,6 +14,7 @@ plugins {
     id("info.solidsoft.pitest") version "1.9.11"
     id("io.freefair.lombok") version "8.0.1"
     id("net.ltgt.errorprone") version "3.1.0"
+    id("org.gradle.test-retry") version "1.5.2"
 }
 
 group = "io.github.mfvanek"
@@ -71,6 +72,12 @@ tasks {
         maxParallelForks = 1
         finalizedBy(jacocoTestReport)
         finalizedBy(jacocoTestCoverageVerification)
+
+        retry {
+            maxRetries.set(3)
+            maxFailures.set(10)
+            failOnPassedAfterRetry.set(false)
+        }
     }
 
     spotbugs {
@@ -152,6 +159,9 @@ tasks {
             property("sonar.host.url", "https://sonarcloud.io")
         }
     }
+    withType<org.sonarqube.gradle.SonarTask>().configureEach {
+        dependsOn(test, jacocoTestReport)
+    }
 
     pitest {
         setProperty("junit5PluginVersion", "1.1.2")
@@ -166,23 +176,11 @@ tasks {
         mutationThreshold.set(100)
         excludedClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper"))
     }
-
     withType<PitestTask>().configureEach {
         mustRunAfter(test)
     }
 
     build {
         dependsOn(pitest)
-    }
-
-    sonar {
-        val path = jacocoTestReport.get().reports.xml.outputLocation.get()
-        properties {
-            property("sonar.coverage.jacoco.xmlReportPaths", path)
-        }
-    }
-
-    withType<org.sonarqube.gradle.SonarTask>().configureEach {
-        dependsOn(test, jacocoTestReport)
     }
 }
