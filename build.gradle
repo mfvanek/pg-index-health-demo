@@ -1,19 +1,19 @@
 import com.github.spotbugs.snom.SpotBugsTask
 
 plugins {
-    id 'java'
-    id 'com.github.spotbugs' version '5.0.14'
-    id 'checkstyle'
-    id 'jacoco'
-    id 'pmd'
-    id 'org.sonarqube' version '4.0.0.2929'
-    id 'info.solidsoft.pitest' version '1.9.11'
-    id 'io.freefair.lombok' version '8.0.1'
-    id 'net.ltgt.errorprone' version '3.1.0'
+    id("java")
+    id("com.github.spotbugs") version "5.0.14"
+    id("checkstyle")
+    id("jacoco")
+    id("pmd")
+    id("org.sonarqube") version "4.0.0.2929"
+    id("info.solidsoft.pitest") version "1.9.11"
+    id("io.freefair.lombok") version "8.0.1"
+    id("net.ltgt.errorprone") version "3.1.0"
 }
 
-group 'io.github.mfvanek'
-version '0.9.0-SNAPSHOT'
+group = "io.github.mfvanek"
+version = "0.9.0-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -30,34 +30,34 @@ repositories {
     mavenCentral()
 }
 
-def pgihVersion = '0.9.1'
-def logbackVersion = '1.4.7'
-def postgresqlVersion = '42.6.0'
+def pgihVersion = "0.9.1"
+def logbackVersion = "1.4.7"
+def postgresqlVersion = "42.6.0"
 dependencies {
-    runtimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
-    implementation "io.github.mfvanek:pg-index-health:${pgihVersion}"
-    implementation "io.github.mfvanek:pg-index-health-generator:${pgihVersion}"
-    runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation 'org.liquibase:liquibase-core:4.22.0'
-    implementation 'org.apache.commons:commons-dbcp2:2.9.0'
-    implementation enforcedPlatform('org.testcontainers:testcontainers-bom:1.18.1')
-    implementation 'org.testcontainers:testcontainers'
-    implementation 'org.testcontainers:postgresql'
+    runtimeOnly("ch.qos.logback:logback-classic:${logbackVersion}")
+    implementation("io.github.mfvanek:pg-index-health:${pgihVersion}")
+    implementation("io.github.mfvanek:pg-index-health-generator:${pgihVersion}")
+    runtimeOnly("org.postgresql:postgresql:${postgresqlVersion}")
+    implementation("com.google.code.findbugs:jsr305:3.0.2")
+    implementation("org.liquibase:liquibase-core:4.22.0")
+    implementation("org.apache.commons:commons-dbcp2:2.9.0")
+    implementation(enforcedPlatform("org.testcontainers:testcontainers-bom:1.18.1"))
+    implementation("org.testcontainers:testcontainers")
+    implementation("org.testcontainers:postgresql")
 
-    testImplementation enforcedPlatform('org.junit:junit-bom:5.9.3')
-    testImplementation 'org.junit.jupiter:junit-jupiter-api'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params'
-    testImplementation 'org.assertj:assertj-core:3.24.2'
-    testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.mockito:mockito-core:5.3.1'
-    testImplementation "ch.qos.logback:logback-classic:${logbackVersion}"
-    testImplementation "org.postgresql:postgresql:${postgresqlVersion}"
+    testImplementation(enforcedPlatform("org.junit:junit-bom:5.9.3"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation("org.assertj:assertj-core:3.24.2")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.mockito:mockito-core:5.3.1")
+    testImplementation("ch.qos.logback:logback-classic:${logbackVersion}")
+    testImplementation("org.postgresql:postgresql:${postgresqlVersion}")
 
-    pitest 'it.mulders.stryker:pit-dashboard-reporter:0.1.5'
-    checkstyle 'com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1'
-    errorprone 'com.google.errorprone:error_prone_core:2.19.1'
+    pitest("it.mulders.stryker:pit-dashboard-reporter:0.1.5")
+    checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
+    errorprone("com.google.errorprone:error_prone_core:2.19.1")
 }
 
 test {
@@ -70,8 +70,8 @@ test {
 
 spotbugs {
     showProgress = true
-    effort = 'max'
-    reportLevel = 'low'
+    effort = "max"
+    reportLevel = "low"
     excludeFilter = file("config/spotbugs/exclude.xml")
 }
 tasks.withType(SpotBugsTask).configureEach {
@@ -82,17 +82,17 @@ tasks.withType(SpotBugsTask).configureEach {
 }
 
 checkstyle {
-    toolVersion '10.7.0'
-    configFile file("config/checkstyle/checkstyle.xml")
+    toolVersion = "10.7.0"
+    configFile = file("config/checkstyle/checkstyle.xml")
     ignoreFailures = false
     maxWarnings = 0
     maxErrors = 0
 }
 checkstyleMain {
-    source ='src/main/java'
+    source ="src/main/java"
 }
 checkstyleTest {
-    source ='src/test/java'
+    source ="src/test/java"
 }
 
 jacocoTestReport {
@@ -106,29 +106,29 @@ jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
-                counter = 'CLASS'
-                value = 'MISSEDCOUNT'
+                counter = "CLASS"
+                value = "MISSEDCOUNT"
                 maximum = 0
             }
         }
         rule {
             limit {
-                counter = 'METHOD'
-                value = 'MISSEDCOUNT'
+                counter = "METHOD"
+                value = "MISSEDCOUNT"
                 maximum = 0
             }
         }
         rule {
             limit {
-                counter = 'LINE'
-                value = 'MISSEDCOUNT'
+                counter = "LINE"
+                value = "MISSEDCOUNT"
                 maximum = 1
             }
         }
         rule {
             limit {
-                counter = 'INSTRUCTION'
-                value = 'COVEREDRATIO'
+                counter = "INSTRUCTION"
+                value = "COVEREDRATIO"
                 minimum = 0.94
             }
         }
@@ -139,7 +139,7 @@ check.dependsOn jacocoTestReport, jacocoTestCoverageVerification
 
 pmd {
     consoleOutput = true
-    toolVersion = '6.54.0'
+    toolVersion = "6.54.0"
     ruleSetFiles = files("config/pmd/pmd.xml")
     ruleSets = []
 }
@@ -153,16 +153,16 @@ sonarqube {
 }
 
 pitest {
-    junit5PluginVersion = '1.1.2'
-    pitestVersion = '1.10.4'
+    junit5PluginVersion = "1.1.2"
+    pitestVersion = "1.10.4"
     threads = 4
-    outputFormats = System.getenv('STRYKER_DASHBOARD_API_KEY') != null ? ['stryker-dashboard'] : ['HTML']
+    outputFormats = System.getenv("STRYKER_DASHBOARD_API_KEY") != null ? ["stryker-dashboard"] : ["HTML"]
     timestampedReports = false
     mutationThreshold = 100
-    excludedClasses = ['io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper']
+    excludedClasses = ["io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper"]
 }
 
-tasks.named('pitest').configure {
+tasks.named("pitest").configure {
     mustRunAfter test
 }
-build.dependsOn 'pitest'
+build.dependsOn "pitest"
