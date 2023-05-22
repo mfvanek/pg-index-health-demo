@@ -165,7 +165,7 @@ tasks {
 
     pitest {
         setProperty("junit5PluginVersion", "1.1.2")
-        setProperty("pitestVersion", "1.12.0")
+        setProperty("pitestVersion", "1.11.7")
         threads.set(4)
         if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
             outputFormats.set(setOf("stryker-dashboard"))
