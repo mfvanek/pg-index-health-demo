@@ -18,12 +18,7 @@ plugins {
 }
 
 group = "io.github.mfvanek"
-version = "0.9.0-SNAPSHOT"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
+version = "0.9.2-SNAPSHOT"
 
 repositories {
     mavenLocal()
@@ -61,11 +56,15 @@ dependencies {
     errorprone("com.google.errorprone:error_prone_core:2.19.1")
 }
 
-tasks {
-    withType<JavaCompile>().configureEach {
-        options.errorprone.disableWarningsInGeneratedCode.set(true)
-    }
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+tasks.withType<JavaCompile>().configureEach {
+    options.errorprone.disableWarningsInGeneratedCode.set(true)
+}
 
+tasks {
     withType<Test>().configureEach {
         useJUnitPlatform()
         dependsOn(checkstyleMain, checkstyleTest, pmdMain, pmdTest, spotbugsMain, spotbugsTest)
@@ -80,33 +79,13 @@ tasks {
         }
     }
 
-    spotbugs {
-        showProgress.set(true)
-        effort.set(Effort.MAX)
-        reportLevel.set(Confidence.LOW)
-        excludeFilter.set(file("config/spotbugs/exclude.xml"))
-    }
-    withType<SpotBugsTask>().configureEach {
-        reports {
-            create("xml") { enabled = true }
-            create("html") { enabled = true }
-        }
-    }
-
-    checkstyle {
-        toolVersion = "10.7.0"
-        configFile = file("config/checkstyle/checkstyle.xml")
-        isIgnoreFailures = false
-        maxWarnings = 0
-        maxErrors = 0
-    }
-
     jacocoTestReport {
         reports {
             xml.required.set(true)
             html.required.set(true)
         }
     }
+
     jacocoTestCoverageVerification {
         dependsOn(test)
         violationRules {
@@ -144,43 +123,63 @@ tasks {
     check {
         dependsOn(jacocoTestReport, jacocoTestCoverageVerification)
     }
+}
 
-    pmd {
-        isConsoleOutput = true
-        toolVersion = "6.54.0"
-        ruleSetFiles = files("config/pmd/pmd.xml")
-        ruleSets = listOf()
-    }
+checkstyle {
+    toolVersion = "10.7.0"
+    configFile = file("config/checkstyle/checkstyle.xml")
+    isIgnoreFailures = false
+    maxWarnings = 0
+    maxErrors = 0
+}
 
-    sonarqube {
-        properties {
-            property("sonar.projectKey", "mfvanek_pg-index-health-demo")
-            property("sonar.organization", "mfvanek")
-            property("sonar.host.url", "https://sonarcloud.io")
-        }
-    }
-    withType<org.sonarqube.gradle.SonarTask>().configureEach {
-        dependsOn(test, jacocoTestReport)
-    }
+pmd {
+    isConsoleOutput = true
+    toolVersion = "6.54.0"
+    ruleSetFiles = files("config/pmd/pmd.xml")
+    ruleSets = listOf()
+}
 
-    pitest {
-        setProperty("junit5PluginVersion", "1.1.2")
-        setProperty("pitestVersion", "1.10.4")
-        threads.set(4)
-        if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
-            outputFormats.set(setOf("stryker-dashboard"))
-        } else {
-            outputFormats.set(setOf("HTML"))
-        }
-        timestampedReports.set(false)
-        mutationThreshold.set(100)
-        excludedClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper"))
+spotbugs {
+    showProgress.set(true)
+    effort.set(Effort.MAX)
+    reportLevel.set(Confidence.LOW)
+    excludeFilter.set(file("config/spotbugs/exclude.xml"))
+}
+tasks.withType<SpotBugsTask>().configureEach {
+    reports {
+        create("xml") { enabled = true }
+        create("html") { enabled = true }
     }
-    withType<PitestTask>().configureEach {
-        mustRunAfter(test)
-    }
+}
 
-    build {
-        dependsOn(pitest)
+sonarqube {
+    properties {
+        property("sonar.projectKey", "mfvanek_pg-index-health-demo")
+        property("sonar.organization", "mfvanek")
+        property("sonar.host.url", "https://sonarcloud.io")
     }
+}
+tasks.withType<org.sonarqube.gradle.SonarTask>().configureEach {
+    dependsOn(tasks.test, tasks.jacocoTestReport)
+}
+
+pitest {
+    setProperty("junit5PluginVersion", "1.1.2")
+    setProperty("pitestVersion", "1.10.4")
+    threads.set(4)
+    if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
+        outputFormats.set(setOf("stryker-dashboard"))
+    } else {
+        outputFormats.set(setOf("HTML"))
+    }
+    timestampedReports.set(false)
+    mutationThreshold.set(100)
+    excludedClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper"))
+}
+tasks.withType<PitestTask>().configureEach {
+    mustRunAfter(tasks.test)
+}
+tasks.build {
+    dependsOn("pitest")
 }
