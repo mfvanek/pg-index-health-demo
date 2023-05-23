@@ -3,6 +3,7 @@ import com.github.spotbugs.snom.Effort
 import com.github.spotbugs.snom.SpotBugsTask
 import info.solidsoft.gradle.pitest.PitestTask
 import net.ltgt.gradle.errorprone.errorprone
+import org.sonarqube.gradle.SonarTask
 
 plugins {
     id("java")
@@ -61,16 +62,17 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 tasks.withType<JavaCompile>().configureEach {
-    options.errorprone.disableWarningsInGeneratedCode.set(true)
+    options.errorprone {
+        disableWarningsInGeneratedCode.set(true)
+    }
 }
 
 tasks {
-    withType<Test>().configureEach {
+    test {
         useJUnitPlatform()
         dependsOn(checkstyleMain, checkstyleTest, pmdMain, pmdTest, spotbugsMain, spotbugsTest)
         maxParallelForks = 1
-        finalizedBy(jacocoTestReport)
-        finalizedBy(jacocoTestCoverageVerification)
+        finalizedBy(jacocoTestReport, jacocoTestCoverageVerification)
 
         retry {
             maxRetries.set(3)
@@ -80,6 +82,7 @@ tasks {
     }
 
     jacocoTestReport {
+        dependsOn(test)
         reports {
             xml.required.set(true)
             html.required.set(true)
@@ -160,13 +163,13 @@ sonarqube {
         property("sonar.host.url", "https://sonarcloud.io")
     }
 }
-tasks.withType<org.sonarqube.gradle.SonarTask>().configureEach {
+tasks.withType<SonarTask>().configureEach {
     dependsOn(tasks.test, tasks.jacocoTestReport)
 }
 
 pitest {
-    setProperty("junit5PluginVersion", "1.1.2")
-    setProperty("pitestVersion", "1.10.4")
+    junit5PluginVersion.set("1.1.2")
+    pitestVersion.set("1.10.4")
     threads.set(4)
     if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
         outputFormats.set(setOf("stryker-dashboard"))
