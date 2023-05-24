@@ -27,7 +27,7 @@ class ConfigurationDemoAppTest extends LogsAwareTestBase {
         assertThatCode(() -> ConfigurationDemoApp.main(new String[]{}))
                 .doesNotThrowAnyException();
         assertThat(getLogs())
-                .hasSize(10)
+                .hasSize(5)
                 .allMatch(l -> l.getMessage().startsWith("Parameter with default value"));
     }
 }

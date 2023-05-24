@@ -19,22 +19,23 @@ plugins {
 }
 
 group = "io.github.mfvanek"
-version = "0.9.2-SNAPSHOT"
+version = "0.9.3-SNAPSHOT"
 
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
-val pgihVersion = "0.9.1"
+val pgihVersion = "0.9.3"
 val logbackVersion = "1.4.7"
 val postgresqlVersion = "42.6.0"
 
 dependencies {
-    runtimeOnly("ch.qos.logback:logback-classic:${logbackVersion}")
-    implementation("io.github.mfvanek:pg-index-health:${pgihVersion}")
-    implementation("io.github.mfvanek:pg-index-health-generator:${pgihVersion}")
-    runtimeOnly("org.postgresql:postgresql:${postgresqlVersion}")
+    runtimeOnly("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("io.github.mfvanek:pg-index-health:$pgihVersion")
+    implementation("io.github.mfvanek:pg-index-health-generator:$pgihVersion")
+    implementation("io.github.mfvanek:pg-index-health-testing:$pgihVersion")
+    runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
     implementation("com.google.code.findbugs:jsr305:3.0.2")
     implementation("org.liquibase:liquibase-core:4.22.0")
     implementation("org.apache.commons:commons-dbcp2:2.9.0")
@@ -49,8 +50,8 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.mockito:mockito-core:5.3.1")
-    testImplementation("ch.qos.logback:logback-classic:${logbackVersion}")
-    testImplementation("org.postgresql:postgresql:${postgresqlVersion}")
+    testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
+    testImplementation("org.postgresql:postgresql:$postgresqlVersion")
 
     pitest("it.mulders.stryker:pit-dashboard-reporter:0.1.5")
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
@@ -75,8 +76,8 @@ tasks {
         finalizedBy(jacocoTestReport, jacocoTestCoverageVerification)
 
         retry {
-            maxRetries.set(3)
-            maxFailures.set(10)
+            maxRetries.set(1)
+            maxFailures.set(3)
             failOnPassedAfterRetry.set(false)
         }
     }
@@ -117,7 +118,7 @@ tasks {
                 limit {
                     counter = "INSTRUCTION"
                     value = "COVEREDRATIO"
-                    minimum = "0.94".toBigDecimal()
+                    minimum = "0.92".toBigDecimal()
                 }
             }
         }

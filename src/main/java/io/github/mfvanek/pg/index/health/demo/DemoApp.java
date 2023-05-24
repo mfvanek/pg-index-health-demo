@@ -15,8 +15,8 @@ import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
 import io.github.mfvanek.pg.index.health.demo.utils.HealthDataCollector;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationsGenerator;
-import io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
+import io.github.mfvanek.pg.testing.PostgreSqlContainerWrapper;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class DemoApp {
 
     @SneakyThrows
     public static void main(final String[] args) {
-        try (PostgreSqlContainerWrapper postgres = new PostgreSqlContainerWrapper("14.5")) {
+        try (PostgreSqlContainerWrapper postgres = PostgreSqlContainerWrapper.withVersion("14.5")) {
             MigrationRunner.runMigrations(postgres.getDataSource());
             final HighAvailabilityPgConnectionFactory connectionFactory = new HighAvailabilityPgConnectionFactoryImpl(
                     new PgConnectionFactoryImpl(), new PrimaryHostDeterminerImpl());
