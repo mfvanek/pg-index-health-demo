@@ -53,7 +53,7 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
     testImplementation("org.postgresql:postgresql:$postgresqlVersion")
 
-    pitest("it.mulders.stryker:pit-dashboard-reporter:0.1.5")
+    pitest("it.mulders.stryker:pit-dashboard-reporter:0.2.1")
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
     errorprone("com.google.errorprone:error_prone_core:2.19.1")
 }
