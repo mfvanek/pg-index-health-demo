@@ -26,34 +26,33 @@ repositories {
     mavenCentral()
 }
 
-val pgihVersion = "0.9.3"
-val logbackVersion = "1.4.7"
-val postgresqlVersion = "42.6.0"
-
 dependencies {
-    runtimeOnly("ch.qos.logback:logback-classic:$logbackVersion")
-    implementation("io.github.mfvanek:pg-index-health:$pgihVersion")
-    implementation("io.github.mfvanek:pg-index-health-generator:$pgihVersion")
-    implementation("io.github.mfvanek:pg-index-health-testing:$pgihVersion")
-    runtimeOnly("org.postgresql:postgresql:$postgresqlVersion")
+    runtimeOnly(libs.logback.classic)
+    implementation(libs.pgIndexHealth.core)
+    implementation(libs.pgIndexHealth.generator)
+    implementation(libs.pgIndexHealth.testing)
+    runtimeOnly(libs.postgresql)
     implementation("com.google.code.findbugs:jsr305:3.0.2")
     implementation("org.liquibase:liquibase-core:4.22.0")
     implementation("org.apache.commons:commons-dbcp2:2.9.0")
-    implementation(enforcedPlatform("org.testcontainers:testcontainers-bom:1.18.1"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.18.1"))
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
 
-    testImplementation(enforcedPlatform("org.junit:junit-bom:5.9.3"))
+    testImplementation(platform("org.junit:junit-bom:5.9.3"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.mockito:mockito-core:5.3.1")
-    testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
-    testImplementation("org.postgresql:postgresql:$postgresqlVersion")
+    testImplementation(libs.logback.classic)
+    testImplementation(libs.postgresql)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher") {
+        because("required for pitest")
+    }
 
-    pitest("it.mulders.stryker:pit-dashboard-reporter:0.1.5")
+    pitest("it.mulders.stryker:pit-dashboard-reporter:0.2.1")
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
     errorprone("com.google.errorprone:error_prone_core:2.19.1")
 }
@@ -173,8 +172,9 @@ tasks.withType<SonarTask>().configureEach {
 }
 
 pitest {
-    junit5PluginVersion.set("1.1.2")
-    pitestVersion.set("1.10.4")
+    verbosity.set("DEFAULT")
+    junit5PluginVersion.set("1.2.0")
+    pitestVersion.set("1.14.1")
     threads.set(4)
     if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
         outputFormats.set(setOf("stryker-dashboard"))
