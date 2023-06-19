@@ -4,7 +4,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             library("postgresql", "org.postgresql:postgresql:42.6.0")
-            library("logback-classic", "ch.qos.logback:logback-classic:1.4.7")
+            library("logback-classic", "ch.qos.logback:logback-classic:1.4.8")
             val pgIndexHealth = version("pg-index-health", "0.9.3")
             library("pgIndexHealth-core", "io.github.mfvanek", "pg-index-health")
                     .versionRef(pgIndexHealth)
