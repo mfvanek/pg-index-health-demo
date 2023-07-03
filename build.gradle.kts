@@ -33,7 +33,7 @@ dependencies {
     implementation(libs.pgIndexHealth.testing)
     runtimeOnly(libs.postgresql)
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("org.liquibase:liquibase-core:4.22.0")
+    implementation("org.liquibase:liquibase-core:4.23.0")
     implementation("org.apache.commons:commons-dbcp2:2.9.0")
     implementation(platform("org.testcontainers:testcontainers-bom:1.18.3"))
     implementation("org.testcontainers:testcontainers")
