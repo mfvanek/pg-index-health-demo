@@ -13,7 +13,7 @@ plugins {
     id("pmd")
     id("org.sonarqube") version "4.2.1.3168"
     id("info.solidsoft.pitest") version "1.9.11"
-    id("io.freefair.lombok") version "8.0.1"
+    id("io.freefair.lombok") version "8.1.0"
     id("net.ltgt.errorprone") version "3.1.0"
     id("org.gradle.test-retry") version "1.5.3"
 }
