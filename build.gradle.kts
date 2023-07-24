@@ -29,11 +29,9 @@ repositories {
 }
 
 dependencies {
-    runtimeOnly(libs.logback.classic)
     implementation(libs.pgIndexHealth.core)
     implementation(libs.pgIndexHealth.generator)
     implementation(libs.pgIndexHealth.testing)
-    runtimeOnly(libs.postgresql)
     implementation("com.google.code.findbugs:jsr305:3.0.2")
     implementation("org.liquibase:liquibase-core:4.23.0")
     implementation("org.apache.commons:commons-dbcp2:2.9.0")
@@ -41,15 +39,19 @@ dependencies {
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
 
+    runtimeOnly(libs.postgresql)
+    runtimeOnly(libs.logback.classic)
+
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.mockito:mockito-core:5.4.0")
     testImplementation(libs.logback.classic)
     testImplementation(libs.postgresql)
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher") {
         because("required for pitest")
     }
