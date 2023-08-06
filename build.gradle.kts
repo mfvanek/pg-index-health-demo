@@ -21,7 +21,7 @@ plugins {
 }
 
 group = "io.github.mfvanek"
-version = "0.9.3-SNAPSHOT"
+version = "0.9.4"
 
 repositories {
     mavenLocal()
@@ -29,9 +29,9 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.pgIndexHealth.core)
-    implementation(libs.pgIndexHealth.generator)
-    implementation(libs.pgIndexHealth.testing)
+    implementation(libs.pg.index.health.core)
+    implementation(libs.pg.index.health.generator)
+    implementation(libs.pg.index.health.testing)
     implementation("com.google.code.findbugs:jsr305:3.0.2")
     implementation("org.liquibase:liquibase-core:4.23.0")
     implementation("org.apache.commons:commons-dbcp2:2.9.0")
