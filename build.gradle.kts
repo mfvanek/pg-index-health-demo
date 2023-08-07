@@ -58,7 +58,7 @@ dependencies {
 
     pitest(libs.pitest.dashboard.reporter)
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
-    errorprone("com.google.errorprone:error_prone_core:2.20.0")
+    errorprone("com.google.errorprone:error_prone_core:2.21.1")
 }
 
 java {
