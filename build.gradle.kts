@@ -187,7 +187,6 @@ pitest {
     }
     timestampedReports.set(false)
     mutationThreshold.set(100)
-    excludedClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.utils.PostgreSqlContainerWrapper"))
 }
 tasks.withType<PitestTask>().configureEach {
     mustRunAfter(tasks.test)
