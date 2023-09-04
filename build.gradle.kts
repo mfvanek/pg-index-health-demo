@@ -12,7 +12,7 @@ plugins {
     id("checkstyle")
     id("jacoco")
     id("pmd")
-    id("org.sonarqube") version "4.3.0.3225"
+    id("org.sonarqube") version "4.3.1.3277"
     id("info.solidsoft.pitest") version "1.9.11"
     id("io.freefair.lombok") version "8.3"
     id("net.ltgt.errorprone") version "3.1.0"
