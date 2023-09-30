@@ -14,6 +14,7 @@ import io.github.mfvanek.pg.connection.PgConnectionFactoryImpl;
 import io.github.mfvanek.pg.connection.PgHost;
 import io.github.mfvanek.pg.connection.PgHostImpl;
 import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
+import io.github.mfvanek.pg.index.health.demo.utils.Consts;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
 import io.github.mfvanek.pg.testing.PostgreSqlContainerWrapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,7 +24,7 @@ import javax.sql.DataSource;
 
 public abstract class DatabaseAwareTestBase {
 
-    private static final PostgreSqlContainerWrapper POSTGRES = PostgreSqlContainerWrapper.withVersion("14.5");
+    private static final PostgreSqlContainerWrapper POSTGRES = PostgreSqlContainerWrapper.withVersion(Consts.PG_VERSION);
 
     @Nonnull
     protected static DataSource getDataSource() {

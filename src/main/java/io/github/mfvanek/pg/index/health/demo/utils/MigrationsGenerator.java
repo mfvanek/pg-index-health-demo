@@ -38,14 +38,20 @@ public class MigrationsGenerator {
         return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
     }
 
+    @SuppressWarnings("StringSplitter")
     @SneakyThrows
     public static void generateMigrations(@Nonnull final DataSource dataSource, @Nonnull final List<ForeignKey> foreignKeys) {
         final DbMigrationGenerator<ForeignKey> generator = new ForeignKeyMigrationGenerator(GeneratingOptions.builder().build());
         final String generatedMigrations = generator.generate(foreignKeys);
-        log.info(generatedMigrations);
-        try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.execute(generatedMigrations);
+        log.info("Generated migrations: {}", generatedMigrations);
+        // TODO change generator API
+        final String[] migrations = generatedMigrations.split(";");
+        try (Connection connection = dataSource.getConnection()) {
+            for (final String migration : migrations) {
+                try (Statement statement = connection.createStatement()) {
+                    statement.execute(migration);
+                }
+            }
         }
     }
 }

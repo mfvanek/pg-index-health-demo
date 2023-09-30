@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
+import io.github.mfvanek.pg.index.health.demo.utils.Consts;
 import io.github.mfvanek.pg.index.health.demo.utils.StatisticsCollector;
 import io.github.mfvanek.pg.testing.PostgreSqlContainerWrapper;
 import lombok.SneakyThrows;
@@ -17,7 +18,7 @@ public class StatisticsDemoApp {
 
     @SneakyThrows
     public static void main(final String[] args) {
-        try (PostgreSqlContainerWrapper postgres = PostgreSqlContainerWrapper.withVersion("14.5")) {
+        try (PostgreSqlContainerWrapper postgres = PostgreSqlContainerWrapper.withVersion(Consts.PG_VERSION)) {
             StatisticsCollector.resetStatistics(postgres.getDataSource(), postgres.getUrl());
         }
     }
