@@ -12,11 +12,11 @@ plugins {
     id("checkstyle")
     id("jacoco")
     id("pmd")
-    id("org.sonarqube") version "4.4.0.3356"
-    id("info.solidsoft.pitest") version "1.9.11"
+    id("org.sonarqube") version "4.4.1.3373"
+    id("info.solidsoft.pitest") version "1.15.0"
     id("io.freefair.lombok") version "8.3"
     id("net.ltgt.errorprone") version "3.1.0"
-    id("org.gradle.test-retry") version "1.5.5"
+    id("org.gradle.test-retry") version "1.5.6"
     id("com.github.ben-manes.versions") version "0.48.0"
 }
 
@@ -33,9 +33,9 @@ dependencies {
     implementation(libs.pg.index.health.generator)
     implementation(libs.pg.index.health.testing)
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("org.liquibase:liquibase-core:4.23.2")
+    implementation("org.liquibase:liquibase-core:4.24.0")
     implementation("org.apache.commons:commons-dbcp2:2.10.0")
-    implementation(platform("org.testcontainers:testcontainers-bom:1.19.0"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.19.1"))
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
 
@@ -47,14 +47,11 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.mockito:mockito-core:5.5.0")
+    testImplementation("org.mockito:mockito-core:5.6.0")
     testImplementation(libs.logback.classic)
     testImplementation(libs.postgresql)
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher") {
-        because("required for pitest")
-    }
 
     pitest(libs.pitest.dashboard.reporter)
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
