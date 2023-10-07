@@ -188,11 +188,9 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     @Test
     void getTablesWithoutDescriptionShouldReturnTwoRowsForPublicSchema() {
         assertThat(tablesWithoutDescriptionCheck.check())
-                .hasSize(2)
+                .hasSize(1)
                 // HOW TO FIX: just add liquibase table to exclusions
-                .containsExactlyInAnyOrder(
-                        Table.of("databasechangelog", 16_384L),
-                        Table.of("databasechangeloglock", 8_192L));
+                .containsExactlyInAnyOrder(Table.of("databasechangelog", 16_384L));
     }
 
     @Test
@@ -205,8 +203,8 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     void getColumnsWithoutDescriptionShouldReturnSeveralRowsForPublicSchema() {
         assertThat(columnsWithoutDescriptionCheck.check())
                 // HOW TO FIX: just add liquibase table to exclusions
-                .hasSize(18)
-                .allMatch(c -> "databasechangelog".equals(c.getTableName()) || "databasechangeloglock".equals(c.getTableName()));
+                .hasSize(14)
+                .allMatch(c -> "databasechangelog".equals(c.getTableName()));
     }
 
     @Test
