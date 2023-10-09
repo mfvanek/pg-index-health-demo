@@ -14,7 +14,7 @@ plugins {
     id("pmd")
     id("org.sonarqube") version "4.4.1.3373"
     id("info.solidsoft.pitest") version "1.15.0"
-    id("io.freefair.lombok") version "8.3"
+    id("io.freefair.lombok") version "8.4"
     id("net.ltgt.errorprone") version "3.1.0"
     id("org.gradle.test-retry") version "1.5.6"
     id("com.github.ben-manes.versions") version "0.49.0"
