@@ -17,7 +17,7 @@ plugins {
     id("io.freefair.lombok") version "8.3"
     id("net.ltgt.errorprone") version "3.1.0"
     id("org.gradle.test-retry") version "1.5.6"
-    id("com.github.ben-manes.versions") version "0.48.0"
+    id("com.github.ben-manes.versions") version "0.49.0"
 }
 
 group = "io.github.mfvanek"
