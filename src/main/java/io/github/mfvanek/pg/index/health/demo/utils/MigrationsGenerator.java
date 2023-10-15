@@ -42,12 +42,10 @@ public class MigrationsGenerator {
     @SneakyThrows
     public static void generateMigrations(@Nonnull final DataSource dataSource, @Nonnull final List<ForeignKey> foreignKeys) {
         final DbMigrationGenerator<ForeignKey> generator = new ForeignKeyMigrationGenerator(GeneratingOptions.builder().build());
-        final String generatedMigrations = generator.generate(foreignKeys);
+        final List<String> generatedMigrations = generator.generate(foreignKeys);
         log.info("Generated migrations: {}", generatedMigrations);
-        // TODO change generator API
-        final String[] migrations = generatedMigrations.split(";");
         try (Connection connection = dataSource.getConnection()) {
-            for (final String migration : migrations) {
+            for (final String migration : generatedMigrations) {
                 try (Statement statement = connection.createStatement()) {
                     statement.execute(migration);
                 }
