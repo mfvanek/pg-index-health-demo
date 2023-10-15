@@ -21,7 +21,7 @@ plugins {
 }
 
 group = "io.github.mfvanek"
-version = "0.9.5"
+version = "0.10.0"
 
 repositories {
     mavenLocal()
