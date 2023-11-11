@@ -28,6 +28,7 @@ import javax.sql.DataSource;
 @UtilityClass
 public final class MigrationRunner {
 
+    @SuppressWarnings("deprecation")
     @SneakyThrows
     public static void runMigrations(@Nonnull final DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
