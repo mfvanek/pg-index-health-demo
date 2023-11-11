@@ -74,6 +74,10 @@ jacoco {
 }
 
 tasks {
+    wrapper {
+        gradleVersion = "8.4"
+    }
+
     test {
         useJUnitPlatform()
         dependsOn(checkstyleMain, checkstyleTest, pmdMain, pmdTest, spotbugsMain, spotbugsTest)
