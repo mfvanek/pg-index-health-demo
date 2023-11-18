@@ -17,11 +17,11 @@ plugins {
     id("io.freefair.lombok") version "8.4"
     id("net.ltgt.errorprone") version "3.1.0"
     id("org.gradle.test-retry") version "1.5.6"
-    id("com.github.ben-manes.versions") version "0.49.0"
+    id("com.github.ben-manes.versions") version "0.50.0"
 }
 
 group = "io.github.mfvanek"
-version = "0.10.0"
+version = "0.10.1"
 
 repositories {
     mavenLocal()
@@ -29,14 +29,15 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.pg.index.health.core)
-    implementation(libs.pg.index.health.generator)
-    implementation(libs.pg.index.health.testing)
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.10.1"))
+    implementation("io.github.mfvanek:pg-index-health")
+    implementation("io.github.mfvanek:pg-index-health-generator")
+    implementation("io.github.mfvanek:pg-index-health-testing")
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("org.liquibase:liquibase-core:4.24.0")
-    implementation("com.github.blagerweij:liquibase-sessionlock:1.6.7")
+    implementation("org.liquibase:liquibase-core:4.25.0")
+    implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
     implementation("org.apache.commons:commons-dbcp2:2.11.0")
-    implementation(platform("org.testcontainers:testcontainers-bom:1.19.1"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.19.2"))
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
 
@@ -48,13 +49,14 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.mockito:mockito-core:5.7.0")
+    testImplementation(platform("org.mockito:mockito-bom:5.7.0"))
+    testImplementation("org.mockito:mockito-core")
     testImplementation(libs.logback.classic)
     testImplementation(libs.postgresql)
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
-    pitest(libs.pitest.dashboard.reporter)
+    pitest("it.mulders.stryker:pit-dashboard-reporter:0.2.1")
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
     errorprone("com.google.errorprone:error_prone_core:2.23.0")
 }
@@ -70,7 +72,7 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 jacoco {
-    toolVersion = libs.versions.jacoco.get()
+    toolVersion = "0.8.11"
 }
 
 tasks {
@@ -139,7 +141,7 @@ tasks {
 }
 
 checkstyle {
-    toolVersion = libs.versions.checkstyle.get()
+    toolVersion = "10.12.5"
     configFile = file("config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     maxWarnings = 0
@@ -147,7 +149,7 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = libs.versions.pmd.get()
+    toolVersion = "6.55.0"
     isConsoleOutput = true
     ruleSetFiles = files("config/pmd/pmd.xml")
     ruleSets = listOf()
@@ -179,8 +181,8 @@ tasks.withType<SonarTask>().configureEach {
 
 pitest {
     verbosity.set("DEFAULT")
-    junit5PluginVersion.set(libs.versions.pitest.junit5Plugin.get())
-    pitestVersion.set(libs.versions.pitest.core.get())
+    junit5PluginVersion.set("1.2.1")
+    pitestVersion.set("1.15.3")
     threads.set(4)
     if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
         outputFormats.set(setOf("stryker-dashboard"))
