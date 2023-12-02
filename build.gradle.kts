@@ -8,7 +8,7 @@ import org.sonarqube.gradle.SonarTask
 
 plugins {
     id("java")
-    id("com.github.spotbugs") version "5.2.4"
+    id("com.github.spotbugs") version "5.2.5"
     id("checkstyle")
     id("jacoco")
     id("pmd")
@@ -16,12 +16,12 @@ plugins {
     id("info.solidsoft.pitest") version "1.15.0"
     id("io.freefair.lombok") version "8.4"
     id("net.ltgt.errorprone") version "3.1.0"
-    id("org.gradle.test-retry") version "1.5.6"
+    id("org.gradle.test-retry") version "1.5.7"
     id("com.github.ben-manes.versions") version "0.50.0"
 }
 
 group = "io.github.mfvanek"
-version = "0.10.1"
+version = "0.10.2"
 
 repositories {
     mavenLocal()
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.10.1"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.10.2"))
     implementation("io.github.mfvanek:pg-index-health")
     implementation("io.github.mfvanek:pg-index-health-generator")
     implementation("io.github.mfvanek:pg-index-health-testing")
@@ -62,10 +62,12 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("-parameters")
     options.errorprone {
         disableWarningsInGeneratedCode.set(true)
     }
@@ -77,7 +79,7 @@ jacoco {
 
 tasks {
     wrapper {
-        gradleVersion = "8.4"
+        gradleVersion = "8.5"
     }
 
     test {
