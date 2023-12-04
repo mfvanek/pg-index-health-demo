@@ -8,7 +8,7 @@ import org.sonarqube.gradle.SonarTask
 
 plugins {
     id("java")
-    id("com.github.spotbugs") version "5.2.5"
+    id("com.github.spotbugs") version "6.0.1"
     id("checkstyle")
     id("jacoco")
     id("pmd")
@@ -49,7 +49,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation(platform("org.mockito:mockito-bom:5.7.0"))
+    testImplementation(platform("org.mockito:mockito-bom:5.8.0"))
     testImplementation("org.mockito:mockito-core")
     testImplementation(libs.logback.classic)
     testImplementation(libs.postgresql)
