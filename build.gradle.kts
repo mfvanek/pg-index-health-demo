@@ -58,7 +58,13 @@ dependencies {
 
     pitest("it.mulders.stryker:pit-dashboard-reporter:0.2.1")
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
+
     errorprone("com.google.errorprone:error_prone_core:2.23.0")
+    errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.20")
+
+    spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
+    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0")
+    spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.3")
 }
 
 java {
@@ -70,6 +76,7 @@ tasks.withType<JavaCompile>().configureEach {
     options.compilerArgs.add("-parameters")
     options.errorprone {
         disableWarningsInGeneratedCode.set(true)
+        disable("Slf4jLoggerShouldBeNonStatic")
     }
 }
 
