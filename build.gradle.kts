@@ -47,7 +47,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.1"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
-    testImplementation("org.assertj:assertj-core:3.25.0")
+    testImplementation("org.assertj:assertj-core:3.25.1")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation(platform("org.mockito:mockito-bom:5.8.0"))
     testImplementation("org.mockito:mockito-core")
