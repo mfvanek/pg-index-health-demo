@@ -8,7 +8,7 @@ import org.sonarqube.gradle.SonarTask
 
 plugins {
     id("java")
-    id("com.github.spotbugs") version "6.0.6"
+    id("com.github.spotbugs") version "6.0.7"
     id("checkstyle")
     id("jacoco")
     id("pmd")
@@ -17,11 +17,11 @@ plugins {
     id("io.freefair.lombok") version "8.4"
     id("net.ltgt.errorprone") version "3.1.0"
     id("org.gradle.test-retry") version "1.5.8"
-    id("com.github.ben-manes.versions") version "0.50.0"
+    id("com.github.ben-manes.versions") version "0.51.0"
 }
 
 group = "io.github.mfvanek"
-version = "0.10.2"
+version = "0.10.3"
 
 repositories {
     mavenLocal()
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.10.2"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.10.3"))
     implementation("io.github.mfvanek:pg-index-health")
     implementation("io.github.mfvanek:pg-index-health-generator")
     implementation("io.github.mfvanek:pg-index-health-testing")
@@ -37,7 +37,7 @@ dependencies {
     implementation("org.liquibase:liquibase-core:4.25.1")
     implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
     implementation("org.apache.commons:commons-dbcp2:2.11.0")
-    implementation(platform("org.testcontainers:testcontainers-bom:1.19.3"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.19.4"))
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
 
@@ -47,9 +47,10 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.1"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
-    testImplementation("org.assertj:assertj-core:3.25.1")
+    testImplementation(platform("org.assertj:assertj-bom:3.25.2"))
+    testImplementation("org.assertj:assertj-core")
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation(platform("org.mockito:mockito-bom:5.9.0"))
+    testImplementation(platform("org.mockito:mockito-bom:5.10.0"))
     testImplementation("org.mockito:mockito-core")
     testImplementation(libs.logback.classic)
     testImplementation(libs.postgresql)
