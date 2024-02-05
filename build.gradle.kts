@@ -44,7 +44,7 @@ dependencies {
     runtimeOnly(libs.postgresql)
     runtimeOnly(libs.logback.classic)
 
-    testImplementation(platform("org.junit:junit-bom:5.10.1"))
+    testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation(platform("org.assertj:assertj-bom:3.25.3"))
