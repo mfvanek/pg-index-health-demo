@@ -37,7 +37,7 @@ dependencies {
     implementation("org.liquibase:liquibase-core:4.25.1")
     implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
     implementation("org.apache.commons:commons-dbcp2:2.11.0")
-    implementation(platform("org.testcontainers:testcontainers-bom:1.19.4"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.19.5"))
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
 
