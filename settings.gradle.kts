@@ -4,7 +4,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             library("postgresql", "org.postgresql:postgresql:42.7.1")
-            library("logback-classic", "ch.qos.logback:logback-classic:1.4.14")
+            library("logback-classic", "ch.qos.logback:logback-classic:1.5.0")
         }
     }
 }
