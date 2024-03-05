@@ -8,7 +8,7 @@ import org.sonarqube.gradle.SonarTask
 
 plugins {
     id("java")
-    id("com.github.spotbugs") version "6.0.7"
+    id("com.github.spotbugs") version "6.0.8"
     id("checkstyle")
     id("jacoco")
     id("pmd")
@@ -64,7 +64,7 @@ dependencies {
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.22")
 
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
-    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0")
+    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.13.0")
     spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.4")
 }
 
