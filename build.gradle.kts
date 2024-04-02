@@ -82,12 +82,12 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 jacoco {
-    toolVersion = "0.8.11"
+    toolVersion = "0.8.12"
 }
 
 tasks {
     wrapper {
-        gradleVersion = "8.5"
+        gradleVersion = "8.7"
     }
 
     test {
@@ -151,7 +151,7 @@ tasks {
 }
 
 checkstyle {
-    toolVersion = "10.12.5"
+    toolVersion = "10.15.0"
     configFile = file("config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     maxWarnings = 0
@@ -159,7 +159,7 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "6.55.0"
+    toolVersion = "7.0.0"
     isConsoleOutput = true
     ruleSetFiles = files("config/pmd/pmd.xml")
     ruleSets = listOf()

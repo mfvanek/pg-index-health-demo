@@ -9,11 +9,12 @@
         <exclude name="JUnitTestContainsTooManyAsserts"/>
         <exclude name="JUnitAssertionsShouldIncludeMessage"/>
         <exclude name="GuardLogStatement"/>
+        <exclude name="CheckResultSet"/> <!-- false positive. broken since v.7.0.0 -->
     </rule>
 
     <rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod">
         <properties>
-            <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration['.*TestBase']"/>
+            <property name="violationSuppressXPath" value=".[@SimpleName = 'DatabaseAwareTestBase'] | .[@SimpleName = 'LogsAwareTestBase']"/>
         </properties>
     </rule>
 
@@ -41,7 +42,7 @@
         <properties>
             <property name="checkSetters" value="false"/>
             <property name="violationSuppressXPath"
-                      value="//ClassOrInterfaceBodyDeclaration/Annotation/MarkerAnnotation//Name[@Image='Test']"/>
+                      value=".[pmd-java:hasAnnotation('org.junit.jupiter.api.Test')] | .[pmd-java:hasAnnotation('org.junit.jupiter.params.ParameterizedTest')]"/>
         </properties>
     </rule>
 
@@ -59,12 +60,6 @@
         <exclude name="ExcessiveImports"/>
     </rule>
 
-    <rule ref="category/java/design.xml/AbstractClassWithoutAnyMethod">
-        <properties>
-            <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration['.*TestBase']"/>
-        </properties>
-    </rule>
-
     <rule ref="category/java/documentation.xml">
         <exclude name="CommentRequired"/>
         <exclude name="CommentSize"/>
@@ -72,13 +67,12 @@
 
     <rule ref="category/java/multithreading.xml">
         <exclude name="UseConcurrentHashMap"/>
+        <exclude name="DoNotUseThreads"/> <!-- false positive. broken since v.7.0.0 -->
     </rule>
 
     <rule ref="category/java/performance.xml"/>
 
     <rule ref="category/java/security.xml"/>
 
-    <rule ref="category/java/errorprone.xml">
-        <exclude name="DataflowAnomalyAnalysis"/>
-    </rule>
+    <rule ref="category/java/errorprone.xml"/>
 </ruleset>
