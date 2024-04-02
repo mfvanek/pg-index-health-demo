@@ -34,7 +34,7 @@ dependencies {
     implementation("io.github.mfvanek:pg-index-health-generator")
     implementation("io.github.mfvanek:pg-index-health-testing")
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("org.liquibase:liquibase-core:4.26.0")
+    implementation("org.liquibase:liquibase-core:4.27.0")
     implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
     implementation("org.apache.commons:commons-dbcp2:2.12.0")
     implementation(platform("org.testcontainers:testcontainers-bom:1.19.7"))
