@@ -16,7 +16,7 @@ plugins {
     id("info.solidsoft.pitest") version "1.15.0"
     id("io.freefair.lombok") version "8.6"
     id("net.ltgt.errorprone") version "3.1.0"
-    id("org.gradle.test-retry") version "1.5.8"
+    id("org.gradle.test-retry") version "1.5.9"
     id("com.github.ben-manes.versions") version "0.51.0"
 }
 
