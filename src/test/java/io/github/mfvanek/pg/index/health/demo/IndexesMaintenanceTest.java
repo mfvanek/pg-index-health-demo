@@ -7,15 +7,18 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
+import io.github.mfvanek.pg.checks.host.BtreeIndexesOnArrayColumnsCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ColumnsWithJsonTypeCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ColumnsWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ColumnsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.DuplicatedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.ForeignKeysNotCoveredWithIndexCheckOnHost;
 import io.github.mfvanek.pg.checks.host.FunctionsWithoutDescriptionCheckOnHost;
+import io.github.mfvanek.pg.checks.host.IndexesWithBooleanCheckOnHost;
 import io.github.mfvanek.pg.checks.host.IndexesWithNullValuesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.IntersectedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.InvalidIndexesCheckOnHost;
+import io.github.mfvanek.pg.checks.host.NotValidConstraintsCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
 import io.github.mfvanek.pg.connection.PgConnection;
@@ -59,6 +62,9 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     private final ColumnsWithJsonTypeCheckOnHost columnsWithJsonTypeCheckOnHost;
     private final ColumnsWithSerialTypesCheckOnHost columnsWithSerialTypesCheckOnHost;
     private final FunctionsWithoutDescriptionCheckOnHost functionsWithoutDescriptionCheckOnHost;
+    private final IndexesWithBooleanCheckOnHost indexesWithBooleanCheckOnHost;
+    private final NotValidConstraintsCheckOnHost notValidConstraintsCheckOnHost;
+    private final BtreeIndexesOnArrayColumnsCheckOnHost btreeIndexesOnArrayColumnsCheckOnHost;
 
     IndexesMaintenanceTest() {
         final PgConnection pgConnection = PgConnectionImpl.of(getDataSource(), getHost());
@@ -73,6 +79,9 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         this.columnsWithJsonTypeCheckOnHost = new ColumnsWithJsonTypeCheckOnHost(pgConnection);
         this.columnsWithSerialTypesCheckOnHost = new ColumnsWithSerialTypesCheckOnHost(pgConnection);
         this.functionsWithoutDescriptionCheckOnHost = new FunctionsWithoutDescriptionCheckOnHost(pgConnection);
+        this.indexesWithBooleanCheckOnHost = new IndexesWithBooleanCheckOnHost(pgConnection);
+        this.notValidConstraintsCheckOnHost = new NotValidConstraintsCheckOnHost(pgConnection);
+        this.btreeIndexesOnArrayColumnsCheckOnHost = new BtreeIndexesOnArrayColumnsCheckOnHost(pgConnection);
     }
 
     @Test
@@ -231,6 +240,27 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     @ValueSource(strings = {"public", "demo"})
     void getFunctionsWithoutDescriptionShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
         assertThat(functionsWithoutDescriptionCheckOnHost.check(PgContext.of(schemaName)))
+                .isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"public", "demo"})
+    void indexesWithBooleanShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
+        assertThat(indexesWithBooleanCheckOnHost.check(PgContext.of(schemaName)))
+                .isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"public", "demo"})
+    void notValidConstraintsShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
+        assertThat(notValidConstraintsCheckOnHost.check(PgContext.of(schemaName)))
+                .isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"public", "demo"})
+    void btreeIndexesOnArrayColumnsShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
+        assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check(PgContext.of(schemaName)))
                 .isEmpty();
     }
 }

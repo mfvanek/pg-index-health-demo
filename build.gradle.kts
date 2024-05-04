@@ -8,7 +8,7 @@ import org.sonarqube.gradle.SonarTask
 
 plugins {
     id("java")
-    id("com.github.spotbugs") version "6.0.12"
+    id("com.github.spotbugs") version "6.0.13"
     id("checkstyle")
     id("jacoco")
     id("pmd")
@@ -21,7 +21,7 @@ plugins {
 }
 
 group = "io.github.mfvanek"
-version = "0.10.3"
+version = "0.11.0"
 
 repositories {
     mavenLocal()
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.10.3"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.11.0"))
     implementation("io.github.mfvanek:pg-index-health")
     implementation("io.github.mfvanek:pg-index-health-generator")
     implementation("io.github.mfvanek:pg-index-health-testing")
@@ -60,8 +60,8 @@ dependencies {
     pitest("it.mulders.stryker:pit-dashboard-reporter:0.2.1")
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
 
-    errorprone("com.google.errorprone:error_prone_core:2.27.0")
-    errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.23")
+    errorprone("com.google.errorprone:error_prone_core:2.27.1")
+    errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.24")
 
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.13.0")
@@ -159,7 +159,7 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.0.0"
+    toolVersion = "7.1.0"
     isConsoleOutput = true
     ruleSetFiles = files("config/pmd/pmd.xml")
     ruleSets = listOf()
