@@ -25,9 +25,11 @@ import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
 import io.github.mfvanek.pg.model.PgContext;
+import io.github.mfvanek.pg.model.column.Column;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import io.github.mfvanek.pg.model.index.DuplicatedIndexes;
 import io.github.mfvanek.pg.model.index.Index;
+import io.github.mfvanek.pg.model.index.IndexWithColumns;
 import io.github.mfvanek.pg.model.index.IndexWithNulls;
 import io.github.mfvanek.pg.model.index.IndexWithSize;
 import io.github.mfvanek.pg.model.table.Table;
@@ -257,10 +259,17 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                 .isEmpty();
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"public", "demo"})
-    void btreeIndexesOnArrayColumnsShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
-        assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check(PgContext.of(schemaName)))
+    @Test
+    void getBtreeIndexesOnArrayColumnsShouldReturnNothingForPublicSchema() {
+        assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check())
                 .isEmpty();
+    }
+
+    @Test
+    void getBtreeIndexesOnArrayColumnsShouldReturnOneRowForDemoSchema() {
+        assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check(demoSchema))
+                .hasSize(1)
+                .containsExactly(
+                        IndexWithColumns.ofSingle(ORDER_ITEM_TABLE, "demo.order_item_categories_idx", 8_192L, Column.ofNullable(ORDER_ITEM_TABLE, "categories")));
     }
 }

@@ -26,3 +26,8 @@ comment on column demo.order_item.price is 'The cost of a unit of goods';
 comment on column demo.order_item.amount is 'The number of units of the product in the position';
 comment on column demo.order_item.sku is 'Stock keeping unit ';
 comment on column demo.order_item.warehouse_id is 'Warehouse ID';
+
+--changeset vadim.khizhin:2024.05.04:order_idem.add.array.column.and.index
+alter table demo.order_item add column categories text[];
+comment on column demo.order_item.categories is 'Categories to which the order item belongs';
+create index if not exists order_item_categories_idx on demo.order_item(categories) where categories is not null;
