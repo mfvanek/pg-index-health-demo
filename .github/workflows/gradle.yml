@@ -8,6 +8,9 @@ on:
 
 jobs:
     build:
+        strategy:
+            matrix:
+                type: [ "sonar", "without-sonar" ]
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
@@ -36,12 +39,17 @@ jobs:
                     restore-keys: |
                         ${{ runner.os }}-gradle-
             -   name: Build and analyze
+                if: matrix.type == 'sonar'
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
                     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
                     STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
                 run: ./gradlew build sonarqube --info
+            -   name: Build with Gradle
+                if: matrix.type != 'sonar'
+                run: ./gradlew build
             -   name: Upload coverage to Codecov
+                if: matrix.type == 'sonar'
                 uses: codecov/codecov-action@v4
                 with:
                     token: ${{ secrets.CODECOV_TOKEN }}
