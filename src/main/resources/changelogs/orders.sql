@@ -24,3 +24,10 @@ comment on column demo.orders.status is 'Order status';
 comment on column demo.orders.created_at is 'Date and time of order creation';
 comment on column demo.orders.order_total is 'Total cost of the order';
 comment on column demo.orders.buyer_id is 'Buyer''s ID';
+
+--changeset ivan.vakhrushev:2024.05.04:orders.preorder.column
+alter table demo.orders add column preorder boolean not null default false;
+comment on column demo.orders.preorder is 'Is it preorder';
+
+--changeset ivan.vakhrushev:2024.05.04:create.index.on.preorder runInTransaction:false
+create index concurrently if not exists i_orders_preorder on demo.orders (preorder);

@@ -31,3 +31,6 @@ comment on column demo.order_item.warehouse_id is 'Warehouse ID';
 alter table demo.order_item add column categories text[];
 comment on column demo.order_item.categories is 'Categories to which the order item belongs';
 create index if not exists order_item_categories_idx on demo.order_item(categories) where categories is not null;
+
+--changeset ivan.vakhrushev:2024.05.04:order_item.not_valid_constraint
+alter table demo.order_item add constraint order_item_amount_less_than_100 check (amount < 100) not valid;
