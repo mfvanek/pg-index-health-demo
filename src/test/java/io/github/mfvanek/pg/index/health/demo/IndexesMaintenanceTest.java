@@ -25,9 +25,13 @@ import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
 import io.github.mfvanek.pg.model.PgContext;
+import io.github.mfvanek.pg.model.column.Column;
+import io.github.mfvanek.pg.model.constraint.Constraint;
+import io.github.mfvanek.pg.model.constraint.ConstraintType;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import io.github.mfvanek.pg.model.index.DuplicatedIndexes;
 import io.github.mfvanek.pg.model.index.Index;
+import io.github.mfvanek.pg.model.index.IndexWithColumns;
 import io.github.mfvanek.pg.model.index.IndexWithNulls;
 import io.github.mfvanek.pg.model.index.IndexWithSize;
 import io.github.mfvanek.pg.model.table.Table;
@@ -49,6 +53,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     private static final String BUYER_TABLE = "demo.buyer";
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
+    private static final String ORDERS_TABLE = "demo.orders";
 
     private final PgContext demoSchema = PgContext.of("demo");
     private final InvalidIndexesCheckOnHost invalidIndexesCheck;
@@ -160,7 +165,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                 // HOW TO FIX: create indexes on columns under foreign key constraint
                 .containsExactlyInAnyOrder(
                         ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fkey", "order_id"),
-                        ForeignKey.ofNotNullColumn("demo.orders", "orders_buyer_id_fkey", "buyer_id"),
+                        ForeignKey.ofNotNullColumn(ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
                         ForeignKey.ofNullableColumn("demo.payment", "payment_order_id_fkey", "order_id"));
     }
 
@@ -243,18 +248,31 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                 .isEmpty();
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"public", "demo"})
-    void indexesWithBooleanShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
-        assertThat(indexesWithBooleanCheckOnHost.check(PgContext.of(schemaName)))
+    @Test
+    void indexesWithBooleanShouldReturnNothingForPublicSchema() {
+        assertThat(indexesWithBooleanCheckOnHost.check())
                 .isEmpty();
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"public", "demo"})
-    void notValidConstraintsShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
-        assertThat(notValidConstraintsCheckOnHost.check(PgContext.of(schemaName)))
+    @Test
+    void indexesWithBooleanShouldReturnOneRowForDemoSchema() {
+        assertThat(indexesWithBooleanCheckOnHost.check(demoSchema))
+                .hasSize(1)
+                .contains(IndexWithColumns.ofSingle(ORDERS_TABLE, "demo.i_orders_preorder", 1L,
+                        Column.ofNotNull(ORDERS_TABLE, "preorder")));
+    }
+
+    @Test
+    void notValidConstraintsShouldReturnNothingForPublicSchema() {
+        assertThat(notValidConstraintsCheckOnHost.check())
                 .isEmpty();
+    }
+
+    @Test
+    void notValidConstraintsShouldReturnOneRowForDemoSchema() {
+        assertThat(notValidConstraintsCheckOnHost.check(demoSchema))
+                .hasSize(1)
+                .contains(Constraint.ofType(ORDER_ITEM_TABLE, "order_item_amount_less_than_100", ConstraintType.CHECK));
     }
 
     @ParameterizedTest

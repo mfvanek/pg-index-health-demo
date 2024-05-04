@@ -26,3 +26,6 @@ comment on column demo.order_item.price is 'The cost of a unit of goods';
 comment on column demo.order_item.amount is 'The number of units of the product in the position';
 comment on column demo.order_item.sku is 'Stock keeping unit ';
 comment on column demo.order_item.warehouse_id is 'Warehouse ID';
+
+--changeset ivan.vakhrushev:2024.05.04:order_item.not_valid_constraint
+alter table demo.order_item add constraint order_item_amount_less_than_100 check (amount < 100) not valid;
