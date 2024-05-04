@@ -36,7 +36,7 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
                 "db_indexes_health\tfunctions_without_description\t0",
                 "db_indexes_health\tindexes_with_boolean\t1",
                 "db_indexes_health\tnot_valid_constraints\t1",
-                "db_indexes_health\tbtree_indexes_on_array_columns\t0");
+                "db_indexes_health\tbtree_indexes_on_array_columns\t1");
         final List<String> healthData = HealthDataCollector.collectHealthData(getConnectionFactory(), getConnectionCredentials());
         assertThat(healthData)
                 .hasSize(18)

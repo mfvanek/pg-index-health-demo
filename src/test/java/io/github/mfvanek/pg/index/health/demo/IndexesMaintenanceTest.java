@@ -275,10 +275,17 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                 .contains(Constraint.ofType(ORDER_ITEM_TABLE, "order_item_amount_less_than_100", ConstraintType.CHECK));
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"public", "demo"})
-    void btreeIndexesOnArrayColumnsShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
-        assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check(PgContext.of(schemaName)))
+    @Test
+    void getBtreeIndexesOnArrayColumnsShouldReturnNothingForPublicSchema() {
+        assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check())
                 .isEmpty();
+    }
+
+    @Test
+    void getBtreeIndexesOnArrayColumnsShouldReturnOneRowForDemoSchema() {
+        assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check(demoSchema))
+                .hasSize(1)
+                .containsExactly(
+                        IndexWithColumns.ofSingle(ORDER_ITEM_TABLE, "demo.order_item_categories_idx", 8_192L, Column.ofNullable(ORDER_ITEM_TABLE, "categories")));
     }
 }
