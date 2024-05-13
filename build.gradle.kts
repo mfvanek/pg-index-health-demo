@@ -50,7 +50,7 @@ dependencies {
     testImplementation(platform("org.assertj:assertj-bom:3.25.3"))
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation(platform("org.mockito:mockito-bom:5.11.0"))
+    testImplementation(platform("org.mockito:mockito-bom:5.12.0"))
     testImplementation("org.mockito:mockito-core")
     testImplementation(libs.logback.classic)
     testImplementation(libs.postgresql)
