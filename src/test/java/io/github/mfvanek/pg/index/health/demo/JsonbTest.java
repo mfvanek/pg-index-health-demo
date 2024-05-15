@@ -35,12 +35,12 @@ class JsonbTest extends DatabaseAwareTestBase {
                     final PGobject infoAsObject = (PGobject) resultSet.getObject("info");
                     final String infoAsString = resultSet.getString("info");
                     assertThat(infoAsObject)
-                            .isNotNull();
+                        .isNotNull();
                     assertThat(infoAsString)
-                            .isNotBlank();
+                        .isNotBlank();
                     assertThat(infoAsObject.getValue())
-                            .isEqualTo("{\" payment\": {\"date\": \"2022-05-27T18:31:42\", \"result\": \"success\"}}")
-                            .isEqualTo(infoAsString);
+                        .isEqualTo("{\" payment\": {\"date\": \"2022-05-27T18:31:42\", \"result\": \"success\"}}")
+                        .isEqualTo(infoAsString);
 
                     final String withoutWhitespaces = StringUtils.deleteWhitespace(infoAsString);
                     assertThat(withoutWhitespaces).isEqualTo("{\"payment\":{\"date\":\"2022-05-27T18:31:42\",\"result\":\"success\"}}");

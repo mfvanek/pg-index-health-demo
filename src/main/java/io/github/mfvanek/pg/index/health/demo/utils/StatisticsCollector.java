@@ -43,8 +43,8 @@ public final class StatisticsCollector {
         waitForStatisticsCollector(dataSource);
         final Optional<OffsetDateTime> resetTimestamp = databaseManagement.getLastStatsResetTimestamp();
         final ZonedDateTime zonedDateTime = resetTimestamp
-                .orElseThrow(IllegalStateException::new)
-                .atZoneSameInstant(ClockHolder.clock().getZone());
+            .orElseThrow(IllegalStateException::new)
+            .atZoneSameInstant(ClockHolder.clock().getZone());
         log.info("Last statistics reset was at {}", zonedDateTime);
         return zonedDateTime;
     }

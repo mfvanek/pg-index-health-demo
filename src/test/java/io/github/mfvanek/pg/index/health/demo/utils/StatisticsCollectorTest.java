@@ -24,10 +24,10 @@ class StatisticsCollectorTest extends DatabaseAwareTestBase {
         final long beforeTest = System.nanoTime();
         final ZonedDateTime zonedDateTime = StatisticsCollector.resetStatistics(getDataSource(), getUrl());
         assertThat(System.nanoTime() - beforeTest)
-                .as("Execution time should be greater than 1 second due to delay")
-                .isGreaterThanOrEqualTo(1_000_000_000L);
+            .as("Execution time should be greater than 1 second due to delay")
+            .isGreaterThanOrEqualTo(1_000_000_000L);
         assertThat(zonedDateTime)
-                .isNotNull()
-                .isBefore(ZonedDateTime.now(clock));
+            .isNotNull()
+            .isBefore(ZonedDateTime.now(clock));
     }
 }

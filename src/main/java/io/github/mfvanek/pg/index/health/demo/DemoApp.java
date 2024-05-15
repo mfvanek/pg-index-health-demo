@@ -33,7 +33,7 @@ public class DemoApp {
         try (PostgreSqlContainerWrapper postgres = PostgreSqlContainerWrapper.withVersion(Consts.PG_VERSION)) {
             MigrationRunner.runMigrations(postgres.getDataSource());
             final HighAvailabilityPgConnectionFactory connectionFactory = new HighAvailabilityPgConnectionFactoryImpl(
-                    new PgConnectionFactoryImpl(), new PrimaryHostDeterminerImpl());
+                new PgConnectionFactoryImpl(), new PrimaryHostDeterminerImpl());
             final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(postgres.getUrl(), postgres.getUsername(), postgres.getPassword());
             HealthDataCollector.collectHealthData(connectionFactory, credentials);
             final List<ForeignKey> foreignKeys = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(connectionFactory, credentials);
