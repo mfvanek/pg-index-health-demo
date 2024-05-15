@@ -25,10 +25,10 @@ class StatisticsDemoAppTest extends LogsAwareTestBase {
     @Test
     void shouldWork() {
         assertThatCode(() -> StatisticsDemoApp.main(new String[]{}))
-                .doesNotThrowAnyException();
+            .doesNotThrowAnyException();
         assertThat(getLogs())
-                .hasSize(2)
-                .anyMatch(l -> l.getMessage().startsWith("Last statistics reset was at"))
-                .anyMatch(l -> l.getMessage().startsWith("Waiting for statistics collector"));
+            .hasSize(2)
+            .anyMatch(l -> l.getMessage().startsWith("Last statistics reset was at"))
+            .anyMatch(l -> l.getMessage().startsWith("Waiting for statistics collector"));
     }
 }

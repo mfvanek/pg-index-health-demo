@@ -54,7 +54,7 @@ public abstract class DatabaseAwareTestBase {
     @Nonnull
     protected static HighAvailabilityPgConnectionFactory getConnectionFactory() {
         return new HighAvailabilityPgConnectionFactoryImpl(
-                new PgConnectionFactoryImpl(),
-                new PrimaryHostDeterminerImpl());
+            new PgConnectionFactoryImpl(),
+            new PrimaryHostDeterminerImpl());
     }
 }

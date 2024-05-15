@@ -36,12 +36,12 @@ public class ConfigurationCollector {
         final PgConnection pgConnection = PgConnectionImpl.of(dataSource, PgHostImpl.ofUrl(databaseUrl));
         final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);
         final DatabaseManagement databaseManagement = new DatabaseManagementImpl(
-                haPgConnection, StatisticsMaintenanceOnHostImpl::new, ConfigurationMaintenanceOnHostImpl::new);
+            haPgConnection, StatisticsMaintenanceOnHostImpl::new, ConfigurationMaintenanceOnHostImpl::new);
         final ServerSpecification serverSpecification = ServerSpecification.builder()
-                .withCpuCores(Runtime.getRuntime().availableProcessors())
-                .withMemoryAmount(16, MemoryUnit.GB)
-                .withSSD()
-                .build();
+            .withCpuCores(Runtime.getRuntime().availableProcessors())
+            .withMemoryAmount(16, MemoryUnit.GB)
+            .withSSD()
+            .build();
         final Set<PgParam> paramsWithDefaultValues = databaseManagement.getParamsWithDefaultValues(serverSpecification);
         paramsWithDefaultValues.forEach(p -> log.info("Parameter with default value {}", p));
         return paramsWithDefaultValues;

@@ -29,9 +29,9 @@ public final class HealthDataCollector {
     public static List<String> collectHealthData(@Nonnull final HighAvailabilityPgConnectionFactory connectionFactory,
                                                  @Nonnull final ConnectionCredentials credentials) {
         final Exclusions exclusions = Exclusions.builder()
-                .withIndexSizeThreshold(1, MemoryUnit.MB)
-                .withTableSizeThreshold(1, MemoryUnit.MB)
-                .build();
+            .withIndexSizeThreshold(1, MemoryUnit.MB)
+            .withTableSizeThreshold(1, MemoryUnit.MB)
+            .build();
         final HealthLogger healthLogger = new KeyValueFileHealthLogger(credentials, connectionFactory, DatabaseChecks::new);
         final PgContext context = PgContext.of("demo");
         final List<String> healthData = healthLogger.logAll(exclusions, context);

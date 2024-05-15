@@ -105,187 +105,187 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     @Test
     void getInvalidIndexesShouldReturnNothingForPublicSchema() {
         assertThat(invalidIndexesCheck.check())
-                .isEmpty();
+            .isEmpty();
     }
 
     @Test
     void getInvalidIndexesShouldReturnOneRowForDemoSchema() {
         assertThat(invalidIndexesCheck.check(demoSchema))
-                .hasSize(1)
-                // HOW TO FIX: drop index concurrently, fix data in table, then create index concurrently again
-                .containsExactly(Index.of(BUYER_TABLE, "demo.i_buyer_email"));
+            .hasSize(1)
+            // HOW TO FIX: drop index concurrently, fix data in table, then create index concurrently again
+            .containsExactly(Index.of(BUYER_TABLE, "demo.i_buyer_email"));
     }
 
     @Test
     void getDuplicatedIndexesShouldReturnNothingForPublicSchema() {
         assertThat(duplicatedIndexesCheck.check())
-                .isEmpty();
+            .isEmpty();
     }
 
     @Test
     void getDuplicatedIndexesShouldReturnOneRowForDemoSchema() {
         assertThat(duplicatedIndexesCheck.check(demoSchema))
-                .hasSize(1)
-                // HOW TO FIX: do not manually create index for column with unique constraint
-                .containsExactly(DuplicatedIndexes.of(
-                        IndexWithSize.of(ORDER_ITEM_TABLE, "demo.i_order_item_sku_order_id_unique", 8_192L),
-                        IndexWithSize.of(ORDER_ITEM_TABLE, "demo.order_item_sku_order_id_key", 8_192L)));
+            .hasSize(1)
+            // HOW TO FIX: do not manually create index for column with unique constraint
+            .containsExactly(DuplicatedIndexes.of(
+                IndexWithSize.of(ORDER_ITEM_TABLE, "demo.i_order_item_sku_order_id_unique", 8_192L),
+                IndexWithSize.of(ORDER_ITEM_TABLE, "demo.order_item_sku_order_id_key", 8_192L)));
     }
 
     @Test
     void getIntersectedIndexesShouldReturnNothingForPublicSchema() {
         assertThat(intersectedIndexesCheck.check())
-                .isEmpty();
+            .isEmpty();
     }
 
     @Test
     void getIntersectedIndexesShouldReturnTwoRowsForDemoSchema() {
         assertThat(intersectedIndexesCheck.check(demoSchema))
-                .hasSize(2)
-                // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
-                .containsExactlyInAnyOrder(
-                        DuplicatedIndexes.of(
-                                IndexWithSize.of(BUYER_TABLE, "demo.buyer_pkey", 1L),
-                                IndexWithSize.of(BUYER_TABLE, "demo.i_buyer_id_phone", 1L)),
-                        DuplicatedIndexes.of(
-                                IndexWithSize.of(BUYER_TABLE, "demo.i_buyer_first_name", 1L),
-                                IndexWithSize.of(BUYER_TABLE, "demo.i_buyer_names", 1L)));
+            .hasSize(2)
+            // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
+            .containsExactlyInAnyOrder(
+                DuplicatedIndexes.of(
+                    IndexWithSize.of(BUYER_TABLE, "demo.buyer_pkey", 1L),
+                    IndexWithSize.of(BUYER_TABLE, "demo.i_buyer_id_phone", 1L)),
+                DuplicatedIndexes.of(
+                    IndexWithSize.of(BUYER_TABLE, "demo.i_buyer_first_name", 1L),
+                    IndexWithSize.of(BUYER_TABLE, "demo.i_buyer_names", 1L)));
     }
 
     @Test
     void getForeignKeysNotCoveredWithIndexShouldReturnNothingForPublicSchema() {
         assertThat(foreignKeysNotCoveredWithIndexCheck.check())
-                .isEmpty();
+            .isEmpty();
     }
 
     @Test
     void getForeignKeysNotCoveredWithIndexShouldReturnThreeRowsForDemoSchema() {
         assertThat(foreignKeysNotCoveredWithIndexCheck.check(demoSchema))
-                .hasSize(3)
-                // HOW TO FIX: create indexes on columns under foreign key constraint
-                .containsExactlyInAnyOrder(
-                        ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fkey", "order_id"),
-                        ForeignKey.ofNotNullColumn(ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
-                        ForeignKey.ofNullableColumn("demo.payment", "payment_order_id_fkey", "order_id"));
+            .hasSize(3)
+            // HOW TO FIX: create indexes on columns under foreign key constraint
+            .containsExactlyInAnyOrder(
+                ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fkey", "order_id"),
+                ForeignKey.ofNotNullColumn(ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
+                ForeignKey.ofNullableColumn("demo.payment", "payment_order_id_fkey", "order_id"));
     }
 
     @Test
     void getTablesWithoutPrimaryKeyShouldReturnOneRowForPublicSchema() {
         assertThat(tablesWithoutPrimaryKeyCheck.check())
-                .hasSize(1)
-                // HOW TO FIX: just add liquibase table to exclusions
-                .containsExactly(Table.of("databasechangelog", 1L));
+            .hasSize(1)
+            // HOW TO FIX: just add liquibase table to exclusions
+            .containsExactly(Table.of("databasechangelog", 1L));
     }
 
     @Test
     void getTablesWithoutPrimaryKeyShouldReturnOneRowForDemoSchema() {
         assertThat(tablesWithoutPrimaryKeyCheck.check(demoSchema))
-                .hasSize(1)
-                // HOW TO FIX: add primary key to the table
-                .containsExactly(Table.of("demo.payment", 1L));
+            .hasSize(1)
+            // HOW TO FIX: add primary key to the table
+            .containsExactly(Table.of("demo.payment", 1L));
     }
 
     @Test
     void getIndexesWithNullValuesShouldReturnNothingForPublicSchema() {
         assertThat(indexesWithNullValuesCheck.check())
-                .isEmpty();
+            .isEmpty();
     }
 
     @Test
     void getIndexesWithNullValuesShouldReturnOneRowForDemoSchema() {
         assertThat(indexesWithNullValuesCheck.check(demoSchema))
-                .hasSize(1)
-                // HOW TO FIX: consider excluding null values from index if it's possible
-                .containsExactly(IndexWithNulls.of(BUYER_TABLE, "demo.i_buyer_middle_name", 1L, "middle_name"));
+            .hasSize(1)
+            // HOW TO FIX: consider excluding null values from index if it's possible
+            .containsExactly(IndexWithNulls.of(BUYER_TABLE, "demo.i_buyer_middle_name", 1L, "middle_name"));
     }
 
     @Test
     void getTablesWithoutDescriptionShouldReturnTwoRowsForPublicSchema() {
         assertThat(tablesWithoutDescriptionCheck.check())
-                .hasSize(1)
-                // HOW TO FIX: just add liquibase table to exclusions
-                .containsExactlyInAnyOrder(Table.of("databasechangelog", 16_384L));
+            .hasSize(1)
+            // HOW TO FIX: just add liquibase table to exclusions
+            .containsExactlyInAnyOrder(Table.of("databasechangelog", 16_384L));
     }
 
     @Test
     void getTablesWithoutDescriptionShouldReturnNothingForDemoSchema() {
         assertThat(tablesWithoutDescriptionCheck.check(demoSchema))
-                .isEmpty();
+            .isEmpty();
     }
 
     @Test
     void getColumnsWithoutDescriptionShouldReturnSeveralRowsForPublicSchema() {
         assertThat(columnsWithoutDescriptionCheck.check())
-                // HOW TO FIX: just add liquibase table to exclusions
-                .hasSize(14)
-                .allMatch(c -> "databasechangelog".equals(c.getTableName()));
+            // HOW TO FIX: just add liquibase table to exclusions
+            .hasSize(14)
+            .allMatch(c -> "databasechangelog".equals(c.getTableName()));
     }
 
     @Test
     void getColumnsWithoutDescriptionShouldReturnNothingForDemoSchema() {
         assertThat(columnsWithoutDescriptionCheck.check(demoSchema))
-                .isEmpty();
+            .isEmpty();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"public", "demo"})
     void getColumnsWithJsonTypeShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
         assertThat(columnsWithJsonTypeCheckOnHost.check(PgContext.of(schemaName)))
-                .isEmpty();
+            .isEmpty();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"public", "demo"})
     void getColumnsWithSerialTypesShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
         assertThat(columnsWithSerialTypesCheckOnHost.check(PgContext.of(schemaName)))
-                .isEmpty();
+            .isEmpty();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"public", "demo"})
     void getFunctionsWithoutDescriptionShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
         assertThat(functionsWithoutDescriptionCheckOnHost.check(PgContext.of(schemaName)))
-                .isEmpty();
+            .isEmpty();
     }
 
     @Test
     void indexesWithBooleanShouldReturnNothingForPublicSchema() {
         assertThat(indexesWithBooleanCheckOnHost.check())
-                .isEmpty();
+            .isEmpty();
     }
 
     @Test
     void indexesWithBooleanShouldReturnOneRowForDemoSchema() {
         assertThat(indexesWithBooleanCheckOnHost.check(demoSchema))
-                .hasSize(1)
-                .contains(IndexWithColumns.ofSingle(ORDERS_TABLE, "demo.i_orders_preorder", 1L,
-                        Column.ofNotNull(ORDERS_TABLE, "preorder")));
+            .hasSize(1)
+            .contains(IndexWithColumns.ofSingle(ORDERS_TABLE, "demo.i_orders_preorder", 1L,
+                Column.ofNotNull(ORDERS_TABLE, "preorder")));
     }
 
     @Test
     void notValidConstraintsShouldReturnNothingForPublicSchema() {
         assertThat(notValidConstraintsCheckOnHost.check())
-                .isEmpty();
+            .isEmpty();
     }
 
     @Test
     void notValidConstraintsShouldReturnOneRowForDemoSchema() {
         assertThat(notValidConstraintsCheckOnHost.check(demoSchema))
-                .hasSize(1)
-                .contains(Constraint.ofType(ORDER_ITEM_TABLE, "order_item_amount_less_than_100", ConstraintType.CHECK));
+            .hasSize(1)
+            .contains(Constraint.ofType(ORDER_ITEM_TABLE, "order_item_amount_less_than_100", ConstraintType.CHECK));
     }
 
     @Test
     void getBtreeIndexesOnArrayColumnsShouldReturnNothingForPublicSchema() {
         assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check())
-                .isEmpty();
+            .isEmpty();
     }
 
     @Test
     void getBtreeIndexesOnArrayColumnsShouldReturnOneRowForDemoSchema() {
         assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check(demoSchema))
-                .hasSize(1)
-                .containsExactly(
-                        IndexWithColumns.ofSingle(ORDER_ITEM_TABLE, "demo.order_item_categories_idx", 8_192L, Column.ofNullable(ORDER_ITEM_TABLE, "categories")));
+            .hasSize(1)
+            .containsExactly(
+                IndexWithColumns.ofSingle(ORDER_ITEM_TABLE, "demo.order_item_categories_idx", 8_192L, Column.ofNullable(ORDER_ITEM_TABLE, "categories")));
     }
 }

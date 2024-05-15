@@ -21,7 +21,7 @@ plugins {
 }
 
 group = "io.github.mfvanek"
-version = "0.11.0"
+version = "0.11.1"
 
 repositories {
     mavenLocal()
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.11.0"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.11.1"))
     implementation("io.github.mfvanek:pg-index-health")
     implementation("io.github.mfvanek:pg-index-health-generator")
     implementation("io.github.mfvanek:pg-index-health-testing")
@@ -151,7 +151,7 @@ tasks {
 }
 
 checkstyle {
-    toolVersion = "10.15.0"
+    toolVersion = "10.16.0"
     configFile = file("config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     maxWarnings = 0
@@ -192,7 +192,7 @@ tasks.withType<SonarTask>().configureEach {
 pitest {
     verbosity.set("DEFAULT")
     junit5PluginVersion.set("1.2.1")
-    pitestVersion.set("1.15.3")
+    pitestVersion.set("1.15.8")
     threads.set(4)
     if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
         outputFormats.set(setOf("stryker-dashboard"))
