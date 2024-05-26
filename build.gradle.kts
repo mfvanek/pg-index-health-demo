@@ -1,180 +1,24 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import com.github.spotbugs.snom.Confidence
-import com.github.spotbugs.snom.Effort
-import com.github.spotbugs.snom.SpotBugsTask
-import info.solidsoft.gradle.pitest.PitestTask
-import net.ltgt.gradle.errorprone.errorprone
-import org.sonarqube.gradle.SonarTask
 
 plugins {
     id("java")
-    id("com.github.spotbugs") version "6.0.14"
-    id("checkstyle")
-    id("jacoco")
-    id("pmd")
-    id("org.sonarqube") version "5.0.0.4638"
-    id("info.solidsoft.pitest") version "1.15.0"
-    id("io.freefair.lombok") version "8.6"
-    id("net.ltgt.errorprone") version "3.1.0"
-    id("org.gradle.test-retry") version "1.5.9"
+    id("org.sonarqube")
     id("com.github.ben-manes.versions") version "0.51.0"
 }
 
-group = "io.github.mfvanek"
-version = "0.11.1"
+allprojects {
+    group = "io.github.mfvanek"
+    version = "0.11.1"
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
-dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.11.1"))
-    implementation("io.github.mfvanek:pg-index-health")
-    implementation("io.github.mfvanek:pg-index-health-generator")
-    implementation("io.github.mfvanek:pg-index-health-testing")
-    implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("org.liquibase:liquibase-core:4.27.0")
-    implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
-    implementation("org.apache.commons:commons-dbcp2:2.12.0")
-    implementation(platform("org.testcontainers:testcontainers-bom:1.19.8"))
-    implementation("org.testcontainers:testcontainers")
-    implementation("org.testcontainers:postgresql")
-
-    runtimeOnly(libs.postgresql)
-    runtimeOnly(libs.logback.classic)
-
-    testImplementation(platform("org.junit:junit-bom:5.10.2"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("org.junit.jupiter:junit-jupiter-params")
-    testImplementation(platform("org.assertj:assertj-bom:3.25.3"))
-    testImplementation("org.assertj:assertj-core")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation(platform("org.mockito:mockito-bom:5.12.0"))
-    testImplementation("org.mockito:mockito-core")
-    testImplementation(libs.logback.classic)
-    testImplementation(libs.postgresql)
-
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-
-    pitest("it.mulders.stryker:pit-dashboard-reporter:0.2.1")
-    checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
-
-    errorprone("com.google.errorprone:error_prone_core:2.27.1")
-    errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.24")
-
-    spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
-    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.13.0")
-    spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.4")
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+    repositories {
+        mavenLocal()
+        mavenCentral()
     }
-}
-tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.add("-parameters")
-    options.errorprone {
-        disableWarningsInGeneratedCode.set(true)
-        disable("Slf4jLoggerShouldBeNonStatic")
-    }
-}
-
-jacoco {
-    toolVersion = "0.8.12"
 }
 
 tasks {
     wrapper {
         gradleVersion = "8.7"
-    }
-
-    test {
-        useJUnitPlatform()
-        dependsOn(checkstyleMain, checkstyleTest, pmdMain, pmdTest, spotbugsMain, spotbugsTest)
-        maxParallelForks = 1
-        finalizedBy(jacocoTestReport, jacocoTestCoverageVerification)
-
-        retry {
-            maxRetries.set(1)
-            maxFailures.set(3)
-            failOnPassedAfterRetry.set(false)
-        }
-    }
-
-    jacocoTestReport {
-        dependsOn(test)
-        reports {
-            xml.required.set(true)
-            html.required.set(true)
-        }
-    }
-
-    jacocoTestCoverageVerification {
-        dependsOn(jacocoTestReport)
-        violationRules {
-            rule {
-                limit {
-                    counter = "CLASS"
-                    value = "MISSEDCOUNT"
-                    maximum = "0.0".toBigDecimal()
-                }
-            }
-            rule {
-                limit {
-                    counter = "METHOD"
-                    value = "MISSEDCOUNT"
-                    maximum = "0.0".toBigDecimal()
-                }
-            }
-            rule {
-                limit {
-                    counter = "LINE"
-                    value = "MISSEDCOUNT"
-                    maximum = "1.0".toBigDecimal()
-                }
-            }
-            rule {
-                limit {
-                    counter = "INSTRUCTION"
-                    value = "COVEREDRATIO"
-                    minimum = "0.92".toBigDecimal()
-                }
-            }
-        }
-    }
-
-    check {
-        dependsOn(jacocoTestCoverageVerification)
-    }
-}
-
-checkstyle {
-    toolVersion = "10.16.0"
-    configFile = file("config/checkstyle/checkstyle.xml")
-    isIgnoreFailures = false
-    maxWarnings = 0
-    maxErrors = 0
-}
-
-pmd {
-    toolVersion = "7.1.0"
-    isConsoleOutput = true
-    ruleSetFiles = files("config/pmd/pmd.xml")
-    ruleSets = listOf()
-}
-
-spotbugs {
-    showProgress.set(true)
-    effort.set(Effort.MAX)
-    reportLevel.set(Confidence.LOW)
-    excludeFilter.set(file("config/spotbugs/exclude.xml"))
-}
-tasks.withType<SpotBugsTask>().configureEach {
-    reports {
-        create("xml") { enabled = true }
-        create("html") { enabled = true }
     }
 }
 
@@ -184,29 +28,6 @@ sonar {
         property("sonar.organization", "mfvanek")
         property("sonar.host.url", "https://sonarcloud.io")
     }
-}
-tasks.withType<SonarTask>().configureEach {
-    dependsOn(tasks.test, tasks.jacocoTestReport)
-}
-
-pitest {
-    verbosity.set("DEFAULT")
-    junit5PluginVersion.set("1.2.1")
-    pitestVersion.set("1.15.8")
-    threads.set(4)
-    if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
-        outputFormats.set(setOf("stryker-dashboard"))
-    } else {
-        outputFormats.set(setOf("HTML"))
-    }
-    timestampedReports.set(false)
-    mutationThreshold.set(100)
-}
-tasks.withType<PitestTask>().configureEach {
-    mustRunAfter(tasks.test)
-}
-tasks.build {
-    dependsOn("pitest")
 }
 
 fun isNonStable(version: String): Boolean {

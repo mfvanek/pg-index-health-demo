@@ -1,7 +1,7 @@
-/.gradle
+.gradle/
 /*.iml
 /*.ipr
 /*.iws
-/build
+build/
 /.idea
-/key-value.log
+key-value.log

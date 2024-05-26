@@ -8,3 +8,5 @@ dependencyResolutionManagement {
         }
     }
 }
+
+include("pg-index-health-demo-without-spring")
