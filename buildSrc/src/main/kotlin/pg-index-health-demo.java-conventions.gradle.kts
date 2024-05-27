@@ -1,7 +1,6 @@
 import com.github.spotbugs.snom.Confidence
 import com.github.spotbugs.snom.Effort
 import com.github.spotbugs.snom.SpotBugsTask
-import gradle.kotlin.dsl.accessors._53fcf84b5c55ae3c098e3bb78b94da8d.implementation
 import net.ltgt.gradle.errorprone.errorprone
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.withType
