@@ -4,10 +4,6 @@ plugins {
     id("org.gradle.test-retry")
 }
 
-dependencies {
-    implementation("com.google.code.findbugs:jsr305:3.0.2")
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)

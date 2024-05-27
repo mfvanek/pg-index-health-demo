@@ -14,7 +14,13 @@
 
     <rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod">
         <properties>
-            <property name="violationSuppressXPath" value=".[@SimpleName = 'DatabaseAwareTestBase'] | .[@SimpleName = 'LogsAwareTestBase']"/>
+            <property name="violationSuppressXPath" value=".[@SimpleName = 'DatabaseAwareTestBase'] | .[@SimpleName = 'LogsAwareTestBase'] | .[@SimpleName = 'BasePgIndexHealthDemoSpringBootTest']"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/bestpractices.xml/LooseCoupling">
+        <properties>
+            <property name="allowedTypes" value="org.springframework.http.HttpHeaders" />
         </properties>
     </rule>
 
