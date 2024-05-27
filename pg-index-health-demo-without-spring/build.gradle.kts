@@ -11,7 +11,7 @@ dependencies {
     implementation("io.github.mfvanek:pg-index-health-generator")
     implementation("io.github.mfvanek:pg-index-health-testing")
 
-    implementation("org.liquibase:liquibase-core:4.27.0")
+    implementation("org.liquibase:liquibase-core:4.28.0")
     implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
     implementation("org.apache.commons:commons-dbcp2:2.12.0")
     implementation(platform("org.testcontainers:testcontainers-bom:1.19.8"))
@@ -24,7 +24,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
-    testImplementation(platform("org.assertj:assertj-bom:3.25.3"))
+    testImplementation(platform("org.assertj:assertj-bom:3.26.0"))
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation(platform("org.mockito:mockito-bom:5.12.0"))
