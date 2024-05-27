@@ -1,0 +1,75 @@
+spring:
+    profiles.active: dev
+    application.name: pg-index-health-spring-boot-demo
+    main.banner-mode: off
+    liquibase:
+        change-log: classpath:/db/changelog/db.changelog-master.yaml
+    security:
+        user:
+            name: demouser
+            password: testpwd123
+
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+        org.springframework.security: INFO
+
+server:
+    port: 8080
+    servlet:
+        context-path: /
+    # See also https://docs.spring.io/spring-boot/docs/2.7.9/reference/html/application-properties.html#appendix.application-properties.server
+    tomcat:
+        accept-count: 10
+        max-connections: 400
+        threads:
+            max: 10
+            min-spare: 5 # actuator port uses the same configuration
+
+management:
+    server:
+        port: 8090
+    endpoints:
+        enabled-by-default: false
+        web.exposure.include: health,prometheus,liquibase,info,threaddump,heapdump,openapi,swaggerui
+    endpoint:
+        health:
+            enabled: true
+            probes.enabled: true
+            group:
+                readiness:
+                    include: readinessState,db
+                    additional-path: server:/readyz # In order to collect probes from application main port
+                    # show-components: always
+        prometheus:
+            enabled: true
+        liquibase:
+            enabled: true
+        info:
+            enabled: true
+        threaddump:
+            enabled: true
+        heapdump:
+            enabled: true
+    metrics:
+        distribution:
+            percentiles-histogram:
+                http.server.requests: true
+            minimum-expected-value:
+                http.server.requests: 10ms
+            maximum-expected-value:
+                http.server.requests: 10s
+            slo:
+                http.server.requests: 1s
+        export:
+            prometheus.enabled: true
+    health:
+        livenessstate:
+            enabled: true
+        readinessstate:
+            enabled: true
+
+springdoc:
+    show-actuator: true
+    use-management-port: true

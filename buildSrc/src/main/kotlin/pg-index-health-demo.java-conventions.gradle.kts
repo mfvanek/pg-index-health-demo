@@ -17,12 +17,19 @@ plugins {
     id("io.freefair.lombok")
 }
 
+configurations.configureEach {
+    exclude("org.hamcrest")
+}
+
 dependencies {
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
 
     errorprone("com.google.errorprone:error_prone_core:2.27.1")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.24")
 
+    spotbugsSlf4j("org.slf4j:slf4j-simple:1.7.36") {
+        because("to be compatible with Spring Boot 2.7.x")
+    }
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.13.0")
     spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.4")

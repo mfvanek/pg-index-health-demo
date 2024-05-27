@@ -18,11 +18,13 @@ Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) l
 
 * [pg-index-health-demo-without-spring](pg-index-health-demo-without-spring)
   * Without Spring/Spring Boot
+* [pg-index-health-spring-boot-demo](pg-index-health-spring-boot-demo)
+  * With Spring Boot
 
 ## Tech stack
 
 * Java 17
-* With Testcontainers
+* Testcontainers
 
 ### Previous versions
 
