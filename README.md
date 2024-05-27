@@ -1,9 +1,6 @@
 # pg-index-health-demo
 
 Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) library.
-* With Testcontainers
-* Without Spring/Spring Boot
-* Java 17
 
 [![Java CI](https://github.com/mfvanek/pg-index-health-demo/workflows/Java%20CI/badge.svg)](https://github.com/mfvanek/pg-index-health-demo/actions "Java CI")
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/mfvanek/pg-index-health-demo/blob/master/LICENSE "Apache License 2.0")
@@ -17,7 +14,17 @@ Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) l
 
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmfvanek%2Fpg-index-health-demo%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/mfvanek/pg-index-health-demo/master)
 
-## Previous versions
+## Modules
+
+* [pg-index-health-demo-without-spring](pg-index-health-demo-without-spring)
+  * Without Spring/Spring Boot
+
+## Tech stack
+
+* Java 17
+* With Testcontainers
+
+### Previous versions
 
 If you search for version with [Embedded PostgreSQL](https://github.com/mfvanek/pg-index-health-demo/blob/4269907dc3e5be92fbe90346755bd107260c0c55/src/main/java/io/github/mfvanek/pg/index/health/demo/DemoApp.java#L28)
 please take a look at release [0.6.1](https://github.com/mfvanek/pg-index-health-demo/releases/tag/v.0.6.1)  
