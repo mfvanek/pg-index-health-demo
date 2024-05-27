@@ -1,15 +1,17 @@
 /*
  * Copyright (c) 2019-2024. Ivan Vakhrushev and others.
- * https://github.com/mfvanek/pg-index-health-spring-boot-demo
+ * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
  */
 
 package io.github.mfvanek.pg.index.health.demo.controller;
 
+import io.github.mfvanek.pg.index.health.demo.service.StatisticsCollectorService;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.http.MediaType;
@@ -21,6 +23,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(OutputCaptureExtension.class)
 class DbStatisticsControllerTest extends BasePgIndexHealthDemoSpringBootTest {
+
+    @Autowired
+    private StatisticsCollectorService statisticsCollectorService;
 
     @Test
     void getLastResetDateShouldNotReturnNull(@Nonnull final CapturedOutput output) {
@@ -68,6 +73,9 @@ class DbStatisticsControllerTest extends BasePgIndexHealthDemoSpringBootTest {
 
     @Test
     void doResetWithWaitShouldReturnOk(@Nonnull final CapturedOutput output) {
+        final OffsetDateTime offsetDateTime = statisticsCollectorService.resetStatistics();
+        assertThat(offsetDateTime).isNotNull();
+
         final long startTime = System.nanoTime();
         final OffsetDateTime result = webTestClient.post()
             .uri(uriBuilder -> uriBuilder

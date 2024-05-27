@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2019-2024. Ivan Vakhrushev and others.
- * https://github.com/mfvanek/pg-index-health-spring-boot-demo
+ * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
  */
