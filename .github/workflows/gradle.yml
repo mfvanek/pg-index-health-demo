@@ -9,6 +9,7 @@ on:
 jobs:
     build:
         strategy:
+            fail-fast: false
             matrix:
                 type: [ "sonar", "without-sonar" ]
         runs-on: ubuntu-latest
