@@ -19,7 +19,9 @@ allprojects {
 
 dependencies {
     subprojects.forEach {
-        jacocoAggregation(it)
+        if (it.name.contains("-demo")) {
+            jacocoAggregation(it)
+        }
     }
 }
 

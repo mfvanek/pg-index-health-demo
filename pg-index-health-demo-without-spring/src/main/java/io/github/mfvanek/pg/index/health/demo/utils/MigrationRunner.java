@@ -36,7 +36,7 @@ public final class MigrationRunner {
             Scope.child(config, () -> {
                 final DatabaseConnection dbConnection = new JdbcConnection(connection);
                 final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(dbConnection);
-                final Liquibase liquibase = new Liquibase("changelogs/changelog.xml", new ClassLoaderResourceAccessor(), database);
+                final Liquibase liquibase = new Liquibase("db/changelog/db.changelog-master.yaml", new ClassLoaderResourceAccessor(), database);
                 liquibase.update("main");
             });
             log.info("Migrations have been successfully executed");
