@@ -29,12 +29,12 @@ class DemoAppTest extends LogsAwareTestBase {
         assertThatCode(() -> DemoApp.main(new String[]{}))
             .doesNotThrowAnyException();
         assertThat(getLogs())
-            .hasSize(19)
+            .hasSize(20)
             .filteredOn(l -> l.getLoggerName().contains("MigrationRunner"))
             .hasSize(1)
             .allMatch(l -> l.getMessage().startsWith("Migrations have been successfully executed"));
         assertThat(getLogs())
             .filteredOn(l -> l.getLoggerName().contains("HealthDataCollector"))
-            .hasSize(18);
+            .hasSize(19);
     }
 }

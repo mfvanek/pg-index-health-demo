@@ -19,6 +19,7 @@ import io.github.mfvanek.pg.checks.host.IndexesWithNullValuesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.IntersectedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.InvalidIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.NotValidConstraintsCheckOnHost;
+import io.github.mfvanek.pg.checks.host.SequenceOverflowCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
@@ -32,6 +33,7 @@ import io.github.mfvanek.pg.model.index.Index;
 import io.github.mfvanek.pg.model.index.IndexWithColumns;
 import io.github.mfvanek.pg.model.index.IndexWithNulls;
 import io.github.mfvanek.pg.model.index.IndexWithSize;
+import io.github.mfvanek.pg.model.sequence.SequenceState;
 import io.github.mfvanek.pg.model.table.Table;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -80,6 +82,8 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
     private NotValidConstraintsCheckOnHost notValidConstraintsCheck;
     @Autowired
     private BtreeIndexesOnArrayColumnsCheckOnHost btreeIndexesOnArrayColumnsCheck;
+    @Autowired
+    private SequenceOverflowCheckOnHost sequenceOverflowCheck;
 
     @Test
     @DisplayName("Always check PostgreSQL version in your tests")
@@ -274,5 +278,18 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
             .hasSize(1)
             .containsExactly(
                 IndexWithColumns.ofSingle(ORDER_ITEM_TABLE, "demo.order_item_categories_idx", 8_192L, Column.ofNullable(ORDER_ITEM_TABLE, "categories")));
+    }
+
+    @Test
+    void sequenceOverflowShouldReturnNothingForPublicSchema() {
+        assertThat(sequenceOverflowCheck.check())
+            .isEmpty();
+    }
+
+    @Test
+    void sequenceOverflowShouldReturnOneRowForDemoSchema() {
+        assertThat(sequenceOverflowCheck.check(demoSchema))
+            .hasSize(1)
+            .containsExactly(SequenceState.of("demo.payment_num_seq", "smallint", 8.44));
     }
 }

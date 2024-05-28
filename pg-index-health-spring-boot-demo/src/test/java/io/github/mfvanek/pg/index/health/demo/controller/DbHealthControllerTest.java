@@ -47,6 +47,7 @@ class DbHealthControllerTest extends BasePgIndexHealthDemoSpringBootTest {
                 "functions_without_description:0",
                 "indexes_with_boolean:1",
                 "not_valid_constraints:1",
-                "btree_indexes_on_array_columns:1");
+                "btree_indexes_on_array_columns:1",
+                "sequence_overflow:1");
     }
 }
