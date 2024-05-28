@@ -6,6 +6,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":db-migrations"))
     implementation("io.github.mfvanek:pg-index-health")
     implementation("io.github.mfvanek:pg-index-health-generator")
     implementation("io.github.mfvanek:pg-index-health-testing")
