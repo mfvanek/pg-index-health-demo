@@ -16,7 +16,7 @@ dependencies {
     implementation("org.apache.commons:commons-dbcp2:2.12.0")
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
-    implementation("ch.qos.logback:logback-classic:1.2.13") {
+    implementation("ch.qos.logback:logback-classic:1.5.6") {
         because("to be compatible with Spring Boot 2.7.18")
     }
 
