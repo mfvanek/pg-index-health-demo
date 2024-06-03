@@ -19,7 +19,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation(platform("org.springdoc:springdoc-openapi:1.8.0"))
+    implementation(platform("org.springdoc:springdoc-openapi:2.5.0"))
     implementation("org.springdoc:springdoc-openapi-ui") {
         exclude(group = "org.slf4j", module = "slf4j-api")
         because("to be compatible with Spring Boot 2.7.18")
