@@ -37,10 +37,11 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
             "db_indexes_health\tindexes_with_boolean\t1",
             "db_indexes_health\tnot_valid_constraints\t1",
             "db_indexes_health\tbtree_indexes_on_array_columns\t1",
-            "db_indexes_health\tsequence_overflow\t1");
+            "db_indexes_health\tsequence_overflow\t1",
+            "db_indexes_health\tprimary_keys_with_serial_types\t0");
         final List<String> healthData = HealthDataCollector.collectHealthData(getConnectionFactory(), getConnectionCredentials());
         assertThat(healthData)
-            .hasSize(19)
+            .hasSize(20)
             .matches(l -> l.stream().allMatch(s -> expected.stream().anyMatch(s::contains)));
     }
 }
