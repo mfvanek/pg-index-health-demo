@@ -33,6 +33,7 @@ dependencies {
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
     implementation("io.github.mfvanek:pg-index-health")
+    implementation("io.github.mfvanek:pg-index-health-logger")
     implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
 
     annotationProcessor(platform("org.springframework.boot:spring-boot-dependencies:2.7.18"))
