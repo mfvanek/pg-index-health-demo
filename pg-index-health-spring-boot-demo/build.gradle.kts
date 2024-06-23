@@ -2,6 +2,7 @@ plugins {
     id("java")
     id("pg-index-health-demo.java-compilation")
     id("pg-index-health-demo.java-conventions")
+    id("pg-index-health-demo.forbidden-apis")
     id("pg-index-health-demo.pitest")
     id("org.springframework.boot") version "2.7.18"
     id("com.google.osdetector") version "1.7.3"

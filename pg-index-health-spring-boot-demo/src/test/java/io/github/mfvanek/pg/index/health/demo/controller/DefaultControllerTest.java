@@ -11,6 +11,8 @@ import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringB
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import java.util.Locale;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DefaultControllerTest extends BasePgIndexHealthDemoSpringBootTest {
@@ -22,7 +24,7 @@ class DefaultControllerTest extends BasePgIndexHealthDemoSpringBootTest {
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isFound()
-            .expectHeader().location(String.format("http://localhost:%d/actuator/swaggerui", port))
+            .expectHeader().location(String.format(Locale.ROOT, "http://localhost:%d/actuator/swaggerui", port))
             .expectBody()
             .returnResult()
             .getResponseBody();
