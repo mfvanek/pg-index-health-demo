@@ -4,7 +4,7 @@ plugins {
     id("pg-index-health-demo.java-conventions")
     id("pg-index-health-demo.forbidden-apis")
     id("pg-index-health-demo.pitest")
-    id("org.springframework.boot") version "2.7.18"
+    id("org.springframework.boot") version "3.3.1"
     id("com.google.osdetector") version "1.7.3"
 }
 
