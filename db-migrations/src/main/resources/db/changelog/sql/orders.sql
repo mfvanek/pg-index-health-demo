@@ -31,3 +31,8 @@ comment on column demo.orders.preorder is 'Is it preorder';
 
 --changeset ivan.vakhrushev:2024.05.04:create.index.on.preorder runInTransaction:false
 create index concurrently if not exists i_orders_preorder on demo.orders (preorder);
+
+--changeset vadim.khizhin:2024.06.24:orders.add.courier_id.field.with.foreign.key
+alter table demo.orders add column courier_id bigint references demo.courier(id);
+create index on demo.orders(courier_id) where courier_id is not null;
+comment on column demo.orders.courier_id is 'Identifier of courier that should deliver the order';

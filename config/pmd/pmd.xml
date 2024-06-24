@@ -64,6 +64,7 @@
         <exclude name="AvoidCatchingGenericException"/>
         <exclude name="UseUtilityClass"/>
         <exclude name="ExcessiveImports"/>
+        <exclude name="CouplingBetweenObjects"/>
     </rule>
 
     <rule ref="category/java/documentation.xml">
