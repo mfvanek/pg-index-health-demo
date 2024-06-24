@@ -10,7 +10,7 @@ plugins {
 
 dependencies {
     implementation(project(":db-migrations"))
-    implementation(platform("org.springframework.boot:spring-boot-dependencies:2.7.18"))
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.3.1"))
     implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.3.1"))
 
     implementation("org.apache.commons:commons-lang3:3.14.0")
@@ -36,7 +36,7 @@ dependencies {
     implementation("io.github.mfvanek:pg-index-health-logger")
     implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
 
-    annotationProcessor(platform("org.springframework.boot:spring-boot-dependencies:2.7.18"))
+    annotationProcessor(platform("org.springframework.boot:spring-boot-dependencies:3.3.1"))
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
