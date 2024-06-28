@@ -19,6 +19,7 @@ import io.github.mfvanek.pg.checks.host.IndexesWithNullValuesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.IntersectedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.InvalidIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.NotValidConstraintsCheckOnHost;
+import io.github.mfvanek.pg.checks.host.PrimaryKeysWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.SequenceOverflowCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
@@ -27,6 +28,7 @@ import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
 import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.model.column.Column;
+import io.github.mfvanek.pg.model.column.ColumnWithSerialType;
 import io.github.mfvanek.pg.model.constraint.Constraint;
 import io.github.mfvanek.pg.model.constraint.ConstraintType;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
@@ -73,6 +75,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     private final NotValidConstraintsCheckOnHost notValidConstraintsCheckOnHost;
     private final BtreeIndexesOnArrayColumnsCheckOnHost btreeIndexesOnArrayColumnsCheckOnHost;
     private final SequenceOverflowCheckOnHost sequenceOverflowCheckOnHost;
+    private final PrimaryKeysWithSerialTypesCheckOnHost primaryKeysWithSerialTypesCheckOnHost;
 
     IndexesMaintenanceTest() {
         final PgConnection pgConnection = PgConnectionImpl.of(getDataSource(), getHost());
@@ -91,6 +94,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         this.notValidConstraintsCheckOnHost = new NotValidConstraintsCheckOnHost(pgConnection);
         this.btreeIndexesOnArrayColumnsCheckOnHost = new BtreeIndexesOnArrayColumnsCheckOnHost(pgConnection);
         this.sequenceOverflowCheckOnHost = new SequenceOverflowCheckOnHost(pgConnection);
+        this.primaryKeysWithSerialTypesCheckOnHost = new PrimaryKeysWithSerialTypesCheckOnHost(pgConnection);
     }
 
     @Test
@@ -304,5 +308,18 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         assertThat(sequenceOverflowCheckOnHost.check(demoSchema))
             .hasSize(1)
             .containsExactly(SequenceState.of("demo.payment_num_seq", "smallint", 8.44));
+    }
+
+    @Test
+    void getPrimaryKeysWithSerialTypesShouldReturnNothingForPublicSchema() {
+        assertThat(primaryKeysWithSerialTypesCheckOnHost.check())
+            .isEmpty();
+    }
+
+    @Test
+    void getPrimaryKeysWithSerialTypesShouldReturnOneRowForDemoSchema() {
+        assertThat(primaryKeysWithSerialTypesCheckOnHost.check(demoSchema))
+            .hasSize(1)
+            .containsExactly(ColumnWithSerialType.ofBigSerial(Column.ofNotNull("demo.courier", "id"), "demo.courier_id_seq"));
     }
 }

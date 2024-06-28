@@ -64,6 +64,13 @@
         <exclude name="AvoidCatchingGenericException"/>
         <exclude name="UseUtilityClass"/>
         <exclude name="ExcessiveImports"/>
+        <exclude name="CouplingBetweenObjects"/>
+    </rule>
+
+    <rule ref="category/java/design.xml/TooManyFields">
+        <properties>
+            <property name="maxfields" value="20"/>
+        </properties>
     </rule>
 
     <rule ref="category/java/documentation.xml">

@@ -19,12 +19,14 @@ import io.github.mfvanek.pg.checks.host.IndexesWithNullValuesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.IntersectedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.InvalidIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.NotValidConstraintsCheckOnHost;
+import io.github.mfvanek.pg.checks.host.PrimaryKeysWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.SequenceOverflowCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.model.column.Column;
+import io.github.mfvanek.pg.model.column.ColumnWithSerialType;
 import io.github.mfvanek.pg.model.constraint.Constraint;
 import io.github.mfvanek.pg.model.constraint.ConstraintType;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
@@ -51,6 +53,7 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
     private static final String BUYER_TABLE = "demo.buyer";
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
     private static final String ORDERS_TABLE = "demo.orders";
+    private static final String COURIER_TABLE = "demo.courier";
 
     private final PgContext demoSchema = PgContext.of("demo");
 
@@ -84,6 +87,9 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
     private BtreeIndexesOnArrayColumnsCheckOnHost btreeIndexesOnArrayColumnsCheck;
     @Autowired
     private SequenceOverflowCheckOnHost sequenceOverflowCheck;
+
+    @Autowired
+    private PrimaryKeysWithSerialTypesCheckOnHost primaryKeysWithSerialTypesCheckOnHost;
 
     @Test
     @DisplayName("Always check PostgreSQL version in your tests")
@@ -291,5 +297,18 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
         assertThat(sequenceOverflowCheck.check(demoSchema))
             .hasSize(1)
             .containsExactly(SequenceState.of("demo.payment_num_seq", "smallint", 8.44));
+    }
+
+    @Test
+    void getPrimaryKeysWithSerialTypesShouldReturnNothingForPublicSchema() {
+        assertThat(primaryKeysWithSerialTypesCheckOnHost.check())
+            .isEmpty();
+    }
+
+    @Test
+    void getPrimaryKeysWithSerialTypesShouldReturnOneRowForDemoSchema() {
+        assertThat(primaryKeysWithSerialTypesCheckOnHost.check(demoSchema))
+            .hasSize(1)
+            .containsExactly(ColumnWithSerialType.ofBigSerial(Column.ofNotNull(COURIER_TABLE, "id"), "demo.courier_id_seq"));
     }
 }
