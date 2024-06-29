@@ -87,9 +87,8 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
     private BtreeIndexesOnArrayColumnsCheckOnHost btreeIndexesOnArrayColumnsCheck;
     @Autowired
     private SequenceOverflowCheckOnHost sequenceOverflowCheck;
-
     @Autowired
-    private PrimaryKeysWithSerialTypesCheckOnHost primaryKeysWithSerialTypesCheckOnHost;
+    private PrimaryKeysWithSerialTypesCheckOnHost primaryKeysWithSerialTypesCheck;
 
     @Test
     @DisplayName("Always check PostgreSQL version in your tests")
@@ -301,13 +300,13 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
 
     @Test
     void getPrimaryKeysWithSerialTypesShouldReturnNothingForPublicSchema() {
-        assertThat(primaryKeysWithSerialTypesCheckOnHost.check())
+        assertThat(primaryKeysWithSerialTypesCheck.check())
             .isEmpty();
     }
 
     @Test
     void getPrimaryKeysWithSerialTypesShouldReturnOneRowForDemoSchema() {
-        assertThat(primaryKeysWithSerialTypesCheckOnHost.check(demoSchema))
+        assertThat(primaryKeysWithSerialTypesCheck.check(demoSchema))
             .hasSize(1)
             .containsExactly(ColumnWithSerialType.ofBigSerial(Column.ofNotNull(COURIER_TABLE, "id"), "demo.courier_id_seq"));
     }
