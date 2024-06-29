@@ -68,14 +68,14 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     private final IndexesWithNullValuesCheckOnHost indexesWithNullValuesCheck;
     private final TablesWithoutDescriptionCheckOnHost tablesWithoutDescriptionCheck;
     private final ColumnsWithoutDescriptionCheckOnHost columnsWithoutDescriptionCheck;
-    private final ColumnsWithJsonTypeCheckOnHost columnsWithJsonTypeCheckOnHost;
-    private final ColumnsWithSerialTypesCheckOnHost columnsWithSerialTypesCheckOnHost;
-    private final FunctionsWithoutDescriptionCheckOnHost functionsWithoutDescriptionCheckOnHost;
-    private final IndexesWithBooleanCheckOnHost indexesWithBooleanCheckOnHost;
-    private final NotValidConstraintsCheckOnHost notValidConstraintsCheckOnHost;
-    private final BtreeIndexesOnArrayColumnsCheckOnHost btreeIndexesOnArrayColumnsCheckOnHost;
-    private final SequenceOverflowCheckOnHost sequenceOverflowCheckOnHost;
-    private final PrimaryKeysWithSerialTypesCheckOnHost primaryKeysWithSerialTypesCheckOnHost;
+    private final ColumnsWithJsonTypeCheckOnHost columnsWithJsonTypeCheck;
+    private final ColumnsWithSerialTypesCheckOnHost columnsWithSerialTypesCheck;
+    private final FunctionsWithoutDescriptionCheckOnHost functionsWithoutDescriptionCheck;
+    private final IndexesWithBooleanCheckOnHost indexesWithBooleanCheck;
+    private final NotValidConstraintsCheckOnHost notValidConstraintsCheck;
+    private final BtreeIndexesOnArrayColumnsCheckOnHost btreeIndexesOnArrayColumnsCheck;
+    private final SequenceOverflowCheckOnHost sequenceOverflowCheck;
+    private final PrimaryKeysWithSerialTypesCheckOnHost primaryKeysWithSerialTypesCheck;
 
     IndexesMaintenanceTest() {
         final PgConnection pgConnection = PgConnectionImpl.of(getDataSource(), getHost());
@@ -87,14 +87,14 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         this.indexesWithNullValuesCheck = new IndexesWithNullValuesCheckOnHost(pgConnection);
         this.tablesWithoutDescriptionCheck = new TablesWithoutDescriptionCheckOnHost(pgConnection);
         this.columnsWithoutDescriptionCheck = new ColumnsWithoutDescriptionCheckOnHost(pgConnection);
-        this.columnsWithJsonTypeCheckOnHost = new ColumnsWithJsonTypeCheckOnHost(pgConnection);
-        this.columnsWithSerialTypesCheckOnHost = new ColumnsWithSerialTypesCheckOnHost(pgConnection);
-        this.functionsWithoutDescriptionCheckOnHost = new FunctionsWithoutDescriptionCheckOnHost(pgConnection);
-        this.indexesWithBooleanCheckOnHost = new IndexesWithBooleanCheckOnHost(pgConnection);
-        this.notValidConstraintsCheckOnHost = new NotValidConstraintsCheckOnHost(pgConnection);
-        this.btreeIndexesOnArrayColumnsCheckOnHost = new BtreeIndexesOnArrayColumnsCheckOnHost(pgConnection);
-        this.sequenceOverflowCheckOnHost = new SequenceOverflowCheckOnHost(pgConnection);
-        this.primaryKeysWithSerialTypesCheckOnHost = new PrimaryKeysWithSerialTypesCheckOnHost(pgConnection);
+        this.columnsWithJsonTypeCheck = new ColumnsWithJsonTypeCheckOnHost(pgConnection);
+        this.columnsWithSerialTypesCheck = new ColumnsWithSerialTypesCheckOnHost(pgConnection);
+        this.functionsWithoutDescriptionCheck = new FunctionsWithoutDescriptionCheckOnHost(pgConnection);
+        this.indexesWithBooleanCheck = new IndexesWithBooleanCheckOnHost(pgConnection);
+        this.notValidConstraintsCheck = new NotValidConstraintsCheckOnHost(pgConnection);
+        this.btreeIndexesOnArrayColumnsCheck = new BtreeIndexesOnArrayColumnsCheckOnHost(pgConnection);
+        this.sequenceOverflowCheck = new SequenceOverflowCheckOnHost(pgConnection);
+        this.primaryKeysWithSerialTypesCheck = new PrimaryKeysWithSerialTypesCheckOnHost(pgConnection);
     }
 
     @Test
@@ -238,33 +238,33 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     @ParameterizedTest
     @ValueSource(strings = {"public", "demo"})
     void getColumnsWithJsonTypeShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
-        assertThat(columnsWithJsonTypeCheckOnHost.check(PgContext.of(schemaName)))
+        assertThat(columnsWithJsonTypeCheck.check(PgContext.of(schemaName)))
             .isEmpty();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"public", "demo"})
     void getColumnsWithSerialTypesShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
-        assertThat(columnsWithSerialTypesCheckOnHost.check(PgContext.of(schemaName)))
+        assertThat(columnsWithSerialTypesCheck.check(PgContext.of(schemaName)))
             .isEmpty();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"public", "demo"})
     void getFunctionsWithoutDescriptionShouldReturnNothingForAllSchemas(@Nonnull final String schemaName) {
-        assertThat(functionsWithoutDescriptionCheckOnHost.check(PgContext.of(schemaName)))
+        assertThat(functionsWithoutDescriptionCheck.check(PgContext.of(schemaName)))
             .isEmpty();
     }
 
     @Test
     void indexesWithBooleanShouldReturnNothingForPublicSchema() {
-        assertThat(indexesWithBooleanCheckOnHost.check())
+        assertThat(indexesWithBooleanCheck.check())
             .isEmpty();
     }
 
     @Test
     void indexesWithBooleanShouldReturnOneRowForDemoSchema() {
-        assertThat(indexesWithBooleanCheckOnHost.check(demoSchema))
+        assertThat(indexesWithBooleanCheck.check(demoSchema))
             .hasSize(1)
             .contains(IndexWithColumns.ofSingle(ORDERS_TABLE, "demo.i_orders_preorder", 1L,
                 Column.ofNotNull(ORDERS_TABLE, "preorder")));
@@ -272,26 +272,26 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void notValidConstraintsShouldReturnNothingForPublicSchema() {
-        assertThat(notValidConstraintsCheckOnHost.check())
+        assertThat(notValidConstraintsCheck.check())
             .isEmpty();
     }
 
     @Test
     void notValidConstraintsShouldReturnOneRowForDemoSchema() {
-        assertThat(notValidConstraintsCheckOnHost.check(demoSchema))
+        assertThat(notValidConstraintsCheck.check(demoSchema))
             .hasSize(1)
             .contains(Constraint.ofType(ORDER_ITEM_TABLE, "order_item_amount_less_than_100", ConstraintType.CHECK));
     }
 
     @Test
     void getBtreeIndexesOnArrayColumnsShouldReturnNothingForPublicSchema() {
-        assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check())
+        assertThat(btreeIndexesOnArrayColumnsCheck.check())
             .isEmpty();
     }
 
     @Test
     void getBtreeIndexesOnArrayColumnsShouldReturnOneRowForDemoSchema() {
-        assertThat(btreeIndexesOnArrayColumnsCheckOnHost.check(demoSchema))
+        assertThat(btreeIndexesOnArrayColumnsCheck.check(demoSchema))
             .hasSize(1)
             .containsExactly(
                 IndexWithColumns.ofSingle(ORDER_ITEM_TABLE, "demo.order_item_categories_idx", 8_192L, Column.ofNullable(ORDER_ITEM_TABLE, "categories")));
@@ -299,26 +299,26 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
 
     @Test
     void sequenceOverflowShouldReturnNothingForPublicSchema() {
-        assertThat(sequenceOverflowCheckOnHost.check())
+        assertThat(sequenceOverflowCheck.check())
             .isEmpty();
     }
 
     @Test
     void sequenceOverflowShouldReturnOneRowForDemoSchema() {
-        assertThat(sequenceOverflowCheckOnHost.check(demoSchema))
+        assertThat(sequenceOverflowCheck.check(demoSchema))
             .hasSize(1)
             .containsExactly(SequenceState.of("demo.payment_num_seq", "smallint", 8.44));
     }
 
     @Test
     void getPrimaryKeysWithSerialTypesShouldReturnNothingForPublicSchema() {
-        assertThat(primaryKeysWithSerialTypesCheckOnHost.check())
+        assertThat(primaryKeysWithSerialTypesCheck.check())
             .isEmpty();
     }
 
     @Test
     void getPrimaryKeysWithSerialTypesShouldReturnOneRowForDemoSchema() {
-        assertThat(primaryKeysWithSerialTypesCheckOnHost.check(demoSchema))
+        assertThat(primaryKeysWithSerialTypesCheck.check(demoSchema))
             .hasSize(1)
             .containsExactly(ColumnWithSerialType.ofBigSerial(Column.ofNotNull("demo.courier", "id"), "demo.courier_id_seq"));
     }
