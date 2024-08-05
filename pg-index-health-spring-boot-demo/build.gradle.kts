@@ -29,7 +29,7 @@ dependencies {
         exclude(group = "org.slf4j", module = "slf4j-api")
         because("to be compatible with Spring Boot 2.7.18")
     }
-    implementation("org.liquibase:liquibase-core:4.29.0")
+    implementation("org.liquibase:liquibase-core:4.29.1")
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
     implementation("io.github.mfvanek:pg-index-health")
