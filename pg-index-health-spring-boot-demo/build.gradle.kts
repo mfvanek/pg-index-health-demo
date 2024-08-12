@@ -13,7 +13,7 @@ dependencies {
     implementation(platform("org.springframework.boot:spring-boot-dependencies:2.7.18"))
     implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.3.1"))
 
-    implementation("org.apache.commons:commons-lang3:3.15.0")
+    implementation("org.apache.commons:commons-lang3:3.16.0")
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.12.6")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
