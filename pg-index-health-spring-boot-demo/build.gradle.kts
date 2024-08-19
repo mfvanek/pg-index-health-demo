@@ -15,7 +15,7 @@ dependencies {
 
     implementation("org.apache.commons:commons-lang3:3.16.0")
 
-    implementation("io.micrometer:micrometer-registry-prometheus:1.12.6")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.13.3")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
