@@ -11,7 +11,7 @@ plugins {
 dependencies {
     implementation(project(":db-migrations"))
     implementation(platform("org.springframework.boot:spring-boot-dependencies:2.7.18"))
-    implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.3.1"))
+    implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.4"))
 
     implementation("org.apache.commons:commons-lang3:3.17.0")
 
