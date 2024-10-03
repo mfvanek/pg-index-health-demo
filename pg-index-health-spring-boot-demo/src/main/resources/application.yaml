@@ -8,8 +8,12 @@ spring:
         user:
             name: demouser
             password: testpwd123
-
-logging:
+    jpa:
+        properties:
+            javax.persistence.query.timeout: 30000
+    jdbc:
+        template:
+            query-timeout: 30
     level:
         root: INFO
         org.springframework: INFO

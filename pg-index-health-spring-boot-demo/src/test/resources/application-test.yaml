@@ -3,3 +3,7 @@ logging:
         org.springframework:
             jdbc: DEBUG
             orm.jpa.JpaTransactionManager: DEBUG
+spring:
+    jdbc:
+        template:
+            query-timeout: 16

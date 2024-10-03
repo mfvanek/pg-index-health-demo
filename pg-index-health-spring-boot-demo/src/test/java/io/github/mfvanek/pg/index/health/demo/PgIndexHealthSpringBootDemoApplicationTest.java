@@ -12,6 +12,7 @@ import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringB
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,5 +32,12 @@ class PgIndexHealthSpringBootDemoApplicationTest extends BasePgIndexHealthDemoSp
         assertThat(context.getBean("corsConfigurer"))
             .isNotNull()
             .isInstanceOf(WebMvcConfigurer.class);
+    }
+
+    @Test
+    void jdbcQueryTimeoutFromProperties() {
+        assertThat(context.getBean("jdbcTemplate", JdbcTemplate.class)
+            .getQueryTimeout())
+            .isEqualTo(16);
     }
 }
