@@ -10,10 +10,10 @@ spring:
             password: testpwd123
     jpa:
         properties:
-            javax.persistence.query.timeout: 30000
+            javax.persistence.query.timeout: 1000 # //todo rename after migration to Spring Boot 3 https://github.com/spring-projects/spring-boot/issues/33866
     jdbc:
         template:
-            query-timeout: 30
+            query-timeout: 1
 
 logging:
     level:

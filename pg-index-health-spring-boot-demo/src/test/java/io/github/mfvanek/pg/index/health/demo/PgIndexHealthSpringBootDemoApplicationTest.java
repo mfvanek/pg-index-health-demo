@@ -9,13 +9,17 @@ package io.github.mfvanek.pg.index.health.demo;
 
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PgIndexHealthSpringBootDemoApplicationTest extends BasePgIndexHealthDemoSpringBootTest {
 
@@ -38,6 +42,20 @@ class PgIndexHealthSpringBootDemoApplicationTest extends BasePgIndexHealthDemoSp
     void jdbcQueryTimeoutFromProperties() {
         assertThat(context.getBean("jdbcTemplate", JdbcTemplate.class)
             .getQueryTimeout())
-            .isEqualTo(16);
+            .isEqualTo(4);
+    }
+
+    @Test
+    @DisplayName("Throws exception when query exceeds timeout")
+    void exceptionWithLongQuery() {
+        assertThatThrownBy(() -> jdbcTemplate.execute("select pg_sleep(4.1); select version();"))
+            .isNotNull()
+            .isInstanceOf(DataAccessResourceFailureException.class);
+    }
+
+    @Test
+    @DisplayName("Does not throw exception when query does not exceed timeout")
+    void exceptionWithNotLongQuery() {
+        assertThatNoException().isThrownBy(() -> jdbcTemplate.execute("select pg_sleep(3.9);"));
     }
 }

@@ -6,4 +6,4 @@ logging:
 spring:
     jdbc:
         template:
-            query-timeout: 16
+            query-timeout: 4
