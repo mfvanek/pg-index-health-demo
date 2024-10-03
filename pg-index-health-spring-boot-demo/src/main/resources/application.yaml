@@ -14,6 +14,8 @@ spring:
     jdbc:
         template:
             query-timeout: 30
+
+logging:
     level:
         root: INFO
         org.springframework: INFO
