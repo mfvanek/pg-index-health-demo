@@ -55,7 +55,7 @@ class PgIndexHealthSpringBootDemoApplicationTest extends BasePgIndexHealthDemoSp
 
     @Test
     @DisplayName("Does not throw exception when query does not exceed timeout")
-    void noExceptionWithNotLongQuery() {
+    void exceptionNotThrownWithNotLongQuery() {
         assertThatNoException().isThrownBy(() -> jdbcTemplate.execute("select pg_sleep(3.9);"));
     }
 }
