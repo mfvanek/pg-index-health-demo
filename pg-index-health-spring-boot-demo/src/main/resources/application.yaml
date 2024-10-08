@@ -9,11 +9,11 @@ spring:
             name: demouser
             password: testpwd123
     jpa:
-        properties:
-            javax.persistence.query.timeout: 1000 # //todo rename after migration to Spring Boot 3 https://github.com/spring-projects/spring-boot/issues/33866
+        properties: # //todo rename a jpa property below after migration to Spring Boot 3 https://github.com/spring-projects/spring-boot/issues/33866
+            javax.persistence.query.timeout: 1000 # milliseconds
     jdbc:
         template:
-            query-timeout: 1
+            query-timeout: 1 # seconds
 
 logging:
     level:
