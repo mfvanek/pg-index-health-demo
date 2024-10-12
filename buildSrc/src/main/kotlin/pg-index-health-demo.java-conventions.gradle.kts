@@ -74,7 +74,7 @@ lombok {
 }
 
 checkstyle {
-    toolVersion = "10.17.0"
+    toolVersion = "10.18.1"
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     maxWarnings = 0
@@ -82,7 +82,7 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.2.0"
+    toolVersion = "7.6.0"
     isConsoleOutput = true
     ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
     ruleSets = listOf()
