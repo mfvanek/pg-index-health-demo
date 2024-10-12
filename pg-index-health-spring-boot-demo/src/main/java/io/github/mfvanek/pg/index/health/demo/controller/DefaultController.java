@@ -7,14 +7,14 @@
 
 package io.github.mfvanek.pg.index.health.demo.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @RestController
@@ -29,7 +29,7 @@ public class DefaultController {
     @GetMapping("/")
     public void redirect(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         final String requestUrl = request.getRequestURL().toString();
-        final String targetUrl = requestUrl.replace(String.valueOf(port), String.valueOf(actuatorPort)) + "actuator/swaggerui";
+        final String targetUrl = requestUrl.replace(String.valueOf(port), String.valueOf(actuatorPort)) + "actuator/swagger-ui";
         log.info("Redirecting to {}", targetUrl);
         response.sendRedirect(targetUrl);
     }

@@ -33,6 +33,7 @@ class DbStatisticsControllerMockTest extends BasePgIndexHealthDemoSpringBootTest
                 .pathSegment("db", "statistics", "reset")
                 .build())
             .contentType(MediaType.APPLICATION_JSON)
+            .headers(this::setUpBasicAuth)
             .bodyValue(wait)
             .exchange()
             .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)

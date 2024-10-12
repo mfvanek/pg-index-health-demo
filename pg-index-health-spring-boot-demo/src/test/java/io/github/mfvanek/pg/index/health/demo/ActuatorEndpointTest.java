@@ -85,6 +85,7 @@ class ActuatorEndpointTest extends BasePgIndexHealthDemoSpringBootTest {
                 .pathSegment("readyz")
                 .build())
             .accept(MediaType.APPLICATION_JSON)
+            .headers(this::setUpBasicAuth)
             .exchange()
             .expectStatus().isOk()
             .expectBody(String.class)

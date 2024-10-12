@@ -19,3 +19,6 @@ http://localhost:8090/actuator/prometheus
 
 ### Liquibase
 http://localhost:8090/actuator/liquibase
+
+### Root endpoint
+http://localhost:8080/

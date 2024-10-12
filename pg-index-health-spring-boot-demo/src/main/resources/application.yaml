@@ -9,8 +9,8 @@ spring:
             name: demouser
             password: testpwd123
     jpa:
-        properties: # //todo rename a jpa property below after migration to Spring Boot 3 https://github.com/spring-projects/spring-boot/issues/33866
-            javax.persistence.query.timeout: 1000 # milliseconds
+        properties:
+            jakarta.persistence.query.timeout: 1000 # milliseconds
     jdbc:
         template:
             query-timeout: 1 # seconds
@@ -25,7 +25,6 @@ server:
     port: 8080
     servlet:
         context-path: /
-    # See also https://docs.spring.io/spring-boot/docs/2.7.9/reference/html/application-properties.html#appendix.application-properties.server
     tomcat:
         accept-count: 10
         max-connections: 400
@@ -68,13 +67,15 @@ management:
                 http.server.requests: 10s
             slo:
                 http.server.requests: 1s
-        export:
-            prometheus.enabled: true
     health:
         livenessstate:
             enabled: true
         readinessstate:
             enabled: true
+    prometheus:
+        metrics:
+            export:
+                enabled: true
 
 springdoc:
     show-actuator: true

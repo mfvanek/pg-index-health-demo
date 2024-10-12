@@ -22,9 +22,10 @@ class DefaultControllerTest extends BasePgIndexHealthDemoSpringBootTest {
         final byte[] result = webTestClient.get()
             .uri("/")
             .accept(MediaType.APPLICATION_JSON)
+            .headers(this::setUpBasicAuth)
             .exchange()
             .expectStatus().isFound()
-            .expectHeader().location(String.format(Locale.ROOT, "http://localhost:%d/actuator/swaggerui", port))
+            .expectHeader().location(String.format(Locale.ROOT, "http://localhost:%d/actuator/swagger-ui", port))
             .expectBody()
             .returnResult()
             .getResponseBody();

@@ -26,10 +26,7 @@ dependencies {
     implementation(platform("org.testcontainers:testcontainers-bom:1.20.2"))
 
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("org.postgresql:postgresql:42.7.4") {
-        exclude(group = "ch.qos.logback", module = "logback-classic")
-        because("to be compatible with Spring Boot 2.7.18")
-    }
+    implementation("org.postgresql:postgresql:42.7.4")
 
     testImplementation(platform("org.junit:junit-bom:5.11.2"))
     testImplementation(platform("org.assertj:assertj-bom:3.26.3"))
@@ -37,9 +34,7 @@ dependencies {
     errorprone("com.google.errorprone:error_prone_core:2.33.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.28")
 
-    spotbugsSlf4j("org.slf4j:slf4j-simple:1.7.36") {
-        because("to be compatible with Spring Boot 2.7.18")
-    }
+    spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.16")
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.13.0")
     spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.5")
