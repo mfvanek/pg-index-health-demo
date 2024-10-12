@@ -16,6 +16,7 @@ import io.github.mfvanek.pg.model.column.Column;
 import io.github.mfvanek.pg.model.column.ColumnWithSerialType;
 import io.github.mfvanek.pg.model.constraint.Constraint;
 import io.github.mfvanek.pg.model.constraint.ConstraintType;
+import io.github.mfvanek.pg.model.constraint.DuplicatedForeignKeys;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import io.github.mfvanek.pg.model.index.DuplicatedIndexes;
 import io.github.mfvanek.pg.model.index.Index;
@@ -38,6 +39,7 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
     private static final String BUYER_TABLE = "demo.buyer";
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
     private static final String ORDERS_TABLE = "demo.orders";
+    private static final String ORDER_ID_COLUMN = "order_id";
 
     private final PgContext demoSchema = PgContext.of("demo");
 
@@ -114,12 +116,13 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
 
                 case FOREIGN_KEYS_WITHOUT_INDEX -> assertThat(checkResult)
                     .asInstanceOf(list(ForeignKey.class))
-                    .hasSize(3)
+                    .hasSize(4)
                     // HOW TO FIX: create indexes on columns under foreign key constraint
                     .containsExactlyInAnyOrder(
-                        ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fkey", "order_id"),
+                        ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN),
+                        ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fk_duplicate", ORDER_ID_COLUMN),
                         ForeignKey.ofNotNullColumn(ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
-                        ForeignKey.ofNullableColumn("demo.payment", "payment_order_id_fkey", "order_id"));
+                        ForeignKey.ofNullableColumn("demo.payment", "payment_order_id_fkey", ORDER_ID_COLUMN));
 
                 case TABLES_WITHOUT_PRIMARY_KEY -> assertThat(checkResult)
                     .asInstanceOf(list(Table.class))
@@ -161,6 +164,14 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
                     .containsExactly(ColumnWithSerialType.ofBigSerial(Column.ofNotNull("demo.courier", "id"), "demo.courier_id_seq"));
 
                 case UNUSED_INDEXES -> assertThat(checkResult).isNotEmpty(); // TODO Just ignore this "runtime" check https://github.com/mfvanek/pg-index-health/issues/456
+
+                case DUPLICATED_FOREIGN_KEYS -> assertThat(checkResult)
+                    .asInstanceOf(list(DuplicatedForeignKeys.class))
+                    .hasSize(1)
+                    .containsExactly(DuplicatedForeignKeys.of(
+                        ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fk_duplicate", ORDER_ID_COLUMN),
+                        ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN))
+                    );
 
                 default -> assertThat(checkResult).isEmpty();
             }

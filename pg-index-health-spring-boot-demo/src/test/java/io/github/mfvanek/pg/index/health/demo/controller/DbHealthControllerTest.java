@@ -35,7 +35,7 @@ class DbHealthControllerTest extends BasePgIndexHealthDemoSpringBootTest {
                 "duplicated_indexes:1",
                 "intersected_indexes:2",
                 "unused_indexes:0",
-                "foreign_keys_without_index:3",
+                "foreign_keys_without_index:4",
                 "tables_with_missing_indexes:0",
                 "tables_without_primary_key:1",
                 "indexes_with_null_values:1",
@@ -51,7 +51,7 @@ class DbHealthControllerTest extends BasePgIndexHealthDemoSpringBootTest {
                 "btree_indexes_on_array_columns:1",
                 "sequence_overflow:1",
                 "primary_keys_with_serial_types:1",
-                "duplicated_foreign_keys:0",
+                "duplicated_foreign_keys:1",
                 "intersected_foreign_keys:0");
     }
 }

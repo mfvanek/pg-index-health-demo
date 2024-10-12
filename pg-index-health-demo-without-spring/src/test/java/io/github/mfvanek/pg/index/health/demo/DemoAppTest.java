@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
+import io.github.mfvanek.pg.common.maintenance.Diagnostic;
 import io.github.mfvanek.pg.index.health.demo.support.LogsAwareTestBase;
 import io.github.mfvanek.pg.index.health.demo.utils.HealthDataCollector;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
@@ -26,15 +27,17 @@ class DemoAppTest extends LogsAwareTestBase {
 
     @Test
     void shouldWork() {
+        final int checkCount = Diagnostic.values().length;
+
         assertThatCode(() -> DemoApp.main(new String[]{}))
             .doesNotThrowAnyException();
         assertThat(getLogs())
-            .hasSize(23)
+            .hasSize(checkCount + 1)
             .filteredOn(l -> l.getLoggerName().contains("MigrationRunner"))
             .hasSize(1)
             .allMatch(l -> l.getMessage().startsWith("Migrations have been successfully executed"));
         assertThat(getLogs())
             .filteredOn(l -> l.getLoggerName().contains("HealthDataCollector"))
-            .hasSize(22);
+            .hasSize(checkCount);
     }
 }
