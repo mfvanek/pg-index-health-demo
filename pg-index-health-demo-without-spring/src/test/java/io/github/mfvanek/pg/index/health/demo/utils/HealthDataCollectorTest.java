@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
+import io.github.mfvanek.pg.common.maintenance.Diagnostic;
 import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
             "db_indexes_health\tduplicated_indexes\t1",
             "db_indexes_health\tintersected_indexes\t2",
             "db_indexes_health\tunused_indexes\t0",
-            "db_indexes_health\tforeign_keys_without_index\t3",
+            "db_indexes_health\tforeign_keys_without_index\t4",
             "db_indexes_health\ttables_with_missing_indexes\t0",
             "db_indexes_health\ttables_without_primary_key\t1",
             "db_indexes_health\tindexes_with_null_values\t1",
@@ -38,10 +39,12 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
             "db_indexes_health\tnot_valid_constraints\t1",
             "db_indexes_health\tbtree_indexes_on_array_columns\t1",
             "db_indexes_health\tsequence_overflow\t1",
-            "db_indexes_health\tprimary_keys_with_serial_types\t1");
+            "db_indexes_health\tprimary_keys_with_serial_types\t1",
+            "db_indexes_health\tduplicated_foreign_keys\t1",
+            "db_indexes_health\tintersected_foreign_keys\t0");
         final List<String> healthData = HealthDataCollector.collectHealthData(getConnectionFactory(), getConnectionCredentials());
         assertThat(healthData)
-            .hasSize(20)
+            .hasSameSizeAs(Diagnostic.values())
             .matches(l -> l.stream().allMatch(s -> expected.stream().anyMatch(s::contains)));
     }
 }

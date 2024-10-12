@@ -24,6 +24,7 @@ class DbConfigurationControllerTest extends BasePgIndexHealthDemoSpringBootTest 
                 .pathSegment("db", "configuration")
                 .build())
             .accept(MediaType.APPLICATION_JSON)
+            .headers(this::setUpBasicAuth)
             .exchange()
             .expectStatus().isOk()
             .expectBody(PgParam[].class)

@@ -34,3 +34,6 @@ alter table demo.order_item add constraint order_item_amount_less_than_100 check
 alter table demo.order_item add column categories text[];
 comment on column demo.order_item.categories is 'Categories to which the order item belongs';
 create index if not exists order_item_categories_idx on demo.order_item(categories) where categories is not null;
+
+--changeset ivan.vakhrushev:2020.10.10:order_item.duplicated_foreign_key
+alter table demo.order_item add constraint order_item_order_id_fk_duplicate foreign key (order_id) references demo.orders (id);
