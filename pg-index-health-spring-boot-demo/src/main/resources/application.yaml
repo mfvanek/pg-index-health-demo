@@ -13,7 +13,7 @@ spring:
             jakarta.persistence.query.timeout: 1000 # milliseconds
     jdbc:
         template:
-            query-timeout: 1 # seconds
+            query-timeout: 1s
 
 logging:
     level:

@@ -42,13 +42,13 @@ class PgIndexHealthSpringBootDemoApplicationTest extends BasePgIndexHealthDemoSp
     void jdbcQueryTimeoutFromProperties() {
         final JdbcTemplate jdbcTemplate = context.getBean("jdbcTemplate", JdbcTemplate.class);
         assertThat(jdbcTemplate.getQueryTimeout())
-            .isEqualTo(4);
+            .isEqualTo(1);
     }
 
     @Test
     @DisplayName("Throws exception when query exceeds timeout")
     void exceptionWithLongQuery() {
-        assertThatThrownBy(() -> jdbcTemplate.execute("select pg_sleep(4.1); select version();"))
+        assertThatThrownBy(() -> jdbcTemplate.execute("select pg_sleep(1.1);"))
             .isInstanceOf(DataAccessResourceFailureException.class)
             .hasMessageContaining("ERROR: canceling statement due to user request");
     }
@@ -56,6 +56,6 @@ class PgIndexHealthSpringBootDemoApplicationTest extends BasePgIndexHealthDemoSp
     @Test
     @DisplayName("Does not throw exception when query does not exceed timeout")
     void exceptionNotThrownWithNotLongQuery() {
-        assertThatNoException().isThrownBy(() -> jdbcTemplate.execute("select pg_sleep(3.9);"));
+        assertThatNoException().isThrownBy(() -> jdbcTemplate.execute("select pg_sleep(0.9);"));
     }
 }
