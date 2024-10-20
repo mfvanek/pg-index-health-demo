@@ -41,7 +41,8 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
             "db_indexes_health\tsequence_overflow\t1",
             "db_indexes_health\tprimary_keys_with_serial_types\t1",
             "db_indexes_health\tduplicated_foreign_keys\t1",
-            "db_indexes_health\tintersected_foreign_keys\t0");
+            "db_indexes_health\tintersected_foreign_keys\t0",
+            "db_indexes_health\tpossible_object_name_overflow\t1");
         final List<String> healthData = HealthDataCollector.collectHealthData(getConnectionFactory(), getConnectionCredentials());
         assertThat(healthData)
             .hasSameSizeAs(Diagnostic.values())
