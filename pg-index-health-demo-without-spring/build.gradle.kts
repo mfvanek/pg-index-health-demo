@@ -18,13 +18,13 @@ dependencies {
     implementation("org.apache.commons:commons-dbcp2:2.12.0")
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
-    implementation("ch.qos.logback:logback-classic:1.5.10")
+    implementation("ch.qos.logback:logback-classic:1.5.11")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation(platform("org.mockito:mockito-bom:5.14.1"))
+    testImplementation(platform("org.mockito:mockito-bom:5.14.2"))
     testImplementation("org.mockito:mockito-core")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
