@@ -21,10 +21,13 @@ import io.github.mfvanek.pg.checks.host.IntersectedForeignKeysCheckOnHost;
 import io.github.mfvanek.pg.checks.host.IntersectedIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.InvalidIndexesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.NotValidConstraintsCheckOnHost;
+import io.github.mfvanek.pg.checks.host.PossibleObjectNameOverflowCheckOnHost;
 import io.github.mfvanek.pg.checks.host.PrimaryKeysWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.SequenceOverflowCheckOnHost;
+import io.github.mfvanek.pg.checks.host.TablesNotLinkedToOthersCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
+import io.github.mfvanek.pg.common.maintenance.CheckTypeAware;
 import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnHost;
 import io.github.mfvanek.pg.common.maintenance.Diagnostic;
 import io.github.mfvanek.pg.connection.PgConnection;
@@ -43,6 +46,8 @@ import io.github.mfvanek.pg.model.index.Index;
 import io.github.mfvanek.pg.model.index.IndexWithColumns;
 import io.github.mfvanek.pg.model.index.IndexWithNulls;
 import io.github.mfvanek.pg.model.index.IndexWithSize;
+import io.github.mfvanek.pg.model.object.AnyObject;
+import io.github.mfvanek.pg.model.object.PgObjectType;
 import io.github.mfvanek.pg.model.sequence.SequenceState;
 import io.github.mfvanek.pg.model.table.Table;
 import org.junit.jupiter.api.DisplayName;
@@ -89,7 +94,9 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
             new SequenceOverflowCheckOnHost(pgConnection),
             new PrimaryKeysWithSerialTypesCheckOnHost(pgConnection),
             new DuplicatedForeignKeysCheckOnHost(pgConnection),
-            new IntersectedForeignKeysCheckOnHost(pgConnection)
+            new IntersectedForeignKeysCheckOnHost(pgConnection),
+            new PossibleObjectNameOverflowCheckOnHost(pgConnection),
+            new TablesNotLinkedToOthersCheckOnHost(pgConnection)
         );
     }
 
@@ -107,14 +114,21 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     }
 
     @Test
-    void databaseStructureCheckForPublicSchema() {
+    void completenessTest() {
         assertThat(checks)
-            .hasSize(Diagnostic.values().length - SKIPPED_CHECKS_COUNT);
+            .hasSize(Diagnostic.values().length - SKIPPED_CHECKS_COUNT)
+            .filteredOn(c -> c.getDiagnostic() != Diagnostic.SEQUENCE_OVERFLOW)
+            .as("Only static checks should present in list")
+            .allMatch(CheckTypeAware::isStatic);
+    }
 
+    @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
+    @Test
+    void databaseStructureCheckForPublicSchema() {
         checks.forEach(check -> {
             final List<? extends DbObject> checkResult = check.check();
             switch (check.getDiagnostic()) {
-                case TABLES_WITHOUT_PRIMARY_KEY, TABLES_WITHOUT_DESCRIPTION -> assertThat(checkResult)
+                case TABLES_WITHOUT_PRIMARY_KEY, TABLES_WITHOUT_DESCRIPTION, TABLES_NOT_LINKED_TO_OTHERS -> assertThat(checkResult)
                     .asInstanceOf(list(Table.class))
                     .hasSize(1)
                     // HOW TO FIX: just add liquibase table to exclusions
@@ -222,6 +236,12 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                         ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fk_duplicate", ORDER_ID_COLUMN),
                         ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN))
                     );
+
+                case POSSIBLE_OBJECT_NAME_OVERFLOW -> assertThat(checkResult)
+                    .asInstanceOf(list(AnyObject.class))
+                    .hasSize(1)
+                    .containsExactly(
+                        AnyObject.ofType("demo.idx_courier_phone_and_email_should_be_unique_very_long_name_tha", PgObjectType.INDEX));
 
                 default -> assertThat(checkResult).isEmpty();
             }
