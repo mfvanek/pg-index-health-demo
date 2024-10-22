@@ -24,6 +24,7 @@ import io.github.mfvanek.pg.checks.host.NotValidConstraintsCheckOnHost;
 import io.github.mfvanek.pg.checks.host.PossibleObjectNameOverflowCheckOnHost;
 import io.github.mfvanek.pg.checks.host.PrimaryKeysWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.checks.host.SequenceOverflowCheckOnHost;
+import io.github.mfvanek.pg.checks.host.TablesNotLinkedToOthersCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
 import io.github.mfvanek.pg.common.maintenance.CheckTypeAware;
@@ -94,7 +95,8 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
             new PrimaryKeysWithSerialTypesCheckOnHost(pgConnection),
             new DuplicatedForeignKeysCheckOnHost(pgConnection),
             new IntersectedForeignKeysCheckOnHost(pgConnection),
-            new PossibleObjectNameOverflowCheckOnHost(pgConnection)
+            new PossibleObjectNameOverflowCheckOnHost(pgConnection),
+            new TablesNotLinkedToOthersCheckOnHost(pgConnection)
         );
     }
 
@@ -126,7 +128,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
         checks.forEach(check -> {
             final List<? extends DbObject> checkResult = check.check();
             switch (check.getDiagnostic()) {
-                case TABLES_WITHOUT_PRIMARY_KEY, TABLES_WITHOUT_DESCRIPTION -> assertThat(checkResult)
+                case TABLES_WITHOUT_PRIMARY_KEY, TABLES_WITHOUT_DESCRIPTION, TABLES_NOT_LINKED_TO_OTHERS -> assertThat(checkResult)
                     .asInstanceOf(list(Table.class))
                     .hasSize(1)
                     // HOW TO FIX: just add liquibase table to exclusions

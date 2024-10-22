@@ -64,7 +64,7 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
         checks.forEach(check -> {
             final List<? extends DbObject> checkResult = check.check();
             switch (check.getDiagnostic()) {
-                case TABLES_WITHOUT_PRIMARY_KEY, TABLES_WITHOUT_DESCRIPTION -> assertThat(checkResult)
+                case TABLES_WITHOUT_PRIMARY_KEY, TABLES_WITHOUT_DESCRIPTION, TABLES_NOT_LINKED_TO_OTHERS -> assertThat(checkResult)
                     .asInstanceOf(list(Table.class))
                     .hasSize(1)
                     // HOW TO FIX: just add liquibase table to exclusions
