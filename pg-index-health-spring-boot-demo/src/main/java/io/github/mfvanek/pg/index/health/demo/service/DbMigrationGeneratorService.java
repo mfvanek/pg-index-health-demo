@@ -4,6 +4,7 @@ import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
+import io.github.mfvanek.pg.index.health.demo.exception.MigrationException;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ public class DbMigrationGeneratorService {
         var keysBefore = getFKsFromDb(fKMigrationRequest.connectionFactory(), fKMigrationRequest.credentials());
         var migrations = generategMigrations(keysBefore);
         var keysAfter = getFKsFromDb(fKMigrationRequest.connectionFactory(), fKMigrationRequest.credentials());
-        if (!keysAfter.isEmpty()) throw new RuntimeException();
+        if (!keysAfter.isEmpty()) throw new MigrationException("There should be no foreign keys not covered by the index");
         return new ForeignKeyMigrationResponse(keysBefore, keysAfter, migrations);
     }
 
