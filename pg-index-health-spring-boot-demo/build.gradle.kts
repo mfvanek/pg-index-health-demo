@@ -10,6 +10,7 @@ plugins {
 
 dependencies {
     implementation(project(":db-migrations"))
+    implementation("io.github.mfvanek:pg-index-health-generator")
     implementation(platform("org.springframework.boot:spring-boot-dependencies:3.3.4"))
     implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.4"))
     implementation(platform("org.springdoc:springdoc-openapi:2.6.0"))
