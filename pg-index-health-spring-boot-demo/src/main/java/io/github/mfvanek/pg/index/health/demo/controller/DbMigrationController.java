@@ -1,7 +1,14 @@
+/*
+ * Copyright (c) 2019-2024. Ivan Vakhrushev and others.
+ * https://github.com/mfvanek/pg-index-health-demo
+ *
+ * Licensed under the Apache License 2.0
+ */
+
 package io.github.mfvanek.pg.index.health.demo.controller;
 
-import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
+import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +24,7 @@ public class DbMigrationController {
     private final DbMigrationGeneratorService dbMigrationGeneratorService;
 
     @PostMapping("/generate")
-    public ForeignKeyMigrationResponse generateFKMigration(@RequestBody ForeignKeyMigrationRequest foreignKeyMigrationRequest) {
-        return dbMigrationGeneratorService.addIndexesWithFKChecks(foreignKeyMigrationRequest);
+    public ForeignKeyMigrationResponse generateFkMigration(@RequestBody final ForeignKeyMigrationRequest foreignKeyMigrationRequest) {
+        return dbMigrationGeneratorService.addIndexesWithFkChecks(foreignKeyMigrationRequest);
     }
 }
