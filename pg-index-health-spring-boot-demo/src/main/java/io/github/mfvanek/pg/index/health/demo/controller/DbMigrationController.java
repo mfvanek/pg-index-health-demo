@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.controller;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@SuppressFBWarnings("EI_EXPOSE_REP2")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/db/migration")

@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.service;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.mfvanek.pg.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
 import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnCluster;
 import io.github.mfvanek.pg.connection.ConnectionCredentials;
@@ -23,6 +24,7 @@ import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -30,9 +32,11 @@ import java.sql.Statement;
 import java.util.List;
 import javax.sql.DataSource;
 
+@SuppressFBWarnings("EI_EXPOSE_REP2")
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class DbMigrationGeneratorService {
 
     private final HighAvailabilityPgConnectionFactory highAvailabilityPgConnectionFactory;
@@ -54,6 +58,7 @@ public class DbMigrationGeneratorService {
         return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
     }
 
+    @SuppressFBWarnings("SIL_SQL_IN_LOOP")
     private List<String> generatedMigrations(final List<ForeignKey> foreignKeys) {
         final DbMigrationGenerator<ForeignKey> generator = new ForeignKeyMigrationGenerator(GeneratingOptions.builder().build());
         final List<String> generatedMigrations = generator.generate(foreignKeys);

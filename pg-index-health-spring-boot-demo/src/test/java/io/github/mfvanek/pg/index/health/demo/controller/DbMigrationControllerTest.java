@@ -13,26 +13,24 @@ import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
-
-import java.util.Objects;
+import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DbMigrationControllerTest extends BasePgIndexHealthDemoSpringBootTest {
 
     @Autowired
-    private ApplicationContext context;
+    private JdbcDatabaseContainer<?> jdbcDatabaseContainer;
 
     @Test
     void runsMigrations() {
-        final ConnectionCredentials creds = ConnectionCredentials.ofUrl(
-            Objects.requireNonNull(context.getEnvironment().getProperty("spring.datasource.url")),
-            Objects.requireNonNull(context.getEnvironment().getProperty("spring.datasource.userName")),
-            Objects.requireNonNull(context.getEnvironment().getProperty("spring.datasource.password")));
-        final ForeignKeyMigrationRequest foreignKeyMigrationRequest = new ForeignKeyMigrationRequest(creds);
+        final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(
+            jdbcDatabaseContainer.getJdbcUrl(),
+            jdbcDatabaseContainer.getUsername(),
+            jdbcDatabaseContainer.getPassword());
+        final ForeignKeyMigrationRequest foreignKeyMigrationRequest = new ForeignKeyMigrationRequest(credentials);
         final ForeignKeyMigrationResponse result = webTestClient
             .post()
             .uri(uriBuilder -> uriBuilder

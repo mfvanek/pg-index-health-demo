@@ -7,12 +7,8 @@
 
 package io.github.mfvanek.pg.index.health.demo.exception;
 
-import java.io.Serial;
-
+@SuppressWarnings("serial")
 public class MigrationException extends IllegalStateException {
-
-    @Serial
-    private static final long serialVersionUID = 42L;
 
     public MigrationException(final String message) {
         super(message);
