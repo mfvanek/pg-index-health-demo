@@ -11,6 +11,7 @@ import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -46,6 +47,13 @@ class DbMigrationControllerTest extends BasePgIndexHealthDemoSpringBootTest {
             .getResponseBody();
 
         assertThat(result).isNotNull();
+        assertThat(result.foreignKeysBefore()).isNotEmpty();
+        assertThat(result.foreignKeysAfter()).isEmpty();
+        assertThat(result.generatedMigrations()).allMatch(s -> s.contains("create index concurrently if not exists"));
     }
 
+    @AfterEach
+    void truncateTables() {
+        jdbcTemplate.execute("truncate table demo.buyer, demo.courier,  demo.payment, demo.order_item, demo.orders");
+    }
 }

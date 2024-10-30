@@ -70,7 +70,7 @@ public class DbMigrationGeneratorService {
                 }
             }
         } catch (SQLException e) {
-            log.error("ERROR", e);
+            log.error("Error running migration", e);
         }
         return generatedMigrations;
     }
