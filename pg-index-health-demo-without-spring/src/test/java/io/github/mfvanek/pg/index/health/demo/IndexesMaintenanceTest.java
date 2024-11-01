@@ -125,7 +125,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
             .allMatch(CheckTypeAware::isStatic);
     }
 
-    @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
+    @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
     @Test
     void databaseStructureCheckForPublicSchema() {
         checks.forEach(check -> {
