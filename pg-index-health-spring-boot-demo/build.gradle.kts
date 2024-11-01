@@ -4,13 +4,13 @@ plugins {
     id("pg-index-health-demo.java-conventions")
     id("pg-index-health-demo.forbidden-apis")
     id("pg-index-health-demo.pitest")
-    id("org.springframework.boot") version "3.3.4"
+    id("org.springframework.boot") version "3.3.5"
     id("com.google.osdetector") version "1.7.3"
 }
 
 dependencies {
     implementation(project(":db-migrations"))
-    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.3.4"))
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.3.5"))
     implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.4"))
     implementation(platform("org.springdoc:springdoc-openapi:2.6.0"))
 
@@ -29,7 +29,7 @@ dependencies {
     implementation("io.github.mfvanek:pg-index-health-logger")
     implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
 
-    annotationProcessor(platform("org.springframework.boot:spring-boot-dependencies:3.3.4"))
+    annotationProcessor(platform("org.springframework.boot:spring-boot-dependencies:3.3.5"))
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
