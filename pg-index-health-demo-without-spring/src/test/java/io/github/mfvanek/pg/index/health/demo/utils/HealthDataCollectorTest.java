@@ -24,7 +24,7 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
             "db_indexes_health\tduplicated_indexes\t1",
             "db_indexes_health\tintersected_indexes\t2",
             "db_indexes_health\tunused_indexes\t0",
-            "db_indexes_health\tforeign_keys_without_index\t4",
+            "db_indexes_health\tforeign_keys_without_index\t5",
             "db_indexes_health\ttables_with_missing_indexes\t0",
             "db_indexes_health\ttables_without_primary_key\t1",
             "db_indexes_health\tindexes_with_null_values\t1",
@@ -43,7 +43,8 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
             "db_indexes_health\tduplicated_foreign_keys\t1",
             "db_indexes_health\tintersected_foreign_keys\t0",
             "db_indexes_health\tpossible_object_name_overflow\t1",
-            "db_indexes_health\ttables_not_linked_to_others\t0");
+            "db_indexes_health\ttables_not_linked_to_others\t0",
+            "db_indexes_health\tforeign_keys_with_unmatched_column_type\t1");
         final List<String> healthData = HealthDataCollector.collectHealthData(getConnectionFactory(), getConnectionCredentials());
         assertThat(healthData)
             .hasSameSizeAs(Diagnostic.values())
