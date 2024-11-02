@@ -23,7 +23,7 @@ Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) l
 
 ## Tech stack
 
-* Java 17
+* Java 21
 * Testcontainers
 
 ### Previous versions
