@@ -6,8 +6,8 @@
     <description>PMD configuration</description>
 
     <rule ref="category/java/bestpractices.xml">
-        <exclude name="JUnitTestContainsTooManyAsserts"/>
-        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+        <exclude name="UnitTestContainsTooManyAsserts"/>
+        <exclude name="UnitTestAssertionsShouldIncludeMessage"/>
         <exclude name="GuardLogStatement"/>
         <exclude name="CheckResultSet"/> <!-- false positive. broken since v.7.0.0 -->
     </rule>

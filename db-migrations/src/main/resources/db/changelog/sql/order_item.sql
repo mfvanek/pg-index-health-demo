@@ -37,3 +37,6 @@ create index if not exists order_item_categories_idx on demo.order_item(categori
 
 --changeset ivan.vakhrushev:2020.10.10:order_item.duplicated_foreign_key
 alter table demo.order_item add constraint order_item_order_id_fk_duplicate foreign key (order_id) references demo.orders (id);
+
+--changeset ivan.vakhrushev:2024.11.01:warehouse.reference
+alter table demo.order_item add constraint order_item_warehouse_id_fk foreign key (warehouse_id) references demo.warehouse (id);

@@ -22,16 +22,16 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.13.1"))
-    implementation(platform("org.testcontainers:testcontainers-bom:1.20.2"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.13.2"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.20.3"))
 
     implementation("com.google.code.findbugs:jsr305:3.0.2")
     implementation("org.postgresql:postgresql:42.7.4")
 
-    testImplementation(platform("org.junit:junit-bom:5.11.2"))
+    testImplementation(platform("org.junit:junit-bom:5.11.3"))
     testImplementation(platform("org.assertj:assertj-bom:3.26.3"))
 
-    errorprone("com.google.errorprone:error_prone_core:2.33.0")
+    errorprone("com.google.errorprone:error_prone_core:2.35.1")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.28")
 
     spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.16")
@@ -77,7 +77,7 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.6.0"
+    toolVersion = "7.7.0"
     isConsoleOutput = true
     ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
     ruleSets = listOf()
