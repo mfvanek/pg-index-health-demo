@@ -7,19 +7,22 @@
 
 package io.github.mfvanek.pg.index.health.demo.controller;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
+import io.github.mfvanek.pg.index.health.demo.dto.MigrationError;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
 class DbMigrationControllerTest extends BasePgIndexHealthDemoSpringBootTest {
 
     @Autowired
@@ -52,8 +55,29 @@ class DbMigrationControllerTest extends BasePgIndexHealthDemoSpringBootTest {
         assertThat(result.generatedMigrations()).allMatch(s -> s.contains("create index concurrently if not exists"));
     }
 
-    @AfterEach
-    void truncateTables() {
-        jdbcTemplate.execute("truncate table demo.buyer, demo.courier,  demo.payment, demo.order_item, demo.orders");
+    @Test
+    void returnsMigrationErrorWithWrongDataInBody() {
+        final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(
+            jdbcDatabaseContainer.getJdbcUrl(),
+            jdbcDatabaseContainer.getUsername(),
+            "123");
+        final ForeignKeyMigrationRequest foreignKeyMigrationRequest = new ForeignKeyMigrationRequest(credentials);
+        final MigrationError result = webTestClient
+            .post()
+            .uri(uriBuilder -> uriBuilder
+                .pathSegment("db", "migration", "generate")
+                .build())
+            .body(BodyInserters.fromValue(foreignKeyMigrationRequest))
+            .accept(MediaType.APPLICATION_JSON)
+            .headers(this::setUpBasicAuth)
+            .exchange()
+            .expectStatus().isEqualTo(HttpStatus.EXPECTATION_FAILED)
+            .expectBody(MigrationError.class)
+            .returnResult()
+            .getResponseBody();
+
+        assertThat(result).isNotNull();
+        assertThat(result).isInstanceOf(MigrationError.class);
+        assertThat(result.message()).contains("Migrations failed - ");
     }
 }

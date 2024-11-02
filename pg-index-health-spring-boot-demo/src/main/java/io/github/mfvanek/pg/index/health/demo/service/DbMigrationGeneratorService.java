@@ -18,7 +18,6 @@ import io.github.mfvanek.pg.generator.ForeignKeyMigrationGenerator;
 import io.github.mfvanek.pg.generator.GeneratingOptions;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
-import io.github.mfvanek.pg.index.health.demo.exception.MigrationException;
 import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +46,7 @@ public class DbMigrationGeneratorService {
         final List<String> migrations = generatedMigrations(keysBefore);
         final List<ForeignKey> keysAfter = getFksFromDb(fkMigrationRequest.credentials());
         if (!keysAfter.isEmpty()) {
-            throw new MigrationException("There should be no foreign keys not covered by the index");
+            throw new IllegalStateException("There should be no foreign keys not covered by the index");
         }
         return new ForeignKeyMigrationResponse(keysBefore, keysAfter, migrations);
     }
