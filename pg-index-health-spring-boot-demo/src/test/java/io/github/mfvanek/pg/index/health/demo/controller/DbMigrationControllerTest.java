@@ -7,7 +7,6 @@
 
 package io.github.mfvanek.pg.index.health.demo.controller;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
@@ -22,7 +21,6 @@ import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
 class DbMigrationControllerTest extends BasePgIndexHealthDemoSpringBootTest {
 
     @Autowired

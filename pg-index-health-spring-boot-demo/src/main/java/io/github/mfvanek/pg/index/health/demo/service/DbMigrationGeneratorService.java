@@ -14,8 +14,6 @@ import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
-import io.github.mfvanek.pg.generator.ForeignKeyMigrationGenerator;
-import io.github.mfvanek.pg.generator.GeneratingOptions;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.model.PgContext;
@@ -40,6 +38,7 @@ public class DbMigrationGeneratorService {
 
     private final HighAvailabilityPgConnectionFactory highAvailabilityPgConnectionFactory;
     private final DataSource dataSource;
+    private final DbMigrationGenerator<ForeignKey> dbMigrationGenerator;
 
     public ForeignKeyMigrationResponse addIndexesWithFkChecks(final ForeignKeyMigrationRequest fkMigrationRequest) {
         final List<ForeignKey> keysBefore = getFksFromDb(fkMigrationRequest.credentials());
@@ -51,7 +50,7 @@ public class DbMigrationGeneratorService {
         return new ForeignKeyMigrationResponse(keysBefore, keysAfter, migrations);
     }
 
-    private List<ForeignKey> getFksFromDb(final ConnectionCredentials credentials) {
+    public List<ForeignKey> getFksFromDb(final ConnectionCredentials credentials) {
         final HighAvailabilityPgConnection haPgConnection = highAvailabilityPgConnectionFactory.of(credentials);
         final DatabaseCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex = new ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection);
         return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
@@ -59,8 +58,7 @@ public class DbMigrationGeneratorService {
 
     @SuppressFBWarnings("SIL_SQL_IN_LOOP")
     private List<String> generatedMigrations(final List<ForeignKey> foreignKeys) {
-        final DbMigrationGenerator<ForeignKey> generator = new ForeignKeyMigrationGenerator(GeneratingOptions.builder().build());
-        final List<String> generatedMigrations = generator.generate(foreignKeys);
+        final List<String> generatedMigrations = dbMigrationGenerator.generate(foreignKeys);
         log.info("Generated migrations: {}", generatedMigrations);
         try (Connection connection = dataSource.getConnection()) {
             for (final String migration : generatedMigrations) {
