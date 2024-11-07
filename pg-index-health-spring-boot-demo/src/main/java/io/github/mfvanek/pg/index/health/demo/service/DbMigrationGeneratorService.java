@@ -10,11 +10,8 @@ package io.github.mfvanek.pg.index.health.demo.service;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.mfvanek.pg.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
 import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnCluster;
-import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
-import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
@@ -36,22 +33,22 @@ import javax.sql.DataSource;
 @Transactional
 public class DbMigrationGeneratorService {
 
-    private final HighAvailabilityPgConnectionFactory highAvailabilityPgConnectionFactory;
     private final DataSource dataSource;
     private final DbMigrationGenerator<ForeignKey> dbMigrationGenerator;
+    private final HighAvailabilityPgConnection haPgConnection;
 
-    public ForeignKeyMigrationResponse addIndexesWithFkChecks(final ForeignKeyMigrationRequest fkMigrationRequest) {
-        final List<ForeignKey> keysBefore = getFksFromDb(fkMigrationRequest.credentials());
+    @SuppressFBWarnings("PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS")
+    public ForeignKeyMigrationResponse generateMigrationsWithForeignKeysChecked() {
+        final List<ForeignKey> keysBefore = getForeignKeysFromDb();
         final List<String> migrations = generatedMigrations(keysBefore);
-        final List<ForeignKey> keysAfter = getFksFromDb(fkMigrationRequest.credentials());
+        final List<ForeignKey> keysAfter = getForeignKeysFromDb();
         if (!keysAfter.isEmpty()) {
             throw new IllegalStateException("There should be no foreign keys not covered by the index");
         }
         return new ForeignKeyMigrationResponse(keysBefore, keysAfter, migrations);
     }
 
-    public List<ForeignKey> getFksFromDb(final ConnectionCredentials credentials) {
-        final HighAvailabilityPgConnection haPgConnection = highAvailabilityPgConnectionFactory.of(credentials);
+    public List<ForeignKey> getForeignKeysFromDb() {
         final DatabaseCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex = new ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection);
         return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
     }

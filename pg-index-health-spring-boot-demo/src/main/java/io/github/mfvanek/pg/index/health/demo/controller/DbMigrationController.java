@@ -8,14 +8,12 @@
 package io.github.mfvanek.pg.index.health.demo.controller;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.index.health.demo.dto.MigrationError;
 import io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,13 +27,13 @@ public class DbMigrationController {
     private final DbMigrationGeneratorService dbMigrationGeneratorService;
 
     @PostMapping("/generate")
-    public ForeignKeyMigrationResponse generateFkMigration(@RequestBody final ForeignKeyMigrationRequest foreignKeyMigrationRequest) {
-        return dbMigrationGeneratorService.addIndexesWithFkChecks(foreignKeyMigrationRequest);
+    public ForeignKeyMigrationResponse generateMigrationsWithForeignKeysChecked() {
+        return dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked();
     }
 
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
-    @org.springframework.web.bind.annotation.ExceptionHandler(RuntimeException.class)
-    public MigrationError handleMigrationException(final RuntimeException runtimeException) {
-        return new MigrationError(HttpStatus.EXPECTATION_FAILED.value(), "Migrations failed - " + runtimeException.getMessage());
+    @org.springframework.web.bind.annotation.ExceptionHandler(IllegalStateException.class)
+    public MigrationError handleMigrationException(final IllegalStateException illegalStateException) {
+        return new MigrationError(HttpStatus.EXPECTATION_FAILED.value(), "Migrations failed - " + illegalStateException.getMessage());
     }
 }

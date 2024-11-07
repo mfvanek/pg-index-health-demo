@@ -7,38 +7,24 @@
 
 package io.github.mfvanek.pg.index.health.demo.controller;
 
-import io.github.mfvanek.pg.connection.ConnectionCredentials;
-import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.index.health.demo.dto.MigrationError;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DbMigrationControllerTest extends BasePgIndexHealthDemoSpringBootTest {
 
-    @Autowired
-    private JdbcDatabaseContainer<?> jdbcDatabaseContainer;
-
     @Test
     void runsMigrations() {
-        final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(
-            jdbcDatabaseContainer.getJdbcUrl(),
-            jdbcDatabaseContainer.getUsername(),
-            jdbcDatabaseContainer.getPassword());
-        final ForeignKeyMigrationRequest foreignKeyMigrationRequest = new ForeignKeyMigrationRequest(credentials);
         final ForeignKeyMigrationResponse result = webTestClient
             .post()
             .uri(uriBuilder -> uriBuilder
                 .pathSegment("db", "migration", "generate")
                 .build())
-            .body(BodyInserters.fromValue(foreignKeyMigrationRequest))
             .accept(MediaType.APPLICATION_JSON)
             .headers(this::setUpBasicAuth)
             .exchange()
@@ -54,28 +40,19 @@ class DbMigrationControllerTest extends BasePgIndexHealthDemoSpringBootTest {
     }
 
     @Test
-    void returnsMigrationErrorWithWrongDataInBody() {
-        final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(
-            jdbcDatabaseContainer.getJdbcUrl(),
-            jdbcDatabaseContainer.getUsername(),
-            "123");
-        final ForeignKeyMigrationRequest foreignKeyMigrationRequest = new ForeignKeyMigrationRequest(credentials);
+    void returnsMigrationErrorWithWrongAuthorization() {
         final MigrationError result = webTestClient
             .post()
             .uri(uriBuilder -> uriBuilder
                 .pathSegment("db", "migration", "generate")
                 .build())
-            .body(BodyInserters.fromValue(foreignKeyMigrationRequest))
             .accept(MediaType.APPLICATION_JSON)
-            .headers(this::setUpBasicAuth)
             .exchange()
-            .expectStatus().isEqualTo(HttpStatus.EXPECTATION_FAILED)
+            .expectStatus().isEqualTo(HttpStatus.UNAUTHORIZED)
             .expectBody(MigrationError.class)
             .returnResult()
             .getResponseBody();
 
-        assertThat(result).isNotNull();
-        assertThat(result).isInstanceOf(MigrationError.class);
-        assertThat(result.message()).contains("Migrations failed - ");
+        assertThat(result).isNull();
     }
 }

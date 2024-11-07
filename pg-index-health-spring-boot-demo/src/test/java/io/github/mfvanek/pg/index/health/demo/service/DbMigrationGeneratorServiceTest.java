@@ -7,9 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.service;
 
-import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
-import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationRequest;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -36,20 +33,12 @@ class DbMigrationGeneratorServiceTest extends BasePgIndexHealthDemoSpringBootTes
     @MockBean
     DbMigrationGenerator<ForeignKey> dbMigrationGenerator;
 
-    @Autowired
-    private JdbcDatabaseContainer<?> jdbcDatabaseContainer;
-
     @Test
     void throwsIllegalStateExceptionWhenEmptyMigrationString(@Nonnull final CapturedOutput output) {
-        final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(
-            jdbcDatabaseContainer.getJdbcUrl(),
-            jdbcDatabaseContainer.getUsername(),
-            jdbcDatabaseContainer.getPassword());
-        final List<ForeignKey> foreignKeys = dbMigrationGeneratorService.getFksFromDb(credentials);
+        final List<ForeignKey> foreignKeys = dbMigrationGeneratorService.getForeignKeysFromDb();
         Mockito.when(dbMigrationGenerator.generate(foreignKeys)).thenReturn(List.of());
-        final ForeignKeyMigrationRequest foreignKeyMigrationRequest = new ForeignKeyMigrationRequest(credentials);
 
-        assertThatThrownBy(() -> dbMigrationGeneratorService.addIndexesWithFkChecks(foreignKeyMigrationRequest))
+        assertThatThrownBy(dbMigrationGeneratorService::generateMigrationsWithForeignKeysChecked)
             .isInstanceOf(IllegalStateException.class)
             .hasMessage("There should be no foreign keys not covered by the index");
         assertThat(output).contains("Generated migrations: []");
@@ -57,15 +46,10 @@ class DbMigrationGeneratorServiceTest extends BasePgIndexHealthDemoSpringBootTes
 
     @Test
     void logsAboutSqlExceptionWhenBadMigrationStringAndThrowsExceptionAfter(@Nonnull final CapturedOutput output) {
-        final ConnectionCredentials credentials = ConnectionCredentials.ofUrl(
-            jdbcDatabaseContainer.getJdbcUrl(),
-            jdbcDatabaseContainer.getUsername(),
-            jdbcDatabaseContainer.getPassword());
-        final List<ForeignKey> foreignKeys = dbMigrationGeneratorService.getFksFromDb(credentials);
+        final List<ForeignKey> foreignKeys = dbMigrationGeneratorService.getForeignKeysFromDb();
         Mockito.when(dbMigrationGenerator.generate(foreignKeys)).thenReturn(List.of("select * from payments"));
-        final ForeignKeyMigrationRequest foreignKeyMigrationRequest = new ForeignKeyMigrationRequest(credentials);
 
-        assertThatThrownBy(() -> dbMigrationGeneratorService.addIndexesWithFkChecks(foreignKeyMigrationRequest))
+        assertThatThrownBy(dbMigrationGeneratorService::generateMigrationsWithForeignKeysChecked)
             .isInstanceOf(IllegalStateException.class)
             .hasMessage("There should be no foreign keys not covered by the index");
         assertThat(output).contains("Error running migration");
