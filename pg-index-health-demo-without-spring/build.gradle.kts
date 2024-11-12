@@ -13,7 +13,7 @@ dependencies {
     implementation("io.github.mfvanek:pg-index-health-testing")
     implementation("io.github.mfvanek:pg-index-health-logger")
 
-    implementation("org.liquibase:liquibase-core:4.29.2")
+    implementation("org.liquibase:liquibase-core:4.30.0")
     implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
     implementation("org.apache.commons:commons-dbcp2:2.12.0")
     implementation("org.testcontainers:testcontainers")
