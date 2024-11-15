@@ -22,7 +22,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
-    implementation("org.liquibase:liquibase-core:4.29.2")
+    implementation("org.liquibase:liquibase-core:4.30.0")
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
     implementation("io.github.mfvanek:pg-index-health")
