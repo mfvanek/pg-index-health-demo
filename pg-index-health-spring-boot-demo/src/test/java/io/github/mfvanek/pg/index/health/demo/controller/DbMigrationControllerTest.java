@@ -40,7 +40,7 @@ class DbMigrationControllerTest extends BasePgIndexHealthDemoSpringBootTest {
     }
 
     @Test
-    void returnsMigrationErrorWithWrongAuthorization() {
+    void returnsNothingWithWrongAuthorization() {
         final MigrationError result = webTestClient
             .post()
             .uri(uriBuilder -> uriBuilder

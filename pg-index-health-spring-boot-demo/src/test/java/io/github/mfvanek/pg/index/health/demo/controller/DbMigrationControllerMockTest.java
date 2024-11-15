@@ -42,8 +42,9 @@ class DbMigrationControllerMockTest extends BasePgIndexHealthDemoSpringBootTest 
             .returnResult()
             .getResponseBody();
 
-        assertThat(result).isNotNull();
-        assertThat(result).isInstanceOf(MigrationError.class);
-        assertThat(result.message()).contains("Migrations failed - ");
+        assertThat(result)
+            .isNotNull()
+            .isInstanceOf(MigrationError.class);
+        assertThat(result.message()).contains("Migrations failed: There should be no foreign keys not covered by the index");
     }
 }

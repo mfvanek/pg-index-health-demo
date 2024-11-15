@@ -7,7 +7,6 @@
 
 package io.github.mfvanek.pg.index.health.demo.service;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.mfvanek.pg.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
 import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnCluster;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
@@ -26,7 +25,6 @@ import java.sql.Statement;
 import java.util.List;
 import javax.sql.DataSource;
 
-@SuppressFBWarnings("EI_EXPOSE_REP2")
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -37,7 +35,6 @@ public class DbMigrationGeneratorService {
     private final DbMigrationGenerator<ForeignKey> dbMigrationGenerator;
     private final HighAvailabilityPgConnection haPgConnection;
 
-    @SuppressFBWarnings("PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS")
     public ForeignKeyMigrationResponse generateMigrationsWithForeignKeysChecked() {
         final List<ForeignKey> keysBefore = getForeignKeysFromDb();
         final List<String> migrations = generatedMigrations(keysBefore);
@@ -53,7 +50,6 @@ public class DbMigrationGeneratorService {
         return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
     }
 
-    @SuppressFBWarnings("SIL_SQL_IN_LOOP")
     private List<String> generatedMigrations(final List<ForeignKey> foreignKeys) {
         final List<String> generatedMigrations = dbMigrationGenerator.generate(foreignKeys);
         log.info("Generated migrations: {}", generatedMigrations);

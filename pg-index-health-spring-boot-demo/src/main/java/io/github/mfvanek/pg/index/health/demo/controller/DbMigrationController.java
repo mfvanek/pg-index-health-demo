@@ -7,7 +7,6 @@
 
 package io.github.mfvanek.pg.index.health.demo.controller;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.index.health.demo.dto.MigrationError;
 import io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@SuppressFBWarnings("EI_EXPOSE_REP2")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/db/migration")
@@ -34,6 +32,6 @@ public class DbMigrationController {
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
     @org.springframework.web.bind.annotation.ExceptionHandler(IllegalStateException.class)
     public MigrationError handleMigrationException(final IllegalStateException illegalStateException) {
-        return new MigrationError(HttpStatus.EXPECTATION_FAILED.value(), "Migrations failed - " + illegalStateException.getMessage());
+        return new MigrationError(HttpStatus.EXPECTATION_FAILED.value(), "Migrations failed: " + illegalStateException.getMessage());
     }
 }
