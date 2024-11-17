@@ -22,7 +22,7 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.13.2"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.13.3"))
     implementation(platform("org.testcontainers:testcontainers-bom:1.20.3"))
 
     implementation("com.google.code.findbugs:jsr305:3.0.2")
@@ -37,7 +37,7 @@ dependencies {
     spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.16")
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.13.0")
-    spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.5")
+    spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.8")
 }
 
 tasks.withType<JavaCompile>().configureEach {
