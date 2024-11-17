@@ -25,6 +25,7 @@ import io.github.mfvanek.pg.model.index.IndexWithNulls;
 import io.github.mfvanek.pg.model.index.IndexWithSize;
 import io.github.mfvanek.pg.model.object.AnyObject;
 import io.github.mfvanek.pg.model.object.PgObjectType;
+import io.github.mfvanek.pg.model.predicates.SkipLiquibaseTablesPredicate;
 import io.github.mfvanek.pg.model.sequence.SequenceState;
 import io.github.mfvanek.pg.model.table.Table;
 import org.assertj.core.api.ListAssert;
@@ -62,26 +63,10 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
         assertThat(checks)
             .hasSize(Diagnostic.values().length);
 
-        checks.forEach(check -> {
-            final ListAssert<? extends DbObject> checksAssert = assertThat(check.check())
-                .as(check.getDiagnostic().name());
-
-            switch (check.getDiagnostic()) {
-                case TABLES_WITHOUT_PRIMARY_KEY, TABLES_WITHOUT_DESCRIPTION, TABLES_NOT_LINKED_TO_OTHERS -> checksAssert
-                    .asInstanceOf(list(Table.class))
-                    .hasSize(1)
-                    // HOW TO FIX: just add liquibase table to exclusions
-                    .containsExactly(Table.of("databasechangelog", 0L));
-
-                case COLUMNS_WITHOUT_DESCRIPTION -> checksAssert
-                    .asInstanceOf(list(Column.class))
-                    // HOW TO FIX: just add liquibase table to exclusions
-                    .hasSize(14)
-                    .allMatch(c -> "databasechangelog".equals(c.getTableName()));
-
-                default -> checksAssert.isEmpty();
-            }
-        });
+        checks.forEach(check ->
+            assertThat(check.check(SkipLiquibaseTablesPredicate.ofPublic()))
+                .as(check.getDiagnostic().name())
+                .isEmpty());
     }
 
     @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:LambdaBodyLength"})
