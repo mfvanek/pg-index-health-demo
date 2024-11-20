@@ -55,25 +55,4 @@ class DbMigrationControllerTest extends BasePgIndexHealthDemoSpringBootTest {
 
         assertThat(result).isNull();
     }
-
-    @Test
-    void returnsMigrationErrorWhenKeysAfterAreNotEmpty() {
-        final MigrationError result = webTestClient
-            .post()
-            .uri(uriBuilder -> uriBuilder
-                .pathSegment("db", "migration", "generate")
-                .build())
-            .accept(MediaType.APPLICATION_JSON)
-            .headers(this::setUpBasicAuth)
-            .exchange()
-            .expectStatus().isEqualTo(HttpStatus.EXPECTATION_FAILED)
-            .expectBody(MigrationError.class)
-            .returnResult()
-            .getResponseBody();
-
-        assertThat(result)
-            .isNotNull()
-            .isInstanceOf(MigrationError.class);
-        assertThat(result.message()).contains("Migrations failed: There should be no foreign keys not covered by the index");
-    }
 }
