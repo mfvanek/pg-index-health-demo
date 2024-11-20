@@ -7,6 +7,9 @@
 
 package io.github.mfvanek.pg.index.health.demo.config;
 
+import io.github.mfvanek.pg.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
+import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnCluster;
+import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
 import io.github.mfvanek.pg.generator.ForeignKeyMigrationGenerator;
 import io.github.mfvanek.pg.generator.GeneratingOptions;
@@ -14,11 +17,16 @@ import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class MigrationGeneratorConfig {
 
     @Bean
     public DbMigrationGenerator<ForeignKey> dbMigrationGenerator() {
         return new ForeignKeyMigrationGenerator(GeneratingOptions.builder().build());
+    }
+
+    @Bean
+    public DatabaseCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex(final HighAvailabilityPgConnection haPgConnection) {
+        return new ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection);
     }
 }

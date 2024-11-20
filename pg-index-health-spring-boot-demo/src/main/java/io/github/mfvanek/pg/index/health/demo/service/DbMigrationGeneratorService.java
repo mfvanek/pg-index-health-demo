@@ -7,9 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.service;
 
-import io.github.mfvanek.pg.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
 import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnCluster;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
 import io.github.mfvanek.pg.model.PgContext;
@@ -28,16 +26,17 @@ import javax.sql.DataSource;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class DbMigrationGeneratorService {
 
     private final DataSource dataSource;
     private final DbMigrationGenerator<ForeignKey> dbMigrationGenerator;
-    private final HighAvailabilityPgConnection haPgConnection;
+    private final DatabaseCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex;
 
     public ForeignKeyMigrationResponse generateMigrationsWithForeignKeysChecked() {
         final List<ForeignKey> keysBefore = getForeignKeysFromDb();
-        final List<String> migrations = generatedMigrations(keysBefore);
+        final List<String> migrations = generateMigrations(keysBefore);
+        runGeneratedMigrations(migrations);
         final List<ForeignKey> keysAfter = getForeignKeysFromDb();
         if (!keysAfter.isEmpty()) {
             throw new IllegalStateException("There should be no foreign keys not covered by the index");
@@ -45,14 +44,17 @@ public class DbMigrationGeneratorService {
         return new ForeignKeyMigrationResponse(keysBefore, keysAfter, migrations);
     }
 
-    public List<ForeignKey> getForeignKeysFromDb() {
-        final DatabaseCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex = new ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection);
+    List<ForeignKey> getForeignKeysFromDb() {
         return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
     }
 
-    private List<String> generatedMigrations(final List<ForeignKey> foreignKeys) {
+    private List<String> generateMigrations(final List<ForeignKey> foreignKeys) {
         final List<String> generatedMigrations = dbMigrationGenerator.generate(foreignKeys);
         log.info("Generated migrations: {}", generatedMigrations);
+        return generatedMigrations;
+    }
+
+    private void runGeneratedMigrations(final List<String> generatedMigrations) {
         try (Connection connection = dataSource.getConnection()) {
             for (final String migration : generatedMigrations) {
                 try (Statement statement = connection.createStatement()) {
@@ -62,6 +64,6 @@ public class DbMigrationGeneratorService {
         } catch (SQLException e) {
             log.error("Error running migration", e);
         }
-        return generatedMigrations;
+
     }
 }
