@@ -14,7 +14,7 @@ dependencies {
 pitest {
     verbosity = "DEFAULT"
     junit5PluginVersion = "1.2.1"
-    pitestVersion = "1.17.0"
+    pitestVersion = "1.17.1"
     threads = 4
     if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
         outputFormats.set(setOf("stryker-dashboard"))

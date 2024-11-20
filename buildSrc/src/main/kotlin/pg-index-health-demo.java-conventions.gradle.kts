@@ -23,7 +23,7 @@ configurations.configureEach {
 
 dependencies {
     implementation(platform("io.github.mfvanek:pg-index-health-bom:0.13.3"))
-    implementation(platform("org.testcontainers:testcontainers-bom:1.20.3"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.20.4"))
 
     implementation("com.google.code.findbugs:jsr305:3.0.2")
     implementation("org.postgresql:postgresql:42.7.4")
@@ -31,7 +31,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.11.3"))
     testImplementation(platform("org.assertj:assertj-bom:3.26.3"))
 
-    errorprone("com.google.errorprone:error_prone_core:2.35.1")
+    errorprone("com.google.errorprone:error_prone_core:2.36.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.28")
 
     spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.16")
