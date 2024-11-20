@@ -18,6 +18,7 @@ import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactoryImpl;
 import io.github.mfvanek.pg.connection.PgConnectionFactoryImpl;
 import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
+import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.statistics.maintenance.StatisticsMaintenanceOnHostImpl;
 import org.springframework.context.annotation.Bean;
@@ -58,5 +59,10 @@ public class DatabaseStructureHealthConfig {
         return new DatabaseManagementImpl(highAvailabilityPgConnection,
             StatisticsMaintenanceOnHostImpl::new,
             ConfigurationMaintenanceOnHostImpl::new);
+    }
+
+    @Bean
+    public PgContext pgContext() {
+        return PgContext.of("demo");
     }
 }

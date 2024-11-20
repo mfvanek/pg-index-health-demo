@@ -34,8 +34,8 @@ class DbMigrationControllerTest extends BasePgIndexHealthDemoSpringBootTest {
             .getResponseBody();
 
         assertThat(result).isNotNull();
-        assertThat(result.foreignKeysBefore().isEmpty()).isFalse();
-        assertThat(result.foreignKeysAfter().isEmpty()).isTrue();
+        assertThat(result.foreignKeysBefore()).isNotEmpty();
+        assertThat(result.foreignKeysAfter()).isEmpty();
         assertThat(result.generatedMigrations()).allMatch(s -> s.contains("create index concurrently if not exists"));
     }
 

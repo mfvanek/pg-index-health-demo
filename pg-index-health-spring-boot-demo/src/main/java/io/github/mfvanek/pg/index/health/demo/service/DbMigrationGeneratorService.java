@@ -32,6 +32,7 @@ public class DbMigrationGeneratorService {
     private final DataSource dataSource;
     private final DbMigrationGenerator<ForeignKey> dbMigrationGenerator;
     private final DatabaseCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex;
+    private final PgContext pgContext;
 
     public ForeignKeyMigrationResponse generateMigrationsWithForeignKeysChecked() {
         final List<ForeignKey> keysBefore = getForeignKeysFromDb();
@@ -45,7 +46,7 @@ public class DbMigrationGeneratorService {
     }
 
     List<ForeignKey> getForeignKeysFromDb() {
-        return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
+        return foreignKeysNotCoveredWithIndex.check(pgContext);
     }
 
     private List<String> generateMigrations(final List<ForeignKey> foreignKeys) {
@@ -64,6 +65,5 @@ public class DbMigrationGeneratorService {
         } catch (SQLException e) {
             log.error("Error running migration", e);
         }
-
     }
 }
