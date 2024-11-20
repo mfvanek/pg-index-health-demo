@@ -25,6 +25,7 @@ import java.util.Collection;
 public class DbHealthController {
 
     private final HealthLogger healthLogger;
+    private final PgContext pgContext;
 
     @GetMapping
     public ResponseEntity<Collection<String>> collectHealthData() {
@@ -32,6 +33,6 @@ public class DbHealthController {
             .withIndexSizeThreshold(1, MemoryUnit.MB)
             .withTableSizeThreshold(1, MemoryUnit.MB)
             .build();
-        return ResponseEntity.ok(healthLogger.logAll(exclusions, PgContext.of("demo")));
+        return ResponseEntity.ok(healthLogger.logAll(exclusions, pgContext));
     }
 }

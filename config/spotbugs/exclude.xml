@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
     <Match>
-        <Bug pattern="EI_EXPOSE_REP,RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE,SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE,BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"/>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2,RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE,SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE,BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"/>
     </Match>
     <Match>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE,UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"/>
@@ -14,6 +14,10 @@
     <Match>
         <Bug pattern="SIL_SQL_IN_LOOP"/>
         <Class name="io.github.mfvanek.pg.index.health.demo.utils.MigrationsGenerator"/>
+    </Match>
+    <Match>
+        <Bug pattern="PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS,SIL_SQL_IN_LOOP"/>
+        <Class name="io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService"/>
     </Match>
     <Match>
         <Bug pattern="CRLF_INJECTION_LOGS,SQL_INJECTION_JDBC"/>

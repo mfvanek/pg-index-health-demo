@@ -45,7 +45,8 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
     private static final String ORDERS_TABLE = "demo.orders";
     private static final String ORDER_ID_COLUMN = "order_id";
 
-    private final PgContext demoSchema = PgContext.of("demo");
+    @Autowired
+    private PgContext pgContext;
 
     @Autowired
     private List<DatabaseCheckOnHost<? extends DbObject>> checks;
@@ -79,7 +80,7 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
             // Skip all runtime checks except SEQUENCE_OVERFLOW
             .filter(check -> check.getDiagnostic() == Diagnostic.SEQUENCE_OVERFLOW || check.isStatic())
             .forEach(check -> {
-                final ListAssert<? extends DbObject> checksAssert = assertThat(check.check(demoSchema))
+                final ListAssert<? extends DbObject> checksAssert = assertThat(check.check(pgContext))
                     .as(check.getDiagnostic().name());
 
                 switch (check.getDiagnostic()) {
