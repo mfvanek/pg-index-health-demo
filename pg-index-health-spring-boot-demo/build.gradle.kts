@@ -12,7 +12,7 @@ dependencies {
     implementation(project(":db-migrations"))
     implementation(platform("org.springframework.boot:spring-boot-dependencies:3.3.5"))
     implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.4.1"))
-    implementation(platform("org.springdoc:springdoc-openapi:2.6.0"))
+    implementation(platform("org.springdoc:springdoc-openapi:2.7.0"))
 
     implementation("org.apache.commons:commons-lang3:3.17.0")
 
