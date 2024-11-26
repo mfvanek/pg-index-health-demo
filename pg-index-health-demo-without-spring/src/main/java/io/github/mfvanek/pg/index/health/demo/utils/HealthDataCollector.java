@@ -7,14 +7,14 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
-import io.github.mfvanek.pg.common.health.logger.Exclusions;
-import io.github.mfvanek.pg.common.health.logger.HealthLogger;
-import io.github.mfvanek.pg.common.health.logger.KeyValueFileHealthLogger;
-import io.github.mfvanek.pg.common.maintenance.DatabaseChecks;
-import io.github.mfvanek.pg.connection.ConnectionCredentials;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
-import io.github.mfvanek.pg.model.MemoryUnit;
-import io.github.mfvanek.pg.model.PgContext;
+import io.github.mfvanek.pg.connection.factory.ConnectionCredentials;
+import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactory;
+import io.github.mfvanek.pg.health.logger.DatabaseChecksOnCluster;
+import io.github.mfvanek.pg.health.logger.Exclusions;
+import io.github.mfvanek.pg.health.logger.HealthLogger;
+import io.github.mfvanek.pg.health.logger.KeyValueFileHealthLogger;
+import io.github.mfvanek.pg.model.context.PgContext;
+import io.github.mfvanek.pg.model.units.MemoryUnit;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +32,7 @@ public final class HealthDataCollector {
             .withIndexSizeThreshold(1, MemoryUnit.MB)
             .withTableSizeThreshold(1, MemoryUnit.MB)
             .build();
-        final HealthLogger healthLogger = new KeyValueFileHealthLogger(credentials, connectionFactory, DatabaseChecks::new);
+        final HealthLogger healthLogger = new KeyValueFileHealthLogger(credentials, connectionFactory, DatabaseChecksOnCluster::new);
         final PgContext context = PgContext.of("demo");
         final List<String> healthData = healthLogger.logAll(exclusions, context);
         healthData.forEach(log::info);

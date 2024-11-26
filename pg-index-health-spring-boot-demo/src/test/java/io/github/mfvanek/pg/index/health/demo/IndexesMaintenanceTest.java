@@ -7,24 +7,24 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
-import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnHost;
-import io.github.mfvanek.pg.common.maintenance.Diagnostic;
+import io.github.mfvanek.pg.core.checks.common.DatabaseCheckOnHost;
+import io.github.mfvanek.pg.core.checks.common.Diagnostic;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
-import io.github.mfvanek.pg.model.DbObject;
-import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.model.column.Column;
 import io.github.mfvanek.pg.model.column.ColumnWithSerialType;
 import io.github.mfvanek.pg.model.constraint.Constraint;
 import io.github.mfvanek.pg.model.constraint.ConstraintType;
 import io.github.mfvanek.pg.model.constraint.DuplicatedForeignKeys;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
+import io.github.mfvanek.pg.model.context.PgContext;
+import io.github.mfvanek.pg.model.dbobject.AnyObject;
+import io.github.mfvanek.pg.model.dbobject.DbObject;
+import io.github.mfvanek.pg.model.dbobject.PgObjectType;
 import io.github.mfvanek.pg.model.index.DuplicatedIndexes;
 import io.github.mfvanek.pg.model.index.Index;
 import io.github.mfvanek.pg.model.index.IndexWithColumns;
 import io.github.mfvanek.pg.model.index.IndexWithNulls;
 import io.github.mfvanek.pg.model.index.IndexWithSize;
-import io.github.mfvanek.pg.model.object.AnyObject;
-import io.github.mfvanek.pg.model.object.PgObjectType;
 import io.github.mfvanek.pg.model.predicates.SkipLiquibaseTablesPredicate;
 import io.github.mfvanek.pg.model.sequence.SequenceState;
 import io.github.mfvanek.pg.model.table.Table;
@@ -56,7 +56,7 @@ class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
     void checkPostgresVersion() {
         final String pgVersion = jdbcTemplate.queryForObject("select version();", String.class);
         assertThat(pgVersion)
-            .startsWith("PostgreSQL 16.4");
+            .startsWith("PostgreSQL 17.2");
     }
 
     @Test

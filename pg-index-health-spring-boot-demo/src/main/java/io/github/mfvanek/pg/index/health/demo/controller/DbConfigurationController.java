@@ -7,10 +7,10 @@
 
 package io.github.mfvanek.pg.index.health.demo.controller;
 
-import io.github.mfvanek.pg.common.management.DatabaseManagement;
-import io.github.mfvanek.pg.model.MemoryUnit;
-import io.github.mfvanek.pg.settings.PgParam;
-import io.github.mfvanek.pg.settings.ServerSpecification;
+import io.github.mfvanek.pg.health.checks.management.DatabaseManagement;
+import io.github.mfvanek.pg.model.settings.PgParam;
+import io.github.mfvanek.pg.model.settings.ServerSpecification;
+import io.github.mfvanek.pg.model.units.MemoryUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

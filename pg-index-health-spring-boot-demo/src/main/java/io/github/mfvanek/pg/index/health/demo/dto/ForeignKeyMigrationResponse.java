@@ -16,5 +16,4 @@ public record ForeignKeyMigrationResponse(
     List<ForeignKey> foreignKeysAfter,
     List<String> generatedMigrations
 ) {
-
 }

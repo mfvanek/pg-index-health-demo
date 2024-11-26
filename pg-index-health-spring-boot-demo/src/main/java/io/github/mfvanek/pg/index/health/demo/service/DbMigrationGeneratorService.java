@@ -7,11 +7,11 @@
 
 package io.github.mfvanek.pg.index.health.demo.service;
 
-import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnCluster;
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
+import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster;
 import io.github.mfvanek.pg.index.health.demo.dto.ForeignKeyMigrationResponse;
-import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
+import io.github.mfvanek.pg.model.context.PgContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

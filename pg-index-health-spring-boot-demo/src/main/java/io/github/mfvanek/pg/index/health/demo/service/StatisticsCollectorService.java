@@ -7,7 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.service;
 
-import io.github.mfvanek.pg.common.management.DatabaseManagement;
+import io.github.mfvanek.pg.health.checks.management.DatabaseManagement;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

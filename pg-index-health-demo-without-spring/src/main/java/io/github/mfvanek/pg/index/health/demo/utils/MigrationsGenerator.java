@@ -7,16 +7,16 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
-import io.github.mfvanek.pg.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
-import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnCluster;
-import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
+import io.github.mfvanek.pg.connection.factory.ConnectionCredentials;
+import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactory;
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
 import io.github.mfvanek.pg.generator.ForeignKeyMigrationGenerator;
 import io.github.mfvanek.pg.generator.GeneratingOptions;
-import io.github.mfvanek.pg.model.PgContext;
+import io.github.mfvanek.pg.health.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
+import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
+import io.github.mfvanek.pg.model.context.PgContext;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;

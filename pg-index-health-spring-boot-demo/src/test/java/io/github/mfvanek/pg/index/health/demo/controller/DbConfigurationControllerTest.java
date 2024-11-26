@@ -8,8 +8,8 @@
 package io.github.mfvanek.pg.index.health.demo.controller;
 
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
-import io.github.mfvanek.pg.settings.PgParam;
-import io.github.mfvanek.pg.settings.PgParamImpl;
+import io.github.mfvanek.pg.model.settings.PgParam;
+import io.github.mfvanek.pg.model.settings.PgParamImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 

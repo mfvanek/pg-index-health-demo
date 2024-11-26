@@ -7,7 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
-import io.github.mfvanek.pg.common.maintenance.Diagnostic;
+import io.github.mfvanek.pg.core.checks.common.Diagnostic;
 import io.github.mfvanek.pg.index.health.demo.support.LogsAwareTestBase;
 import io.github.mfvanek.pg.index.health.demo.utils.HealthDataCollector;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;

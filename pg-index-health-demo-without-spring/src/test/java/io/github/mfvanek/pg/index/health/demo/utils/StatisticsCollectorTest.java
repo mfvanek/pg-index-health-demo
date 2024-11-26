@@ -7,8 +7,8 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
+import io.github.mfvanek.pg.core.utils.ClockHolder;
 import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
-import io.github.mfvanek.pg.utils.ClockHolder;
 import org.junit.jupiter.api.Test;
 
 import java.time.Clock;

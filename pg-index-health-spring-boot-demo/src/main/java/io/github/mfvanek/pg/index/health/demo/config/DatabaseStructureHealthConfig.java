@@ -7,20 +7,20 @@
 
 package io.github.mfvanek.pg.index.health.demo.config;
 
-import io.github.mfvanek.pg.common.health.logger.HealthLogger;
-import io.github.mfvanek.pg.common.health.logger.StandardHealthLogger;
-import io.github.mfvanek.pg.common.maintenance.DatabaseChecks;
-import io.github.mfvanek.pg.common.management.DatabaseManagement;
-import io.github.mfvanek.pg.common.management.DatabaseManagementImpl;
-import io.github.mfvanek.pg.connection.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactoryImpl;
-import io.github.mfvanek.pg.connection.PgConnectionFactoryImpl;
 import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
-import io.github.mfvanek.pg.model.PgContext;
-import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
-import io.github.mfvanek.pg.statistics.maintenance.StatisticsMaintenanceOnHostImpl;
+import io.github.mfvanek.pg.connection.factory.ConnectionCredentials;
+import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactory;
+import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactoryImpl;
+import io.github.mfvanek.pg.connection.factory.PgConnectionFactoryImpl;
+import io.github.mfvanek.pg.core.settings.ConfigurationMaintenanceOnHostImpl;
+import io.github.mfvanek.pg.core.statistics.StatisticsMaintenanceOnHostImpl;
+import io.github.mfvanek.pg.health.checks.management.DatabaseManagement;
+import io.github.mfvanek.pg.health.checks.management.DatabaseManagementImpl;
+import io.github.mfvanek.pg.health.logger.DatabaseChecksOnCluster;
+import io.github.mfvanek.pg.health.logger.HealthLogger;
+import io.github.mfvanek.pg.health.logger.StandardHealthLogger;
+import io.github.mfvanek.pg.model.context.PgContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -44,7 +44,7 @@ public class DatabaseStructureHealthConfig {
     @Bean
     public HealthLogger healthLogger(@Nonnull final ConnectionCredentials connectionCredentials,
                                      @Nonnull final HighAvailabilityPgConnectionFactory highAvailabilityPgConnectionFactory) {
-        return new StandardHealthLogger(connectionCredentials, highAvailabilityPgConnectionFactory, DatabaseChecks::new);
+        return new StandardHealthLogger(connectionCredentials, highAvailabilityPgConnectionFactory, DatabaseChecksOnCluster::new);
     }
 
     @Bean
