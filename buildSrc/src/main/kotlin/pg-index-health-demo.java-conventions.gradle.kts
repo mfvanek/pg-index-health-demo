@@ -22,7 +22,7 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.13.3"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.14.0"))
     implementation(platform("org.testcontainers:testcontainers-bom:1.20.4"))
 
     implementation("com.google.code.findbugs:jsr305:3.0.2")
@@ -69,7 +69,7 @@ lombok {
 }
 
 checkstyle {
-    toolVersion = "10.18.1"
+    toolVersion = "10.20.1"
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     maxWarnings = 0

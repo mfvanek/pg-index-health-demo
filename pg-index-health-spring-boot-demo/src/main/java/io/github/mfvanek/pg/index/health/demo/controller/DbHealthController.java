@@ -7,10 +7,10 @@
 
 package io.github.mfvanek.pg.index.health.demo.controller;
 
-import io.github.mfvanek.pg.common.health.logger.Exclusions;
-import io.github.mfvanek.pg.common.health.logger.HealthLogger;
-import io.github.mfvanek.pg.model.MemoryUnit;
-import io.github.mfvanek.pg.model.PgContext;
+import io.github.mfvanek.pg.health.logger.Exclusions;
+import io.github.mfvanek.pg.health.logger.HealthLogger;
+import io.github.mfvanek.pg.model.context.PgContext;
+import io.github.mfvanek.pg.model.units.MemoryUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

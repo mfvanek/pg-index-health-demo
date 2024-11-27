@@ -9,7 +9,7 @@ plugins {
 
 allprojects {
     group = "io.github.mfvanek"
-    version = "0.13.3"
+    version = "0.14.0"
 
     repositories {
         mavenLocal()

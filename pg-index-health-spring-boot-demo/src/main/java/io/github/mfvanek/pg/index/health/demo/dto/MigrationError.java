@@ -11,5 +11,4 @@ public record MigrationError(
     int statusCode,
     String message
 ) {
-
 }

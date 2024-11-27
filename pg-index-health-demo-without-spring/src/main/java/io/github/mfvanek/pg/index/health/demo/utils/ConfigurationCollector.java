@@ -7,18 +7,18 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
-import io.github.mfvanek.pg.common.management.DatabaseManagement;
-import io.github.mfvanek.pg.common.management.DatabaseManagementImpl;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
-import io.github.mfvanek.pg.connection.PgHostImpl;
-import io.github.mfvanek.pg.model.MemoryUnit;
-import io.github.mfvanek.pg.settings.PgParam;
-import io.github.mfvanek.pg.settings.ServerSpecification;
-import io.github.mfvanek.pg.settings.maintenance.ConfigurationMaintenanceOnHostImpl;
-import io.github.mfvanek.pg.statistics.maintenance.StatisticsMaintenanceOnHostImpl;
+import io.github.mfvanek.pg.connection.host.PgHostImpl;
+import io.github.mfvanek.pg.core.settings.ConfigurationMaintenanceOnHostImpl;
+import io.github.mfvanek.pg.core.statistics.StatisticsMaintenanceOnHostImpl;
+import io.github.mfvanek.pg.health.checks.management.DatabaseManagement;
+import io.github.mfvanek.pg.health.checks.management.DatabaseManagementImpl;
+import io.github.mfvanek.pg.model.settings.PgParam;
+import io.github.mfvanek.pg.model.settings.ServerSpecification;
+import io.github.mfvanek.pg.model.units.MemoryUnit;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 

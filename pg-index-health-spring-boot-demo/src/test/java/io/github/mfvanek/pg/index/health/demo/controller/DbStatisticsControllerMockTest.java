@@ -7,7 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.controller;
 
-import io.github.mfvanek.pg.common.management.DatabaseManagement;
+import io.github.mfvanek.pg.health.checks.management.DatabaseManagement;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

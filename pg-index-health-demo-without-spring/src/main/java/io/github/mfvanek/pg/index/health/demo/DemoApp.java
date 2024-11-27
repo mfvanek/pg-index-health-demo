@@ -7,11 +7,11 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
-import io.github.mfvanek.pg.connection.ConnectionCredentials;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactory;
-import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionFactoryImpl;
-import io.github.mfvanek.pg.connection.PgConnectionFactoryImpl;
 import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
+import io.github.mfvanek.pg.connection.factory.ConnectionCredentials;
+import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactory;
+import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactoryImpl;
+import io.github.mfvanek.pg.connection.factory.PgConnectionFactoryImpl;
 import io.github.mfvanek.pg.index.health.demo.utils.Consts;
 import io.github.mfvanek.pg.index.health.demo.utils.HealthDataCollector;
 import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;

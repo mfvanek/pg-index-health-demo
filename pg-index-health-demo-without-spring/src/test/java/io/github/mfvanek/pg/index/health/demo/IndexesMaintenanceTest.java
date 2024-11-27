@@ -7,48 +7,48 @@
 
 package io.github.mfvanek.pg.index.health.demo;
 
-import io.github.mfvanek.pg.checks.host.BtreeIndexesOnArrayColumnsCheckOnHost;
-import io.github.mfvanek.pg.checks.host.ColumnsWithJsonTypeCheckOnHost;
-import io.github.mfvanek.pg.checks.host.ColumnsWithSerialTypesCheckOnHost;
-import io.github.mfvanek.pg.checks.host.ColumnsWithoutDescriptionCheckOnHost;
-import io.github.mfvanek.pg.checks.host.DuplicatedForeignKeysCheckOnHost;
-import io.github.mfvanek.pg.checks.host.DuplicatedIndexesCheckOnHost;
-import io.github.mfvanek.pg.checks.host.ForeignKeysNotCoveredWithIndexCheckOnHost;
-import io.github.mfvanek.pg.checks.host.ForeignKeysWithUnmatchedColumnTypeCheckOnHost;
-import io.github.mfvanek.pg.checks.host.FunctionsWithoutDescriptionCheckOnHost;
-import io.github.mfvanek.pg.checks.host.IndexesWithBooleanCheckOnHost;
-import io.github.mfvanek.pg.checks.host.IndexesWithNullValuesCheckOnHost;
-import io.github.mfvanek.pg.checks.host.IntersectedForeignKeysCheckOnHost;
-import io.github.mfvanek.pg.checks.host.IntersectedIndexesCheckOnHost;
-import io.github.mfvanek.pg.checks.host.InvalidIndexesCheckOnHost;
-import io.github.mfvanek.pg.checks.host.NotValidConstraintsCheckOnHost;
-import io.github.mfvanek.pg.checks.host.PossibleObjectNameOverflowCheckOnHost;
-import io.github.mfvanek.pg.checks.host.PrimaryKeysWithSerialTypesCheckOnHost;
-import io.github.mfvanek.pg.checks.host.SequenceOverflowCheckOnHost;
-import io.github.mfvanek.pg.checks.host.TablesNotLinkedToOthersCheckOnHost;
-import io.github.mfvanek.pg.checks.host.TablesWithoutDescriptionCheckOnHost;
-import io.github.mfvanek.pg.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
-import io.github.mfvanek.pg.common.maintenance.CheckTypeAware;
-import io.github.mfvanek.pg.common.maintenance.DatabaseCheckOnHost;
-import io.github.mfvanek.pg.common.maintenance.Diagnostic;
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
+import io.github.mfvanek.pg.core.checks.common.CheckTypeAware;
+import io.github.mfvanek.pg.core.checks.common.DatabaseCheckOnHost;
+import io.github.mfvanek.pg.core.checks.common.Diagnostic;
+import io.github.mfvanek.pg.core.checks.host.BtreeIndexesOnArrayColumnsCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.ColumnsWithJsonTypeCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.ColumnsWithSerialTypesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.ColumnsWithoutDescriptionCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.DuplicatedForeignKeysCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.DuplicatedIndexesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.ForeignKeysNotCoveredWithIndexCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.ForeignKeysWithUnmatchedColumnTypeCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.FunctionsWithoutDescriptionCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.IndexesWithBooleanCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.IndexesWithNullValuesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.IntersectedForeignKeysCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.IntersectedIndexesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.InvalidIndexesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.NotValidConstraintsCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.PossibleObjectNameOverflowCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.PrimaryKeysWithSerialTypesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.SequenceOverflowCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.TablesNotLinkedToOthersCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.TablesWithoutDescriptionCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
 import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
-import io.github.mfvanek.pg.model.DbObject;
-import io.github.mfvanek.pg.model.PgContext;
 import io.github.mfvanek.pg.model.column.Column;
 import io.github.mfvanek.pg.model.column.ColumnWithSerialType;
 import io.github.mfvanek.pg.model.constraint.Constraint;
 import io.github.mfvanek.pg.model.constraint.ConstraintType;
 import io.github.mfvanek.pg.model.constraint.DuplicatedForeignKeys;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
+import io.github.mfvanek.pg.model.context.PgContext;
+import io.github.mfvanek.pg.model.dbobject.AnyObject;
+import io.github.mfvanek.pg.model.dbobject.DbObject;
+import io.github.mfvanek.pg.model.dbobject.PgObjectType;
 import io.github.mfvanek.pg.model.index.DuplicatedIndexes;
 import io.github.mfvanek.pg.model.index.Index;
 import io.github.mfvanek.pg.model.index.IndexWithColumns;
 import io.github.mfvanek.pg.model.index.IndexWithNulls;
 import io.github.mfvanek.pg.model.index.IndexWithSize;
-import io.github.mfvanek.pg.model.object.AnyObject;
-import io.github.mfvanek.pg.model.object.PgObjectType;
 import io.github.mfvanek.pg.model.predicates.SkipLiquibaseTablesPredicate;
 import io.github.mfvanek.pg.model.sequence.SequenceState;
 import io.github.mfvanek.pg.model.table.Table;
@@ -112,7 +112,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
             try (ResultSet resultSet = statement.executeQuery("select version();")) {
                 resultSet.next();
                 final String pgVersion = resultSet.getString(1);
-                assertThat(pgVersion).startsWith("PostgreSQL 16.4");
+                assertThat(pgVersion).startsWith("PostgreSQL 17.2");
             }
         }
     }
