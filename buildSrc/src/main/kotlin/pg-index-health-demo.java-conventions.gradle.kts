@@ -22,7 +22,7 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.14.0"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.14.1"))
     implementation(platform("org.testcontainers:testcontainers-bom:1.20.4"))
 
     implementation("com.google.code.findbugs:jsr305:3.0.2")
