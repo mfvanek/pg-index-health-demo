@@ -6,13 +6,13 @@ create sequence if not exists demo.buyer_seq;
 --changeset ivan.vakhrushev:2020.01.01:buyer.table
 create table if not exists demo.buyer
 (
-    id          bigint primary key default nextval('demo.buyer_seq'),
-    first_name  varchar(255) not null,
-    last_name   varchar(255) not null,
+    id bigint primary key default nextval('demo.buyer_seq'),
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
     middle_name varchar(255),
-    phone       varchar(20)  not null,
-    email       varchar(50)  not null,
-    ip_address  varchar(100)
+    phone varchar(20) not null,
+    email varchar(50) not null,
+    ip_address varchar(100)
 );
 
 --changeset ivan.vakhrushev:2020.01.01:buyer.indexes

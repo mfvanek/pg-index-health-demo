@@ -3,10 +3,10 @@
 --changeset vadim.khizhin:2024.06.24:courier.table
 create table if not exists demo.courier (
     id bigserial primary key,
-    first_name  varchar(255) not null,
-    last_name   varchar(255) not null,
-    phone       varchar(20)  not null,
-    email       varchar(50)  not null
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
+    phone varchar(20) not null,
+    email varchar(50) not null
 );
 
 comment on table demo.courier is 'Information about couriers that deliver orders';

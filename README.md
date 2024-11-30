@@ -40,3 +40,33 @@ With **pg-index-health** library you will be able to:
 3. [analyze your database configuration](https://github.com/mfvanek/pg-index-health-demo/blob/master/src/main/java/io/github/mfvanek/pg/index/health/demo/ConfigurationDemoApp.java) to prevent using of default values for important options;
 4. [manage your database statistics](https://github.com/mfvanek/pg-index-health-demo/blob/master/src/main/java/io/github/mfvanek/pg/index/health/demo/StatisticsDemoApp.java) in production environment;
 5. [generate migrations](https://github.com/mfvanek/pg-index-health-demo/blob/master/src/main/java/io/github/mfvanek/pg/index/health/demo/DemoApp.java) to fix your database structure.
+
+## Local development
+
+### Linting
+
+#### macOS/Linux
+
+To run super-linter locally:
+
+```shell
+docker run \
+  -e RUN_LOCAL=true \
+  -e USE_FIND_ALGORITHM=true \
+  -e VALIDATE_SQLFLUFF=true \
+  -v $(pwd):/tmp/lint \
+  ghcr.io/super-linter/super-linter:slim-v7.1.0
+```
+
+#### Windows
+
+Use `cmd` on Windows:
+
+```shell
+docker run ^
+  -e RUN_LOCAL=true ^
+  -e USE_FIND_ALGORITHM=true ^
+  -e VALIDATE_SQLFLUFF=true ^
+  -v "%cd%":/tmp/lint ^
+  ghcr.io/super-linter/super-linter:slim-v7.1.0
+```
