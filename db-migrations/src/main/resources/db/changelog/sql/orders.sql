@@ -6,13 +6,13 @@ create sequence if not exists demo.orders_seq;
 --changeset ivan.vakhrushev:2020.01.01:orders.table
 create table if not exists demo.orders
 (
-    id          bigint primary key default nextval('demo.orders_seq'),
-    user_id     bigint         not null,
-    shop_id     bigint         not null,
-    status      int            not null,
-    created_at  timestamp      not null,
+    id bigint primary key default nextval('demo.orders_seq'),
+    user_id bigint not null,
+    shop_id bigint not null,
+    status int not null,
+    created_at timestamp not null,
     order_total decimal(22, 2) not null,
-    buyer_id    bigint         not null references demo.buyer (id)
+    buyer_id bigint not null references demo.buyer (id)
 );
 
 --changeset ivan.vakhrushev:2022.07.10:orders.comments.on.table.and.columns
@@ -33,6 +33,6 @@ comment on column demo.orders.preorder is 'Is it preorder';
 create index concurrently if not exists i_orders_preorder on demo.orders (preorder);
 
 --changeset vadim.khizhin:2024.06.24:orders.add.courier_id.field.with.foreign.key
-alter table demo.orders add column courier_id bigint references demo.courier(id);
-create index on demo.orders(courier_id) where courier_id is not null;
+alter table demo.orders add column courier_id bigint references demo.courier (id);
+create index on demo.orders (courier_id) where courier_id is not null;
 comment on column demo.orders.courier_id is 'Identifier of courier that should deliver the order';
