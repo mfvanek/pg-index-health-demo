@@ -24,8 +24,8 @@ create index if not exists i_buyer_names on demo.buyer (first_name, last_name, m
 --changeset ivan.vakhrushev:2020.01.02:populate.data
 insert into demo.buyer (first_name, last_name, phone, email)
 values ('John', 'Smith', '89201213456', 'john@example.com'),
-    ('Mary', 'Smith', '89201213457', 'hello@example.com'),
-    ('Anna', 'Smith', '89201213458', 'hello@example.com');
+('Mary', 'Smith', '89201213457', 'hello@example.com'),
+('Anna', 'Smith', '89201213458', 'hello@example.com');
 
 --changeset ivan.vakhrushev:2020.01.02:create.unique.index.on.email runInTransaction:false failOnError:false
 create unique index concurrently if not exists i_buyer_email on demo.buyer (email);

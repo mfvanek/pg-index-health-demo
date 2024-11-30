@@ -18,4 +18,4 @@ comment on column demo.courier.email is 'Courier''s email address';
 
 --changeset ivan.vakhrushev:2024.10.20:courier.indexes runInTransaction:false
 create unique index concurrently if not exists idx_courier_phone_and_email_should_be_unique_very_long_name_that_will_be_truncated
-    on demo.courier (phone, email);
+on demo.courier (phone, email);

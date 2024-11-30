@@ -20,7 +20,13 @@ alter table if exists demo.payment add column num smallint not null default next
 
 --changeset ivan.vakhrushev:2020.01.02:payment.populate.data
 insert into demo.payment
-select data.id, null, 1, now(), 1.1, '{ " payment": { "result": "success", "date": "2022-05-27T18:31:42" } }'
+select
+    data.id,
+    null,
+    1,
+    now(),
+    1.1,
+    '{ " payment": { "result": "success", "date": "2022-05-27T18:31:42" } }'
 from generate_series(1, 30000) as data(id);
 
 --changeset ivan.vakhrushev:2022.07.10:payment.comments.on.table.and.columns
