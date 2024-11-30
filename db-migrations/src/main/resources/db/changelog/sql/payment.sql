@@ -21,13 +21,13 @@ alter table if exists demo.payment add column num smallint not null default next
 --changeset ivan.vakhrushev:2020.01.02:payment.populate.data
 insert into demo.payment
 select
-    ids.id as id,
+    ids.id,
     null as order_id,
     1 as status,
     now() as created_at,
     1.1 as payment_total,
     '{ " payment": { "result": "success", "date": "2022-05-27T18:31:42" } }' as info
-from generate_series(1, 30000) as ids (id);
+from generate_series(1, 30000) ids (id);
 
 --changeset ivan.vakhrushev:2022.07.10:payment.comments.on.table.and.columns
 comment on table demo.payment is 'Information about the buyer''s payments';
