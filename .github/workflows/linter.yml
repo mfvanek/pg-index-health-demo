@@ -23,5 +23,4 @@ jobs:
                     VALIDATE_ALL_CODEBASE: false
                     VALIDATE_SQLFLUFF: true
                     DEFAULT_BRANCH: master
-                    FILTER_REGEX_INCLUDE: ^db-migrations/src/main/resources/db/changelog/sql/
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
