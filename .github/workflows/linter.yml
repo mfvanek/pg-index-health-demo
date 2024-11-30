@@ -8,6 +8,7 @@ on:
 
 jobs:
     build:
+        name: Lint SQL Migrations
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout Code
