@@ -74,7 +74,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     private static final String ORDERS_TABLE = "demo.orders";
     private static final String ORDER_ID_COLUMN = "order_id";
 
-    private final PgContext demoSchema = PgContext.of("demo");
+    private final PgContext ctx = PgContext.of("demo");
     private final List<DatabaseCheckOnHost<? extends DbObject>> checks;
 
     IndexesMaintenanceTest() {
@@ -142,7 +142,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
             .hasSize(Diagnostic.values().length - SKIPPED_CHECKS_COUNT);
 
         checks.forEach(check -> {
-            final ListAssert<? extends DbObject> checksAssert = assertThat(check.check(demoSchema))
+            final ListAssert<? extends DbObject> checksAssert = assertThat(check.check(ctx))
                 .as(check.getDiagnostic().name());
 
             switch (check.getDiagnostic()) {
@@ -150,15 +150,15 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                     .asInstanceOf(list(Index.class))
                     .hasSize(1)
                     // HOW TO FIX: drop index concurrently, fix data in table, then create index concurrently again
-                    .containsExactly(Index.of(BUYER_TABLE, "demo.i_buyer_email"));
+                    .containsExactly(Index.of(ctx, BUYER_TABLE, "i_buyer_email"));
 
                 case DUPLICATED_INDEXES -> checksAssert
                     .asInstanceOf(list(DuplicatedIndexes.class))
                     .hasSize(1)
                     // HOW TO FIX: do not manually create index for column with unique constraint
                     .containsExactly(DuplicatedIndexes.of(
-                        IndexWithSize.of(ORDER_ITEM_TABLE, "demo.i_order_item_sku_order_id_unique", 8_192L),
-                        IndexWithSize.of(ORDER_ITEM_TABLE, "demo.order_item_sku_order_id_key", 8_192L)));
+                        IndexWithSize.of(ctx, ORDER_ITEM_TABLE, "i_order_item_sku_order_id_unique"),
+                        IndexWithSize.of(ctx, ORDER_ITEM_TABLE, "order_item_sku_order_id_key")));
 
                 case INTERSECTED_INDEXES -> checksAssert
                     .asInstanceOf(list(DuplicatedIndexes.class))
@@ -166,11 +166,11 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                     // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
                     .containsExactlyInAnyOrder(
                         DuplicatedIndexes.of(
-                            IndexWithSize.of(BUYER_TABLE, "demo.buyer_pkey", 1L),
-                            IndexWithSize.of(BUYER_TABLE, "demo.i_buyer_id_phone", 1L)),
+                            IndexWithSize.of(ctx, BUYER_TABLE, "demo.buyer_pkey"),
+                            IndexWithSize.of(ctx, BUYER_TABLE, "demo.i_buyer_id_phone")),
                         DuplicatedIndexes.of(
-                            IndexWithSize.of(BUYER_TABLE, "demo.i_buyer_first_name", 1L),
-                            IndexWithSize.of(BUYER_TABLE, "demo.i_buyer_names", 1L)));
+                            IndexWithSize.of(ctx, BUYER_TABLE, "demo.i_buyer_first_name"),
+                            IndexWithSize.of(ctx, BUYER_TABLE, "demo.i_buyer_names")));
 
                 case FOREIGN_KEYS_WITHOUT_INDEX -> checksAssert
                     .asInstanceOf(list(ForeignKey.class))
@@ -187,13 +187,13 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                     .asInstanceOf(list(Table.class))
                     .hasSize(1)
                     // HOW TO FIX: add primary key to the table
-                    .containsExactly(Table.of("demo.payment", 1L));
+                    .containsExactly(Table.of(ctx, "payment"));
 
                 case INDEXES_WITH_NULL_VALUES -> checksAssert
                     .asInstanceOf(list(IndexWithNulls.class))
                     .hasSize(1)
                     // HOW TO FIX: consider excluding null values from index if it's possible
-                    .containsExactly(IndexWithNulls.of(BUYER_TABLE, "demo.i_buyer_middle_name", 1L, "middle_name"));
+                    .containsExactly(IndexWithNulls.of(ctx, BUYER_TABLE, "demo.i_buyer_middle_name", "middle_name"));
 
                 case INDEXES_WITH_BOOLEAN -> checksAssert
                     .asInstanceOf(list(IndexWithColumns.class))
@@ -215,7 +215,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
                 case SEQUENCE_OVERFLOW -> checksAssert
                     .asInstanceOf(list(SequenceState.class))
                     .hasSize(1)
-                    .containsExactly(SequenceState.of("demo.payment_num_seq", "smallint", 8.44));
+                    .containsExactly(SequenceState.of(ctx, "payment_num_seq", "smallint", 8.44));
 
                 case PRIMARY_KEYS_WITH_SERIAL_TYPES -> checksAssert
                     .asInstanceOf(list(ColumnWithSerialType.class))
