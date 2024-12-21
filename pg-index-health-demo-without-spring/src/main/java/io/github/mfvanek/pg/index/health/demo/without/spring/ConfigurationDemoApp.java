@@ -5,10 +5,10 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo;
+package io.github.mfvanek.pg.index.health.demo.without.spring;
 
-import io.github.mfvanek.pg.index.health.demo.utils.ConfigurationCollector;
-import io.github.mfvanek.pg.index.health.demo.utils.Consts;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.ConfigurationCollector;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.Consts;
 import io.github.mfvanek.pg.testing.PostgreSqlContainerWrapper;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;

@@ -5,7 +5,7 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo.utils;
+package io.github.mfvanek.pg.index.health.demo.without.spring.utils;
 
 import lombok.experimental.UtilityClass;
 

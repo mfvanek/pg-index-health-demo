@@ -5,7 +5,7 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo.support;
+package io.github.mfvanek.pg.index.health.demo.without.spring.support;
 
 import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
 import io.github.mfvanek.pg.connection.factory.ConnectionCredentials;
@@ -14,8 +14,8 @@ import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFacto
 import io.github.mfvanek.pg.connection.factory.PgConnectionFactoryImpl;
 import io.github.mfvanek.pg.connection.host.PgHost;
 import io.github.mfvanek.pg.connection.host.PgHostImpl;
-import io.github.mfvanek.pg.index.health.demo.utils.Consts;
-import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.Consts;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.MigrationRunner;
 import io.github.mfvanek.pg.testing.PostgreSqlContainerWrapper;
 import org.junit.jupiter.api.BeforeAll;
 

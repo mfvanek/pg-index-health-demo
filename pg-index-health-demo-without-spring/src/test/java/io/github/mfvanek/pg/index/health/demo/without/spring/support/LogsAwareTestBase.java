@@ -5,7 +5,7 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo.support;
+package io.github.mfvanek.pg.index.health.demo.without.spring.support;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;

@@ -9,11 +9,11 @@
     </Match>
     <Match>
         <Bug pattern="MDM_THREAD_YIELD"/>
-        <Class name="io.github.mfvanek.pg.index.health.demo.utils.StatisticsCollector"/>
+        <Class name="io.github.mfvanek.pg.index.health.demo.without.spring.utils.StatisticsCollector"/>
     </Match>
     <Match>
         <Bug pattern="SIL_SQL_IN_LOOP"/>
-        <Class name="io.github.mfvanek.pg.index.health.demo.utils.MigrationsGenerator"/>
+        <Class name="io.github.mfvanek.pg.index.health.demo.without.spring.utils.MigrationsGenerator"/>
     </Match>
     <Match>
         <Bug pattern="PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS,SIL_SQL_IN_LOOP"/>

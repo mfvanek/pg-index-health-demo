@@ -5,12 +5,12 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo;
+package io.github.mfvanek.pg.index.health.demo.without.spring;
 
 import io.github.mfvanek.pg.core.checks.common.Diagnostic;
-import io.github.mfvanek.pg.index.health.demo.support.LogsAwareTestBase;
-import io.github.mfvanek.pg.index.health.demo.utils.HealthDataCollector;
-import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
+import io.github.mfvanek.pg.index.health.demo.without.spring.support.LogsAwareTestBase;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.HealthDataCollector;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.MigrationRunner;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
