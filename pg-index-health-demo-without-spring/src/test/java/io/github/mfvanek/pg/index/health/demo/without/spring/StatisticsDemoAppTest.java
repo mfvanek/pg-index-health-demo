@@ -5,10 +5,10 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo;
+package io.github.mfvanek.pg.index.health.demo.without.spring;
 
-import io.github.mfvanek.pg.index.health.demo.support.LogsAwareTestBase;
-import io.github.mfvanek.pg.index.health.demo.utils.StatisticsCollector;
+import io.github.mfvanek.pg.index.health.demo.without.spring.support.LogsAwareTestBase;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.StatisticsCollector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

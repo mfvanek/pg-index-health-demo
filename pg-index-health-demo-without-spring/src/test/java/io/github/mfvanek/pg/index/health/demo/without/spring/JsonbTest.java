@@ -5,9 +5,9 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo;
+package io.github.mfvanek.pg.index.health.demo.without.spring;
 
-import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
+import io.github.mfvanek.pg.index.health.demo.without.spring.support.DatabaseAwareTestBase;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.postgresql.util.PGobject;

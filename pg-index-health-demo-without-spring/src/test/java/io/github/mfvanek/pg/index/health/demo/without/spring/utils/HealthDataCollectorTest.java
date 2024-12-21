@@ -5,11 +5,11 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo.utils;
+package io.github.mfvanek.pg.index.health.demo.without.spring.utils;
 
 import io.github.mfvanek.pg.core.checks.common.Diagnostic;
 import io.github.mfvanek.pg.core.utils.ClockHolder;
-import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
+import io.github.mfvanek.pg.index.health.demo.without.spring.support.DatabaseAwareTestBase;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

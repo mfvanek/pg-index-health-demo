@@ -5,17 +5,17 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo;
+package io.github.mfvanek.pg.index.health.demo.without.spring;
 
 import io.github.mfvanek.pg.connection.PrimaryHostDeterminerImpl;
 import io.github.mfvanek.pg.connection.factory.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactory;
 import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactoryImpl;
 import io.github.mfvanek.pg.connection.factory.PgConnectionFactoryImpl;
-import io.github.mfvanek.pg.index.health.demo.utils.Consts;
-import io.github.mfvanek.pg.index.health.demo.utils.HealthDataCollector;
-import io.github.mfvanek.pg.index.health.demo.utils.MigrationRunner;
-import io.github.mfvanek.pg.index.health.demo.utils.MigrationsGenerator;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.Consts;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.HealthDataCollector;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.MigrationRunner;
+import io.github.mfvanek.pg.index.health.demo.without.spring.utils.MigrationsGenerator;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import io.github.mfvanek.pg.testing.PostgreSqlContainerWrapper;
 import lombok.SneakyThrows;

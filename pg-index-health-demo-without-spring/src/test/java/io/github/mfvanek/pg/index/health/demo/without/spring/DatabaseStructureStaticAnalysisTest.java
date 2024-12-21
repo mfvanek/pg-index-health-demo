@@ -5,7 +5,7 @@
  * Licensed under the Apache License 2.0
  */
 
-package io.github.mfvanek.pg.index.health.demo;
+package io.github.mfvanek.pg.index.health.demo.without.spring;
 
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
@@ -33,7 +33,7 @@ import io.github.mfvanek.pg.core.checks.host.SequenceOverflowCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesNotLinkedToOthersCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
-import io.github.mfvanek.pg.index.health.demo.support.DatabaseAwareTestBase;
+import io.github.mfvanek.pg.index.health.demo.without.spring.support.DatabaseAwareTestBase;
 import io.github.mfvanek.pg.model.column.Column;
 import io.github.mfvanek.pg.model.column.ColumnWithSerialType;
 import io.github.mfvanek.pg.model.constraint.Constraint;
