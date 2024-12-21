@@ -66,7 +66,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.list;
 
 @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
-class IndexesMaintenanceTest extends DatabaseAwareTestBase {
+class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
 
     private static final int SKIPPED_CHECKS_COUNT = 4; // indexes with bloat, tables with bloat, unused indexes, tables with missing indexes
     private static final String BUYER_TABLE = "demo.buyer";
@@ -77,7 +77,7 @@ class IndexesMaintenanceTest extends DatabaseAwareTestBase {
     private final PgContext ctx = PgContext.of("demo");
     private final List<DatabaseCheckOnHost<? extends DbObject>> checks;
 
-    IndexesMaintenanceTest() {
+    DatabaseStructureStaticAnalysisTest() {
         final PgConnection pgConnection = PgConnectionImpl.of(getDataSource(), getHost());
         this.checks = List.of(
             new InvalidIndexesCheckOnHost(pgConnection),

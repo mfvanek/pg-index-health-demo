@@ -38,7 +38,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.list;
 
-class IndexesMaintenanceTest extends BasePgIndexHealthDemoSpringBootTest {
+class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBootTest {
 
     private static final String BUYER_TABLE = "demo.buyer";
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
