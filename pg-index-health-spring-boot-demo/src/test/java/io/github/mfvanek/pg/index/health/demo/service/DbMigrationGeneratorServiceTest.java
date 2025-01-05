@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2024. Ivan Vakhrushev and others.
+ * Copyright (c) 2019-2025. Ivan Vakhrushev and others.
  * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
@@ -14,9 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -30,7 +30,7 @@ class DbMigrationGeneratorServiceTest extends BasePgIndexHealthDemoSpringBootTes
     @Autowired
     DbMigrationGeneratorService dbMigrationGeneratorService;
 
-    @MockBean
+    @MockitoBean
     DbMigrationGenerator<ForeignKey> dbMigrationGenerator;
 
     @Test

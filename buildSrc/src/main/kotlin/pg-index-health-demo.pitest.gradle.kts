@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019-2025. Ivan Vakhrushev and others.
+ * https://github.com/mfvanek/pg-index-health-demo
+ *
+ * Licensed under the Apache License 2.0
+ */
+
 import info.solidsoft.gradle.pitest.PitestTask
 
 plugins {
@@ -14,7 +21,7 @@ dependencies {
 pitest {
     verbosity = "DEFAULT"
     junit5PluginVersion = "1.2.1"
-    pitestVersion = "1.17.1"
+    pitestVersion = "1.17.3"
     threads = 4
     if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
         outputFormats.set(setOf("stryker-dashboard"))

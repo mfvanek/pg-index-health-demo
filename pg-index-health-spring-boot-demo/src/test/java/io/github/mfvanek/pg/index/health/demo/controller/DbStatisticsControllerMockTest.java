@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2024. Ivan Vakhrushev and others.
+ * Copyright (c) 2019-2025. Ivan Vakhrushev and others.
  * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
@@ -12,15 +12,15 @@ import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringB
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DbStatisticsControllerMockTest extends BasePgIndexHealthDemoSpringBootTest {
 
-    @MockBean
+    @MockitoBean
     private DatabaseManagement databaseManagement;
 
     @ParameterizedTest

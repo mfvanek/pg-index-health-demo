@@ -36,27 +36,16 @@ management:
     server:
         port: 8090
     endpoints:
-        enabled-by-default: false
         web.exposure.include: health,prometheus,liquibase,info,threaddump,heapdump,openapi,swaggerui
+        access:
+            default: read_only
     endpoint:
         health:
-            enabled: true
             probes.enabled: true
             group:
                 readiness:
                     include: readinessState,db
                     additional-path: server:/readyz # In order to collect probes from application main port
-                    # show-components: always
-        prometheus:
-            enabled: true
-        liquibase:
-            enabled: true
-        info:
-            enabled: true
-        threaddump:
-            enabled: true
-        heapdump:
-            enabled: true
     metrics:
         distribution:
             percentiles-histogram:

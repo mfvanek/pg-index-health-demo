@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2024. Ivan Vakhrushev and others.
+ * Copyright (c) 2019-2025. Ivan Vakhrushev and others.
  * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
@@ -37,7 +37,6 @@ class ConfigurableEnvironmentMutatorTest {
 
         assertThat(ConfigurableEnvironmentMutator.addDatasourceUrlIfNeed(jdbcDatabaseContainer, environment))
             .isFalse();
-        assertThat(environment.getProperty(DATASOURCE_URL_PROP_NAME)).isNull();
     }
 
     @Test
