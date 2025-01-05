@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019-2025. Ivan Vakhrushev and others.
+ * https://github.com/mfvanek/pg-index-health-demo
+ *
+ * Licensed under the Apache License 2.0
+ */
+
 import com.github.spotbugs.snom.Confidence
 import com.github.spotbugs.snom.Effort
 import com.github.spotbugs.snom.SpotBugsTask
