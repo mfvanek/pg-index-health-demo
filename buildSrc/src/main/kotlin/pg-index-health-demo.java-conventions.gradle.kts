@@ -36,7 +36,7 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.4")
 
     testImplementation(platform("org.junit:junit-bom:5.11.4"))
-    testImplementation(platform("org.assertj:assertj-bom:3.27.0"))
+    testImplementation(platform("org.assertj:assertj-bom:3.27.2"))
 
     errorprone("com.google.errorprone:error_prone_core:2.36.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.28")

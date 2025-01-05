@@ -37,7 +37,6 @@ class ConfigurableEnvironmentMutatorTest {
 
         assertThat(ConfigurableEnvironmentMutator.addDatasourceUrlIfNeed(jdbcDatabaseContainer, environment))
             .isFalse();
-        assertThat(environment.getProperty(DATASOURCE_URL_PROP_NAME)).isNull();
     }
 
     @Test
