@@ -29,7 +29,7 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.14.4"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.14.5"))
     implementation(platform("org.testcontainers:testcontainers-bom:1.20.4"))
 
     implementation("com.google.code.findbugs:jsr305:3.0.2")
@@ -72,7 +72,7 @@ tasks {
 }
 
 lombok {
-    version = "1.18.34"
+    version = "1.18.38"
 }
 
 checkstyle {
