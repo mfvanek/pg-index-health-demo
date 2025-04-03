@@ -29,19 +29,19 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.14.4"))
-    implementation(platform("org.testcontainers:testcontainers-bom:1.20.4"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.14.5"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.20.6"))
 
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.postgresql:postgresql:42.7.5")
 
-    testImplementation(platform("org.junit:junit-bom:5.11.4"))
-    testImplementation(platform("org.assertj:assertj-bom:3.27.2"))
+    testImplementation(platform("org.junit:junit-bom:5.12.1"))
+    testImplementation(platform("org.assertj:assertj-bom:3.27.3"))
 
-    errorprone("com.google.errorprone:error_prone_core:2.36.0")
+    errorprone("com.google.errorprone:error_prone_core:2.37.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.28")
 
-    spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.16")
+    spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.17")
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.13.0")
     spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.9")
@@ -72,11 +72,11 @@ tasks {
 }
 
 lombok {
-    version = "1.18.34"
+    version = "1.18.38"
 }
 
 checkstyle {
-    toolVersion = "10.20.1"
+    toolVersion = "10.23.0"
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     maxWarnings = 0
@@ -84,7 +84,7 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.7.0"
+    toolVersion = "7.12.0"
     isConsoleOutput = true
     ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
     ruleSets = listOf()
