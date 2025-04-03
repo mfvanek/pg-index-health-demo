@@ -27,6 +27,7 @@ import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import javax.annotation.Nonnull;
 
+@SuppressWarnings("checkstyle:ClassDataAbstractionCoupling")
 @Configuration(proxyBeanMethods = false)
 public class DatabaseStructureHealthConfig {
 
