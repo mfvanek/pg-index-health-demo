@@ -13,5 +13,5 @@ dependencies {
     implementation("info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0")
     implementation("org.gradle:test-retry-gradle-plugin:1.6.2")
     implementation("io.freefair.gradle:lombok-plugin:8.13.1")
-    implementation("de.thetaphi:forbiddenapis:3.8")
+    implementation("de.thetaphi:forbiddenapis:3.9")
 }
