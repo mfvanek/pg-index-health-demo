@@ -67,7 +67,8 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
             "2000-01-01T00:00:00Z\tdb_indexes_health\tintersected_foreign_keys\t0",
             "2000-01-01T00:00:00Z\tdb_indexes_health\tpossible_object_name_overflow\t1",
             "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_not_linked_to_others\t0",
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tforeign_keys_with_unmatched_column_type\t1");
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tforeign_keys_with_unmatched_column_type\t1",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_with_zero_or_one_column\t0");
         final List<String> healthData = HealthDataCollector.collectHealthData(getConnectionFactory(), getConnectionCredentials());
         assertThat(healthData)
             .hasSameSizeAs(Diagnostic.values())

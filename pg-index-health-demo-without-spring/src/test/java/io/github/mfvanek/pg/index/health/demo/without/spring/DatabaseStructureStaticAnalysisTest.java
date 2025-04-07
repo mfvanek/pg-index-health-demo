@@ -31,6 +31,7 @@ import io.github.mfvanek.pg.core.checks.host.PossibleObjectNameOverflowCheckOnHo
 import io.github.mfvanek.pg.core.checks.host.PrimaryKeysWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.SequenceOverflowCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesNotLinkedToOthersCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.TablesWithZeroOrOneColumnCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
 import io.github.mfvanek.pg.index.health.demo.without.spring.support.DatabaseAwareTestBase;
@@ -100,7 +101,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             new IntersectedForeignKeysCheckOnHost(pgConnection),
             new PossibleObjectNameOverflowCheckOnHost(pgConnection),
             new TablesNotLinkedToOthersCheckOnHost(pgConnection),
-            new ForeignKeysWithUnmatchedColumnTypeCheckOnHost(pgConnection)
+            new ForeignKeysWithUnmatchedColumnTypeCheckOnHost(pgConnection),
+            new TablesWithZeroOrOneColumnCheckOnHost(pgConnection)
         );
     }
 
