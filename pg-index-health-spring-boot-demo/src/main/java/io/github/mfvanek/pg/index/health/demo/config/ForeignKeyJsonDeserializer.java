@@ -15,12 +15,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.github.mfvanek.pg.model.column.Column;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
+import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-//@JsonComponent
+@JsonComponent
 public class ForeignKeyJsonDeserializer extends JsonDeserializer<ForeignKey> {
 
     @Override
