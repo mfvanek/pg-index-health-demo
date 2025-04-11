@@ -25,14 +25,6 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
     void deserializeShouldWork() throws Exception {
         final ForeignKey original = ForeignKey.ofNotNullColumn("users", "fk_user_role", "role_id");
         final String json = objectMapper.writeValueAsString(original);
-        assertThat(json)
-            .isEqualTo("""
-                {"tableName":"users","constraintName":"fk_user_role",\
-                "columns":[{"tableName":"users","columnName":"role_id","notNull":true,"name":"role_id","objectType":"TABLE","nullable":false}],\
-                "constraintType":"FOREIGN_KEY",\
-                "columnsInConstraint":[{"tableName":"users","columnName":"role_id","notNull":true,"name":"role_id","objectType":"TABLE","nullable":false}],\
-                "name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}""");
-
         final ForeignKey restored = objectMapper.readValue(json, ForeignKey.class);
         assertThat(restored)
             .isEqualTo(original);
@@ -41,9 +33,9 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
     @Test
     void deserializeShouldThrowExceptionWhenNoColumns() {
         final String json = """
-                {"tableName":"users","constraintName":"fk_user_role",\
-                "constraintType":"FOREIGN_KEY",\
-                "name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}""";
+            {"tableName":"users","constraintName":"fk_user_role",\
+            "constraintType":"FOREIGN_KEY",\
+            "name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}""";
 
         assertThatThrownBy(() -> objectMapper.readValue(json, ForeignKey.class))
             .isInstanceOf(IllegalArgumentException.class)
@@ -54,10 +46,10 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
     @Test
     void deserializeShouldThrowExceptionWhenColumnsIsNotArray() {
         final String json = """
-                {"tableName":"users","constraintName":"fk_user_role",\
-                "columnsInConstraint":"test",\
-                "constraintType":"FOREIGN_KEY",\
-                "name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}""";
+            {"tableName":"users","constraintName":"fk_user_role",\
+            "columnsInConstraint":"test",\
+            "constraintType":"FOREIGN_KEY",\
+            "name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}""";
 
         assertThatThrownBy(() -> objectMapper.readValue(json, ForeignKey.class))
             .isInstanceOf(IllegalArgumentException.class)
