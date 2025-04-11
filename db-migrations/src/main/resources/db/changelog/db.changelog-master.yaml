@@ -2,7 +2,7 @@ databaseChangeLog:
     - include:
         file: db/changelog/sql/schema.sql
     - include:
-          file: db/changelog/sql/warehouse.sql
+        file: db/changelog/sql/warehouse.sql
     - include:
         file: db/changelog/sql/buyer.sql
     - include:
@@ -13,3 +13,5 @@ databaseChangeLog:
         file: db/changelog/sql/order_item.sql
     - include:
         file: db/changelog/sql/payment.sql
+    - include:
+        file: db/changelog/sql/dictionary.sql

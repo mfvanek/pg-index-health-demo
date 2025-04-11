@@ -28,6 +28,7 @@ import io.github.mfvanek.pg.model.index.IndexWithSize;
 import io.github.mfvanek.pg.model.predicates.SkipLiquibaseTablesPredicate;
 import io.github.mfvanek.pg.model.sequence.SequenceState;
 import io.github.mfvanek.pg.model.table.Table;
+import io.github.mfvanek.pg.model.table.TableWithColumns;
 import org.assertj.core.api.ListAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,7 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
     private static final String ORDERS_TABLE = "demo.orders";
     private static final String ORDER_ID_COLUMN = "order_id";
+    private static final String DICTIONARY_TABLE = "\"dictionary-to-delete\"";
 
     @Autowired
     private PgContext ctx;
@@ -123,9 +125,12 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
 
                     case TABLES_WITHOUT_PRIMARY_KEY -> checksAssert
                         .asInstanceOf(list(Table.class))
-                        .hasSize(1)
+                        .hasSize(2)
                         // HOW TO FIX: add primary key to the table
-                        .containsExactly(Table.of(ctx, "payment"));
+                        .containsExactly(
+                            Table.of(ctx, DICTIONARY_TABLE),
+                            Table.of(ctx, "payment")
+                        );
 
                     case INDEXES_WITH_NULL_VALUES -> checksAssert
                         .asInstanceOf(list(IndexWithNulls.class))
@@ -178,6 +183,21 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
                         .asInstanceOf(list(ForeignKey.class))
                         .hasSize(1)
                         .containsExactly(ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_warehouse_id_fk", "warehouse_id"));
+
+                    case TABLES_NOT_LINKED_TO_OTHERS -> checksAssert
+                        .asInstanceOf(list(Table.class))
+                        .hasSize(1)
+                        .containsExactly(Table.of(ctx, DICTIONARY_TABLE));
+
+                    case TABLES_WITH_ZERO_OR_ONE_COLUMN -> checksAssert
+                        .asInstanceOf(list(TableWithColumns.class))
+                        .hasSize(1)
+                        .containsExactly(TableWithColumns.withoutColumns(ctx, DICTIONARY_TABLE));
+
+                    case OBJECTS_NOT_FOLLOWING_NAMING_CONVENTION -> checksAssert
+                        .asInstanceOf(list(AnyObject.class))
+                        .hasSize(1)
+                        .containsExactly(AnyObject.ofType(ctx, DICTIONARY_TABLE, PgObjectType.TABLE));
 
                     default -> checksAssert.isEmpty();
                 }
