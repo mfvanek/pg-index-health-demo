@@ -13,6 +13,7 @@ import io.github.mfvanek.pg.core.checks.common.CheckTypeAware;
 import io.github.mfvanek.pg.core.checks.common.DatabaseCheckOnHost;
 import io.github.mfvanek.pg.core.checks.common.Diagnostic;
 import io.github.mfvanek.pg.core.checks.host.BtreeIndexesOnArrayColumnsCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.ColumnsNotFollowingNamingConventionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithJsonTypeCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithoutDescriptionCheckOnHost;
@@ -106,7 +107,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             new TablesNotLinkedToOthersCheckOnHost(pgConnection),
             new ForeignKeysWithUnmatchedColumnTypeCheckOnHost(pgConnection),
             new TablesWithZeroOrOneColumnCheckOnHost(pgConnection),
-            new ObjectsNotFollowingNamingConventionCheckOnHost(pgConnection)
+            new ObjectsNotFollowingNamingConventionCheckOnHost(pgConnection),
+            new ColumnsNotFollowingNamingConventionCheckOnHost(pgConnection)
         );
     }
 
@@ -262,8 +264,18 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
 
                 case OBJECTS_NOT_FOLLOWING_NAMING_CONVENTION -> checksAssert
                     .asInstanceOf(list(AnyObject.class))
+                    .hasSize(2)
+                    .containsExactly(
+                        AnyObject.ofType(ctx, "\"dictionary-to-delete_dict-id_seq\"", PgObjectType.SEQUENCE),
+                        AnyObject.ofType(ctx, DICTIONARY_TABLE, PgObjectType.TABLE)
+                    );
+
+                case COLUMNS_WITHOUT_DESCRIPTION, COLUMNS_NOT_FOLLOWING_NAMING_CONVENTION -> checksAssert
+                    .asInstanceOf(list(Column.class))
                     .hasSize(1)
-                    .containsExactly(AnyObject.ofType(ctx, DICTIONARY_TABLE, PgObjectType.TABLE));
+                    .containsExactly(
+                        Column.ofNotNull(ctx, DICTIONARY_TABLE, "\"dict-id\"")
+                    );
 
                 default -> checksAssert
                     .isEmpty();

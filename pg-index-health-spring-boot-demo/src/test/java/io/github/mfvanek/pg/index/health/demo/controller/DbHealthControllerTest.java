@@ -42,7 +42,7 @@ class DbHealthControllerTest extends BasePgIndexHealthDemoSpringBootTest {
                 "invalid_indexes:1",
                 "unused_indexes:0",
                 "tables_without_description:0",
-                "columns_without_description:0",
+                "columns_without_description:1",
                 "columns_with_json_type:0",
                 "columns_with_serial_types:0",
                 "functions_without_description:0",
@@ -57,6 +57,8 @@ class DbHealthControllerTest extends BasePgIndexHealthDemoSpringBootTest {
                 "tables_not_linked_to_others:0",
                 "foreign_keys_with_unmatched_column_type:1",
                 "tables_with_zero_or_one_column:0",
-                "objects_not_following_naming_convention:1");
+                "objects_not_following_naming_convention:2",
+                "columns_not_following_naming_convention:1"
+            );
     }
 }
