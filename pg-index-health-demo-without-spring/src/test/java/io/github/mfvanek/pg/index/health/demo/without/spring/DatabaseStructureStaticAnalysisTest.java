@@ -31,6 +31,7 @@ import io.github.mfvanek.pg.core.checks.host.NotValidConstraintsCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ObjectsNotFollowingNamingConventionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.PossibleObjectNameOverflowCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.PrimaryKeysWithSerialTypesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.PrimaryKeysWithVarcharCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.SequenceOverflowCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesNotLinkedToOthersCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithZeroOrOneColumnCheckOnHost;
@@ -108,7 +109,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             new ForeignKeysWithUnmatchedColumnTypeCheckOnHost(pgConnection),
             new TablesWithZeroOrOneColumnCheckOnHost(pgConnection),
             new ObjectsNotFollowingNamingConventionCheckOnHost(pgConnection),
-            new ColumnsNotFollowingNamingConventionCheckOnHost(pgConnection)
+            new ColumnsNotFollowingNamingConventionCheckOnHost(pgConnection),
+            new PrimaryKeysWithVarcharCheckOnHost(pgConnection)
         );
     }
 
