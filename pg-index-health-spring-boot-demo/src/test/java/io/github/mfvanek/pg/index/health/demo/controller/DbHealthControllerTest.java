@@ -59,7 +59,9 @@ class DbHealthControllerTest extends BasePgIndexHealthDemoSpringBootTest {
                 "tables_with_zero_or_one_column:0",
                 "objects_not_following_naming_convention:2",
                 "columns_not_following_naming_convention:1",
-                "primary_keys_with_varchar:0"
+                "primary_keys_with_varchar:0",
+                "columns_with_fixed_length_varchar:12",
+                "indexes_with_unnecessary_where_clause:0"
             );
     }
 }
