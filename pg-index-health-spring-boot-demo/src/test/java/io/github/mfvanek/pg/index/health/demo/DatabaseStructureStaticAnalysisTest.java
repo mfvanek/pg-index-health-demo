@@ -45,7 +45,8 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
     private static final String ORDERS_TABLE = "demo.orders";
     private static final String ORDER_ID_COLUMN = "order_id";
-    private static final String DICTIONARY_TABLE = "\"dictionary-to-delete\"";
+    private static final String DICTIONARY_TABLE = "demo.\"dictionary-to-delete\"";
+    private static final String COURIER_TABLE = "demo.courier";
 
     @Autowired
     private PgContext ctx;
@@ -72,7 +73,7 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
                 .isEmpty());
     }
 
-    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:LambdaBodyLength"})
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:LambdaBodyLength", "checkstyle:MethodLength"})
     @Test
     void databaseStructureCheckForDemoSchema() {
         assertThat(checks)
@@ -163,7 +164,7 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
                     case PRIMARY_KEYS_WITH_SERIAL_TYPES -> checksAssert
                         .asInstanceOf(list(ColumnWithSerialType.class))
                         .hasSize(1)
-                        .containsExactly(ColumnWithSerialType.ofBigSerial(Column.ofNotNull("demo.courier", "id"), "demo.courier_id_seq"));
+                        .containsExactly(ColumnWithSerialType.ofBigSerial(Column.ofNotNull(ctx, COURIER_TABLE, "id"), "demo.courier_id_seq"));
 
                     case DUPLICATED_FOREIGN_KEYS -> checksAssert
                         .asInstanceOf(list(DuplicatedForeignKeys.class))
@@ -207,6 +208,24 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
                         .hasSize(1)
                         .containsExactly(
                             Column.ofNotNull(ctx, DICTIONARY_TABLE, "\"dict-id\"")
+                        );
+
+                    case COLUMNS_WITH_FIXED_LENGTH_VARCHAR -> checksAssert
+                        .asInstanceOf(list(Column.class))
+                        .hasSize(12)
+                        .containsExactly(
+                            Column.ofNotNull(ctx, BUYER_TABLE, "email"),
+                            Column.ofNotNull(ctx, BUYER_TABLE, "first_name"),
+                            Column.ofNullable(ctx, BUYER_TABLE, "ip_address"),
+                            Column.ofNotNull(ctx, BUYER_TABLE, "last_name"),
+                            Column.ofNullable(ctx, BUYER_TABLE, "middle_name"),
+                            Column.ofNotNull(ctx, BUYER_TABLE, "phone"),
+                            Column.ofNotNull(ctx, COURIER_TABLE, "email"),
+                            Column.ofNotNull(ctx, COURIER_TABLE, "first_name"),
+                            Column.ofNotNull(ctx, COURIER_TABLE, "last_name"),
+                            Column.ofNotNull(ctx, COURIER_TABLE, "phone"),
+                            Column.ofNotNull(ctx, ORDER_ITEM_TABLE, "sku"),
+                            Column.ofNotNull(ctx, "warehouse", "name")
                         );
 
                     default -> checksAssert.isEmpty();

@@ -14,6 +14,7 @@ import io.github.mfvanek.pg.core.checks.common.DatabaseCheckOnHost;
 import io.github.mfvanek.pg.core.checks.common.Diagnostic;
 import io.github.mfvanek.pg.core.checks.host.BtreeIndexesOnArrayColumnsCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsNotFollowingNamingConventionCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.ColumnsWithFixedLengthVarcharCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithJsonTypeCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithoutDescriptionCheckOnHost;
@@ -24,6 +25,7 @@ import io.github.mfvanek.pg.core.checks.host.ForeignKeysWithUnmatchedColumnTypeC
 import io.github.mfvanek.pg.core.checks.host.FunctionsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.IndexesWithBooleanCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.IndexesWithNullValuesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.IndexesWithUnnecessaryWhereClauseCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.IntersectedForeignKeysCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.IntersectedIndexesCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.InvalidIndexesCheckOnHost;
@@ -78,7 +80,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
     private static final String ORDERS_TABLE = "demo.orders";
     private static final String ORDER_ID_COLUMN = "order_id";
-    private static final String DICTIONARY_TABLE = "\"dictionary-to-delete\"";
+    private static final String DICTIONARY_TABLE = "demo.\"dictionary-to-delete\"";
+    private static final String COURIER_TABLE = "demo.courier";
 
     private final PgContext ctx = PgContext.of("demo");
     private final List<DatabaseCheckOnHost<? extends DbObject>> checks;
@@ -110,7 +113,9 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             new TablesWithZeroOrOneColumnCheckOnHost(pgConnection),
             new ObjectsNotFollowingNamingConventionCheckOnHost(pgConnection),
             new ColumnsNotFollowingNamingConventionCheckOnHost(pgConnection),
-            new PrimaryKeysWithVarcharCheckOnHost(pgConnection)
+            new PrimaryKeysWithVarcharCheckOnHost(pgConnection),
+            new ColumnsWithFixedLengthVarcharCheckOnHost(pgConnection),
+            new IndexesWithUnnecessaryWhereClauseCheckOnHost(pgConnection)
         );
     }
 
@@ -145,7 +150,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                 .isEmpty());
     }
 
-    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:LambdaBodyLength"})
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:LambdaBodyLength", "checkstyle:MethodLength"})
     @Test
     void databaseStructureCheckForDemoSchema() {
         assertThat(checks)
@@ -233,7 +238,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                 case PRIMARY_KEYS_WITH_SERIAL_TYPES -> checksAssert
                     .asInstanceOf(list(ColumnWithSerialType.class))
                     .hasSize(1)
-                    .containsExactly(ColumnWithSerialType.ofBigSerial(Column.ofNotNull("demo.courier", "id"), "demo.courier_id_seq"));
+                    .containsExactly(ColumnWithSerialType.ofBigSerial(Column.ofNotNull(ctx, COURIER_TABLE, "id"), "demo.courier_id_seq"));
 
                 case DUPLICATED_FOREIGN_KEYS -> checksAssert
                     .asInstanceOf(list(DuplicatedForeignKeys.class))
@@ -277,6 +282,24 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                     .hasSize(1)
                     .containsExactly(
                         Column.ofNotNull(ctx, DICTIONARY_TABLE, "\"dict-id\"")
+                    );
+
+                case COLUMNS_WITH_FIXED_LENGTH_VARCHAR -> checksAssert
+                    .asInstanceOf(list(Column.class))
+                    .hasSize(12)
+                    .containsExactly(
+                        Column.ofNotNull(ctx, BUYER_TABLE, "email"),
+                        Column.ofNotNull(ctx, BUYER_TABLE, "first_name"),
+                        Column.ofNullable(ctx, BUYER_TABLE, "ip_address"),
+                        Column.ofNotNull(ctx, BUYER_TABLE, "last_name"),
+                        Column.ofNullable(ctx, BUYER_TABLE, "middle_name"),
+                        Column.ofNotNull(ctx, BUYER_TABLE, "phone"),
+                        Column.ofNotNull(ctx, COURIER_TABLE, "email"),
+                        Column.ofNotNull(ctx, COURIER_TABLE, "first_name"),
+                        Column.ofNotNull(ctx, COURIER_TABLE, "last_name"),
+                        Column.ofNotNull(ctx, COURIER_TABLE, "phone"),
+                        Column.ofNotNull(ctx, ORDER_ITEM_TABLE, "sku"),
+                        Column.ofNotNull(ctx, "warehouse", "name")
                     );
 
                 default -> checksAssert
