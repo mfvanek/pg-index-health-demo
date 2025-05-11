@@ -53,8 +53,6 @@ import io.github.mfvanek.pg.model.dbobject.PgObjectType;
 import io.github.mfvanek.pg.model.index.DuplicatedIndexes;
 import io.github.mfvanek.pg.model.index.Index;
 import io.github.mfvanek.pg.model.index.IndexWithColumns;
-import io.github.mfvanek.pg.model.index.IndexWithNulls;
-import io.github.mfvanek.pg.model.index.IndexWithSize;
 import io.github.mfvanek.pg.model.predicates.SkipLiquibaseTablesPredicate;
 import io.github.mfvanek.pg.model.sequence.SequenceState;
 import io.github.mfvanek.pg.model.table.Table;
@@ -145,7 +143,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
     @Test
     void databaseStructureCheckForPublicSchema() {
         checks.forEach(check ->
-            assertThat(check.check(SkipLiquibaseTablesPredicate.ofPublic()))
+            assertThat(check.check(SkipLiquibaseTablesPredicate.ofDefault()))
                 .as(check.getDiagnostic().name())
                 .isEmpty());
     }
@@ -172,8 +170,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                     .hasSize(1)
                     // HOW TO FIX: do not manually create index for column with unique constraint
                     .containsExactly(DuplicatedIndexes.of(
-                        IndexWithSize.of(ctx, ORDER_ITEM_TABLE, "i_order_item_sku_order_id_unique"),
-                        IndexWithSize.of(ctx, ORDER_ITEM_TABLE, "order_item_sku_order_id_key")));
+                        Index.of(ctx, ORDER_ITEM_TABLE, "i_order_item_sku_order_id_unique"),
+                        Index.of(ctx, ORDER_ITEM_TABLE, "order_item_sku_order_id_key")));
 
                 case INTERSECTED_INDEXES -> checksAssert
                     .asInstanceOf(list(DuplicatedIndexes.class))
@@ -181,11 +179,11 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                     // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
                     .containsExactlyInAnyOrder(
                         DuplicatedIndexes.of(
-                            IndexWithSize.of(ctx, BUYER_TABLE, "demo.buyer_pkey"),
-                            IndexWithSize.of(ctx, BUYER_TABLE, "demo.i_buyer_id_phone")),
+                            Index.of(ctx, BUYER_TABLE, "demo.buyer_pkey"),
+                            Index.of(ctx, BUYER_TABLE, "demo.i_buyer_id_phone")),
                         DuplicatedIndexes.of(
-                            IndexWithSize.of(ctx, BUYER_TABLE, "demo.i_buyer_first_name"),
-                            IndexWithSize.of(ctx, BUYER_TABLE, "demo.i_buyer_names")));
+                            Index.of(ctx, BUYER_TABLE, "demo.i_buyer_first_name"),
+                            Index.of(ctx, BUYER_TABLE, "demo.i_buyer_names")));
 
                 case FOREIGN_KEYS_WITHOUT_INDEX -> checksAssert
                     .asInstanceOf(list(ForeignKey.class))
@@ -208,10 +206,10 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                     );
 
                 case INDEXES_WITH_NULL_VALUES -> checksAssert
-                    .asInstanceOf(list(IndexWithNulls.class))
+                    .asInstanceOf(list(IndexWithColumns.class))
                     .hasSize(1)
                     // HOW TO FIX: consider excluding null values from index if it's possible
-                    .containsExactly(IndexWithNulls.of(ctx, BUYER_TABLE, "demo.i_buyer_middle_name", "middle_name"));
+                    .containsExactly(IndexWithColumns.ofNullable(ctx, BUYER_TABLE, "demo.i_buyer_middle_name", "middle_name"));
 
                 case INDEXES_WITH_BOOLEAN -> checksAssert
                     .asInstanceOf(list(IndexWithColumns.class))
