@@ -32,7 +32,7 @@ public class ForeignKeyJsonDeserializer extends JsonDeserializer<ForeignKey> {
         final TextNode tableName = (TextNode) treeNode.get("tableName");
         final TextNode constraintName = (TextNode) treeNode.get("constraintName");
         final List<Column> columns = new ArrayList<>();
-        final JsonNode columnsNode = treeNode.get("columnsInConstraint");
+        final JsonNode columnsNode = treeNode.get("columns");
         if (columnsNode != null && columnsNode.isArray()) {
             for (final JsonNode columnNode : columnsNode) {
                 final Column column = codec.treeToValue(columnNode, Column.class);
