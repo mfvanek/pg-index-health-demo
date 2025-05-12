@@ -14,5 +14,4 @@ dependencies {
     implementation("org.gradle:test-retry-gradle-plugin:1.6.2")
     implementation("io.freefair.gradle:lombok-plugin:8.13.1")
     implementation("de.thetaphi:forbiddenapis:3.9")
-    implementation("org.openrewrite.rewrite:org.openrewrite.rewrite.gradle.plugin:7.6.1")
 }
