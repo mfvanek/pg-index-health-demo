@@ -7,11 +7,13 @@ include("db-migrations")
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            val springBoot3Version = version("spring-boot-v3", "3.4.4")
+            val springBoot3Version = version("spring-boot-v3", "3.4.6")
             plugin("spring-boot-v3", "org.springframework.boot")
                 .versionRef(springBoot3Version)
             library("spring-boot-v3-dependencies", "org.springframework.boot", "spring-boot-dependencies")
                 .versionRef(springBoot3Version)
+            library("liquibase-core", "org.liquibase:liquibase-core:4.32.0")
+            library("liquibase-sessionlock", "com.github.blagerweij:liquibase-sessionlock:1.6.9")
         }
     }
 }

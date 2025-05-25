@@ -12,7 +12,7 @@ dependencies {
     implementation(project(":db-migrations"))
     implementation(platform(libs.spring.boot.v3.dependencies))
     implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.4.4"))
-    implementation(platform("org.springdoc:springdoc-openapi:2.8.6"))
+    implementation(platform("org.springdoc:springdoc-openapi-bom:2.8.8"))
 
     implementation("org.apache.commons:commons-lang3:3.17.0")
 
@@ -22,13 +22,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
-    implementation("org.liquibase:liquibase-core:4.31.1")
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
     implementation("io.github.mfvanek:pg-index-health")
     implementation("io.github.mfvanek:pg-index-health-logger")
     implementation("io.github.mfvanek:pg-index-health-generator")
-    implementation("com.github.blagerweij:liquibase-sessionlock:1.6.9")
+    implementation(libs.liquibase.core)
+    implementation(libs.liquibase.sessionlock)
 
     annotationProcessor(platform(libs.spring.boot.v3.dependencies))
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
