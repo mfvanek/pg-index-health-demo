@@ -50,7 +50,7 @@ dependencies {
 tasks.withType<JavaCompile>().configureEach {
     options.errorprone {
         disableWarningsInGeneratedCode.set(true)
-        disable("Slf4jLoggerShouldBeNonStatic")
+        disable("Slf4jLoggerShouldBeNonStatic", "Slf4jSignOnlyFormat")
     }
 }
 

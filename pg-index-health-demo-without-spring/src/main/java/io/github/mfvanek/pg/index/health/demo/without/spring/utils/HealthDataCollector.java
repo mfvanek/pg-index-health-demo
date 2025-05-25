@@ -12,7 +12,6 @@ import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFacto
 import io.github.mfvanek.pg.health.logger.DatabaseChecksOnCluster;
 import io.github.mfvanek.pg.health.logger.Exclusions;
 import io.github.mfvanek.pg.health.logger.HealthLogger;
-import io.github.mfvanek.pg.health.logger.KeyValueFileHealthLogger;
 import io.github.mfvanek.pg.model.context.PgContext;
 import io.github.mfvanek.pg.model.units.MemoryUnit;
 import lombok.experimental.UtilityClass;

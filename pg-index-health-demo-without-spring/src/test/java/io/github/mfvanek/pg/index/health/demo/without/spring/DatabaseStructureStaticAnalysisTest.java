@@ -32,6 +32,7 @@ import io.github.mfvanek.pg.core.checks.host.InvalidIndexesCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.NotValidConstraintsCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ObjectsNotFollowingNamingConventionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.PossibleObjectNameOverflowCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.PrimaryKeysThatMostLikelyNaturalKeysCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.PrimaryKeysWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.PrimaryKeysWithVarcharCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.SequenceOverflowCheckOnHost;
@@ -113,7 +114,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             new ColumnsNotFollowingNamingConventionCheckOnHost(pgConnection),
             new PrimaryKeysWithVarcharCheckOnHost(pgConnection),
             new ColumnsWithFixedLengthVarcharCheckOnHost(pgConnection),
-            new IndexesWithUnnecessaryWhereClauseCheckOnHost(pgConnection)
+            new IndexesWithUnnecessaryWhereClauseCheckOnHost(pgConnection),
+            new PrimaryKeysThatMostLikelyNaturalKeysCheckOnHost(pgConnection)
         );
     }
 
