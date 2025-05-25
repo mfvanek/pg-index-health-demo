@@ -30,7 +30,7 @@ public class DbHealthController {
     @GetMapping
     public ResponseEntity<Collection<String>> collectHealthData() {
         final Exclusions exclusions = Exclusions.builder()
-            .withIndexSizeThreshold(1, MemoryUnit.MB)
+            .withIndexSizeThreshold(0, MemoryUnit.MB)
             .withTableSizeThreshold(1, MemoryUnit.MB)
             .build();
         return ResponseEntity.ok(healthLogger.logAll(exclusions, pgContext));

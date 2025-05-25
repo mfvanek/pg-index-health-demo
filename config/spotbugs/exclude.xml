@@ -42,4 +42,8 @@
     <Match>
         <Bug pattern="UTAO_JUNIT_ASSERTION_ODDITIES_NO_ASSERT"/>
     </Match>
+    <Match>
+        <Bug pattern="SLF4J_SIGN_ONLY_FORMAT,LO_SUSPECT_LOG_CLASS"/>
+        <Class name="io.github.mfvanek.pg.index.health.demo.without.spring.utils.KeyValueFileHealthLogger"/>
+    </Match>
 </FindBugsFilter>

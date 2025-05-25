@@ -13,7 +13,6 @@ import io.github.mfvanek.pg.connection.factory.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactory;
 import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactoryImpl;
 import io.github.mfvanek.pg.connection.factory.PgConnectionFactoryImpl;
-import io.github.mfvanek.pg.core.settings.ConfigurationMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.core.statistics.StatisticsMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagement;
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagementImpl;
@@ -57,9 +56,7 @@ public class DatabaseStructureHealthConfig {
 
     @Bean
     public DatabaseManagement databaseManagement(@Nonnull final HighAvailabilityPgConnection highAvailabilityPgConnection) {
-        return new DatabaseManagementImpl(highAvailabilityPgConnection,
-            StatisticsMaintenanceOnHostImpl::new,
-            ConfigurationMaintenanceOnHostImpl::new);
+        return new DatabaseManagementImpl(highAvailabilityPgConnection, StatisticsMaintenanceOnHostImpl::new);
     }
 
     @Bean

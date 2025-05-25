@@ -12,7 +12,6 @@ import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFacto
 import io.github.mfvanek.pg.health.logger.DatabaseChecksOnCluster;
 import io.github.mfvanek.pg.health.logger.Exclusions;
 import io.github.mfvanek.pg.health.logger.HealthLogger;
-import io.github.mfvanek.pg.health.logger.KeyValueFileHealthLogger;
 import io.github.mfvanek.pg.model.context.PgContext;
 import io.github.mfvanek.pg.model.units.MemoryUnit;
 import lombok.experimental.UtilityClass;
@@ -29,7 +28,7 @@ public final class HealthDataCollector {
     public static List<String> collectHealthData(@Nonnull final HighAvailabilityPgConnectionFactory connectionFactory,
                                                  @Nonnull final ConnectionCredentials credentials) {
         final Exclusions exclusions = Exclusions.builder()
-            .withIndexSizeThreshold(1, MemoryUnit.MB)
+            .withIndexSizeThreshold(0, MemoryUnit.MB)
             .withTableSizeThreshold(1, MemoryUnit.MB)
             .build();
         final HealthLogger healthLogger = new KeyValueFileHealthLogger(credentials, connectionFactory, DatabaseChecksOnCluster::new);
