@@ -24,7 +24,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation(platform("org.mockito:mockito-bom:5.17.0"))
+    testImplementation(platform("org.mockito:mockito-bom:5.18.0"))
     testImplementation("org.mockito:mockito-core")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
