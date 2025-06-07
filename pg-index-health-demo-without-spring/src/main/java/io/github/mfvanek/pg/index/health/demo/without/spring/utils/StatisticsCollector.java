@@ -12,7 +12,6 @@ import io.github.mfvanek.pg.connection.HighAvailabilityPgConnectionImpl;
 import io.github.mfvanek.pg.connection.PgConnection;
 import io.github.mfvanek.pg.connection.PgConnectionImpl;
 import io.github.mfvanek.pg.connection.host.PgHostImpl;
-import io.github.mfvanek.pg.core.settings.ConfigurationMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.core.statistics.StatisticsMaintenanceOnHostImpl;
 import io.github.mfvanek.pg.core.utils.ClockHolder;
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagement;
@@ -38,7 +37,7 @@ public final class StatisticsCollector {
                                                 @Nonnull final String databaseUrl) {
         final PgConnection pgConnection = PgConnectionImpl.of(dataSource, PgHostImpl.ofUrl(databaseUrl));
         final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);
-        final DatabaseManagement databaseManagement = new DatabaseManagementImpl(haPgConnection, StatisticsMaintenanceOnHostImpl::new, ConfigurationMaintenanceOnHostImpl::new);
+        final DatabaseManagement databaseManagement = new DatabaseManagementImpl(haPgConnection, StatisticsMaintenanceOnHostImpl::new);
         databaseManagement.resetStatistics();
         waitForStatisticsCollector(dataSource);
         final Optional<OffsetDateTime> resetTimestamp = databaseManagement.getLastStatsResetTimestamp();

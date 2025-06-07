@@ -9,7 +9,7 @@ plugins {
 
 allprojects {
     group = "io.github.mfvanek"
-    version = "0.14.6"
+    version = "0.15.0"
 
     repositories {
         mavenLocal()
@@ -27,7 +27,7 @@ dependencies {
 
 tasks {
     wrapper {
-        gradleVersion = "8.13"
+        gradleVersion = "8.14.1"
     }
 
     check {
