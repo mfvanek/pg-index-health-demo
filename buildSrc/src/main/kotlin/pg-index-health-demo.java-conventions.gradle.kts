@@ -33,18 +33,18 @@ dependencies {
     implementation(platform("org.testcontainers:testcontainers-bom:1.21.1"))
 
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("org.postgresql:postgresql:42.7.5")
+    implementation("org.postgresql:postgresql:42.7.6")
 
-    testImplementation(platform("org.junit:junit-bom:5.12.2"))
+    testImplementation(platform("org.junit:junit-bom:5.13.1"))
     testImplementation(platform("org.assertj:assertj-bom:3.27.3"))
 
     errorprone("com.google.errorprone:error_prone_core:2.38.0")
-    errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.28")
+    errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.29")
 
     spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.17")
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
-    spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.9")
+    spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.10")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -76,7 +76,7 @@ lombok {
 }
 
 checkstyle {
-    toolVersion = "10.23.0"
+    toolVersion = "10.24.0"
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     maxWarnings = 0
@@ -84,13 +84,14 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.12.0"
+    toolVersion = "7.14.0"
     isConsoleOutput = true
     ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
     ruleSets = listOf()
 }
 
 spotbugs {
+    toolVersion.set("4.9.3")
     showProgress.set(true)
     effort.set(Effort.MAX)
     reportLevel.set(Confidence.LOW)

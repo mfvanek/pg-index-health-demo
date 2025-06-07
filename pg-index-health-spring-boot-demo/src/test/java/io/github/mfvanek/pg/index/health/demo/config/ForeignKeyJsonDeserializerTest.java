@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
@@ -22,7 +23,7 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
     private ObjectMapper objectMapper;
 
     @Test
-    void deserializeShouldWork() throws Exception {
+    void deserializeShouldWork() throws JsonProcessingException {
         final ForeignKey original = ForeignKey.ofNotNullColumn("users", "fk_user_role", "role_id");
         final String json = objectMapper.writeValueAsString(original);
         final ForeignKey restored = objectMapper.readValue(json, ForeignKey.class);
