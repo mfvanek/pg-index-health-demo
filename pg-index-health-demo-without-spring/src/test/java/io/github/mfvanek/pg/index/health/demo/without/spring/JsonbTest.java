@@ -9,6 +9,7 @@ package io.github.mfvanek.pg.index.health.demo.without.spring;
 
 import io.github.mfvanek.pg.index.health.demo.without.spring.support.DatabaseAwareTestBase;
 import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 import org.postgresql.util.PGobject;
 
@@ -17,10 +18,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.annotation.Nonnull;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@NullMarked
 class JsonbTest extends DatabaseAwareTestBase {
 
     @Test
@@ -55,8 +56,7 @@ class JsonbTest extends DatabaseAwareTestBase {
         }
     }
 
-    @Nonnull
-    private static PGobject preparePgObject(@Nonnull final String withoutWhitespaces) throws SQLException {
+    private static PGobject preparePgObject(final String withoutWhitespaces) throws SQLException {
         final PGobject fixedInfoObject = new PGobject();
         fixedInfoObject.setType("jsonb");
         fixedInfoObject.setValue(withoutWhitespaces);

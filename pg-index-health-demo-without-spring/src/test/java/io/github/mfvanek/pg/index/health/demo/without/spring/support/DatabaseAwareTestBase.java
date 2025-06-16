@@ -17,26 +17,26 @@ import io.github.mfvanek.pg.connection.host.PgHostImpl;
 import io.github.mfvanek.pg.index.health.demo.without.spring.utils.Consts;
 import io.github.mfvanek.pg.index.health.demo.without.spring.utils.MigrationRunner;
 import io.github.mfvanek.pg.testing.PostgreSqlContainerWrapper;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.BeforeAll;
 
-import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
 public abstract class DatabaseAwareTestBase {
 
     private static final PostgreSqlContainerWrapper POSTGRES = PostgreSqlContainerWrapper.withVersion(Consts.PG_VERSION);
 
-    @Nonnull
+    @NonNull
     protected static DataSource getDataSource() {
         return POSTGRES.getDataSource();
     }
 
-    @Nonnull
+    @NonNull
     protected static PgHost getHost() {
         return PgHostImpl.ofUrl(POSTGRES.getUrl());
     }
 
-    @Nonnull
+    @NonNull
     protected static String getUrl() {
         return POSTGRES.getUrl();
     }
@@ -46,12 +46,12 @@ public abstract class DatabaseAwareTestBase {
         MigrationRunner.runMigrations(getDataSource());
     }
 
-    @Nonnull
+    @NonNull
     protected static ConnectionCredentials getConnectionCredentials() {
         return ConnectionCredentials.ofUrl(POSTGRES.getUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
     }
 
-    @Nonnull
+    @NonNull
     protected static HighAvailabilityPgConnectionFactory getConnectionFactory() {
         return new HighAvailabilityPgConnectionFactoryImpl(
             new PgConnectionFactoryImpl(),
