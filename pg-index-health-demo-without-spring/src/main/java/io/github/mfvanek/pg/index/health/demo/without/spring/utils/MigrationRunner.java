@@ -21,16 +21,14 @@ import lombok.extern.slf4j.Slf4j;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
 @Slf4j
 @UtilityClass
 public final class MigrationRunner {
 
-    @SuppressWarnings("deprecation")
     @SneakyThrows
-    public static void runMigrations(@Nonnull final DataSource dataSource) {
+    public static void runMigrations(final DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
             final Map<String, Object> config = new HashMap<>();
             Scope.child(config, () -> {

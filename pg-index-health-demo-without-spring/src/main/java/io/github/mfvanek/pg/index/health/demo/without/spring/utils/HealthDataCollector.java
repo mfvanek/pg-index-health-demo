@@ -18,15 +18,13 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import javax.annotation.Nonnull;
 
 @Slf4j
 @UtilityClass
 public final class HealthDataCollector {
 
-    @Nonnull
-    public static List<String> collectHealthData(@Nonnull final HighAvailabilityPgConnectionFactory connectionFactory,
-                                                 @Nonnull final ConnectionCredentials credentials) {
+    public static List<String> collectHealthData(final HighAvailabilityPgConnectionFactory connectionFactory,
+                                                 final ConnectionCredentials credentials) {
         final Exclusions exclusions = Exclusions.builder()
             .withIndexSizeThreshold(0, MemoryUnit.MB)
             .withTableSizeThreshold(1, MemoryUnit.MB)

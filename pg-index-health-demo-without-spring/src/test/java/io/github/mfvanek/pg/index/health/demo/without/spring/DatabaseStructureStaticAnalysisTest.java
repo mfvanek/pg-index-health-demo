@@ -16,6 +16,7 @@ import io.github.mfvanek.pg.core.checks.host.BtreeIndexesOnArrayColumnsCheckOnHo
 import io.github.mfvanek.pg.core.checks.host.ColumnsNotFollowingNamingConventionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithFixedLengthVarcharCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithJsonTypeCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.ColumnsWithMoneyTypeCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithSerialTypesCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.DuplicatedForeignKeysCheckOnHost;
@@ -59,6 +60,7 @@ import io.github.mfvanek.pg.model.sequence.SequenceState;
 import io.github.mfvanek.pg.model.table.Table;
 import io.github.mfvanek.pg.model.table.TableWithColumns;
 import org.assertj.core.api.ListAssert;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +85,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
     private static final String COURIER_TABLE = "demo.courier";
 
     private final PgContext ctx = PgContext.of("demo");
-    private final List<DatabaseCheckOnHost<? extends DbObject>> checks;
+    private final List<DatabaseCheckOnHost<? extends @NonNull DbObject>> checks;
 
     DatabaseStructureStaticAnalysisTest() {
         final PgConnection pgConnection = PgConnectionImpl.of(getDataSource(), getHost());
@@ -115,7 +117,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             new PrimaryKeysWithVarcharCheckOnHost(pgConnection),
             new ColumnsWithFixedLengthVarcharCheckOnHost(pgConnection),
             new IndexesWithUnnecessaryWhereClauseCheckOnHost(pgConnection),
-            new PrimaryKeysThatMostLikelyNaturalKeysCheckOnHost(pgConnection)
+            new PrimaryKeysThatMostLikelyNaturalKeysCheckOnHost(pgConnection),
+            new ColumnsWithMoneyTypeCheckOnHost(pgConnection)
         );
     }
 
