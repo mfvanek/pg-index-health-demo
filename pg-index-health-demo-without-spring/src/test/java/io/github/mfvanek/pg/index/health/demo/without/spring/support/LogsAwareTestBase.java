@@ -12,6 +12,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nonnull;
 
 public abstract class LogsAwareTestBase {
 
@@ -45,19 +45,19 @@ public abstract class LogsAwareTestBase {
         LOGGERS.forEach(l -> l.setLevel(Level.INFO));
     }
 
-    @Nonnull
-    private static <T> Logger getLogger(@Nonnull final Class<T> type) {
+    @NonNull
+    private static <T> Logger getLogger(@NonNull final Class<T> type) {
         final LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         return context.getLogger(type);
     }
 
-    protected static <T> void registerLoggerOfType(@Nonnull final Class<T> type) {
+    protected static <T> void registerLoggerOfType(@NonNull final Class<T> type) {
         final Logger logger = getLogger(type);
         logger.addAppender(logAppender);
         LOGGERS.add(logger);
     }
 
-    @Nonnull
+    @NonNull
     protected static List<ILoggingEvent> getLogs() {
         return List.copyOf(logAppender.list);
     }

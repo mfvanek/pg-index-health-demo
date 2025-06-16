@@ -15,8 +15,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import javax.annotation.Nonnull;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ActuatorEndpointTest extends BasePgIndexHealthDemoSpringBootTest {
@@ -45,9 +43,9 @@ class ActuatorEndpointTest extends BasePgIndexHealthDemoSpringBootTest {
         "health/readiness|{\"status\":\"UP\"}|application/json",
         "liquibase|{\"contexts\":{\"pg-index-health-spring-boot-demo\":{\"liquibaseBeans\":{\"liquibase\":{\"changeSets\"|application/json",
         "info|\"version\":|application/json"}, delimiter = '|')
-    void actuatorEndpointShouldReturnOk(@Nonnull final String endpointName,
-                                        @Nonnull final String expectedSubstring,
-                                        @Nonnull final String mediaType) {
+    void actuatorEndpointShouldReturnOk(final String endpointName,
+                                        final String expectedSubstring,
+                                        final String mediaType) {
         final String result = actuatorClient.get()
             .uri(uriBuilder -> uriBuilder
                 .path(endpointName)

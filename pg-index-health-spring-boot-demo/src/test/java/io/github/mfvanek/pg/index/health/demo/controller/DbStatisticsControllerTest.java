@@ -17,7 +17,6 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.http.MediaType;
 
 import java.time.OffsetDateTime;
-import javax.annotation.Nonnull;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,7 +27,7 @@ class DbStatisticsControllerTest extends BasePgIndexHealthDemoSpringBootTest {
     private StatisticsCollectorService statisticsCollectorService;
 
     @Test
-    void getLastResetDateShouldNotReturnNull(@Nonnull final CapturedOutput output) {
+    void getLastResetDateShouldNotReturnNull(final CapturedOutput output) {
         final OffsetDateTime startTestTimestamp = OffsetDateTime.now(clock);
         final OffsetDateTime result = webTestClient.get()
             .uri(uriBuilder -> uriBuilder
@@ -49,7 +48,7 @@ class DbStatisticsControllerTest extends BasePgIndexHealthDemoSpringBootTest {
     }
 
     @Test
-    void doResetWithoutWaitShouldReturnAccepted(@Nonnull final CapturedOutput output) {
+    void doResetWithoutWaitShouldReturnAccepted(final CapturedOutput output) {
         final long startTime = System.nanoTime();
         final OffsetDateTime result = webTestClient.post()
             .uri(uriBuilder -> uriBuilder
@@ -74,7 +73,7 @@ class DbStatisticsControllerTest extends BasePgIndexHealthDemoSpringBootTest {
     }
 
     @Test
-    void doResetWithWaitShouldReturnOk(@Nonnull final CapturedOutput output) {
+    void doResetWithWaitShouldReturnOk(final CapturedOutput output) {
         final OffsetDateTime offsetDateTime = statisticsCollectorService.resetStatistics();
         assertThat(offsetDateTime).isNotNull();
 

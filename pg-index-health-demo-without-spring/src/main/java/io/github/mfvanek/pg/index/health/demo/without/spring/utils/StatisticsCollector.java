@@ -25,16 +25,14 @@ import java.sql.Statement;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Optional;
-import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
 @Slf4j
 @UtilityClass
 public final class StatisticsCollector {
 
-    @Nonnull
-    public static ZonedDateTime resetStatistics(@Nonnull final DataSource dataSource,
-                                                @Nonnull final String databaseUrl) {
+    public static ZonedDateTime resetStatistics(final DataSource dataSource,
+                                                final String databaseUrl) {
         final PgConnection pgConnection = PgConnectionImpl.of(dataSource, PgHostImpl.ofUrl(databaseUrl));
         final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);
         final DatabaseManagement databaseManagement = new DatabaseManagementImpl(haPgConnection, StatisticsMaintenanceOnHostImpl::new);
@@ -49,7 +47,7 @@ public final class StatisticsCollector {
     }
 
     @SneakyThrows
-    static void waitForStatisticsCollector(@Nonnull final DataSource dataSource) {
+    static void waitForStatisticsCollector(final DataSource dataSource) {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             log.info("Waiting for statistics collector via executing 'vacuum analyze' command");

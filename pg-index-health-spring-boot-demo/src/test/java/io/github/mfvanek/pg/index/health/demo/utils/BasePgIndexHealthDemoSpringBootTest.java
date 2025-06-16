@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.Clock;
-import javax.annotation.Nonnull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -42,7 +42,7 @@ public abstract class BasePgIndexHealthDemoSpringBootTest {
     @Autowired
     private SecurityProperties securityProperties;
 
-    protected final void setUpBasicAuth(@Nonnull final HttpHeaders httpHeaders) {
+    protected final void setUpBasicAuth(@NonNull final HttpHeaders httpHeaders) {
         httpHeaders.setBasicAuth(securityProperties.getUser().getName(), securityProperties.getUser().getPassword());
     }
 }

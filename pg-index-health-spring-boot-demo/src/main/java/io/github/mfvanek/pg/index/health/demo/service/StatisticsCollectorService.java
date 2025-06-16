@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.concurrent.TimeUnit;
-import javax.annotation.Nonnull;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,14 +34,12 @@ public class StatisticsCollectorService {
         TimeUnit.MILLISECONDS.sleep(1_000L);
     }
 
-    @Nonnull
     private OffsetDateTime getLastStatsResetTimestampInner() {
         final OffsetDateTime result = databaseManagement.getLastStatsResetTimestamp().orElse(OffsetDateTime.MIN);
         log.trace("Last stats reset timestamp = {}", result);
         return result;
     }
 
-    @Nonnull
     public OffsetDateTime getLastStatsResetTimestamp() {
         return getLastStatsResetTimestampInner();
     }

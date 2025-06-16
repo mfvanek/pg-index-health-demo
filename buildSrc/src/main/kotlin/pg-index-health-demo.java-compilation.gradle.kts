@@ -11,6 +11,10 @@ plugins {
     id("org.gradle.test-retry")
 }
 
+configurations.compileClasspath {
+    exclude("com.google.code.findbugs", "jsr305")
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21

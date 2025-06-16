@@ -24,14 +24,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 
-import javax.annotation.Nonnull;
-
 @SuppressWarnings("checkstyle:ClassDataAbstractionCoupling")
 @Configuration(proxyBeanMethods = false)
 public class DatabaseStructureHealthConfig {
 
     @Bean
-    public ConnectionCredentials connectionCredentials(@Nonnull final JdbcDatabaseContainer<?> jdbcDatabaseContainer) {
+    public ConnectionCredentials connectionCredentials(final JdbcDatabaseContainer<?> jdbcDatabaseContainer) {
         return ConnectionCredentials.ofUrl(jdbcDatabaseContainer.getJdbcUrl(),
             jdbcDatabaseContainer.getUsername(), jdbcDatabaseContainer.getPassword());
     }
@@ -42,20 +40,20 @@ public class DatabaseStructureHealthConfig {
     }
 
     @Bean
-    public HealthLogger healthLogger(@Nonnull final ConnectionCredentials connectionCredentials,
-                                     @Nonnull final HighAvailabilityPgConnectionFactory highAvailabilityPgConnectionFactory) {
+    public HealthLogger healthLogger(final ConnectionCredentials connectionCredentials,
+                                     final HighAvailabilityPgConnectionFactory highAvailabilityPgConnectionFactory) {
         return new StandardHealthLogger(connectionCredentials, highAvailabilityPgConnectionFactory, DatabaseChecksOnCluster::new);
     }
 
     @Bean
     public HighAvailabilityPgConnection highAvailabilityPgConnection(
-        @Nonnull final ConnectionCredentials connectionCredentials,
-        @Nonnull final HighAvailabilityPgConnectionFactory highAvailabilityPgConnectionFactory) {
+        final ConnectionCredentials connectionCredentials,
+        final HighAvailabilityPgConnectionFactory highAvailabilityPgConnectionFactory) {
         return highAvailabilityPgConnectionFactory.of(connectionCredentials);
     }
 
     @Bean
-    public DatabaseManagement databaseManagement(@Nonnull final HighAvailabilityPgConnection highAvailabilityPgConnection) {
+    public DatabaseManagement databaseManagement(final HighAvailabilityPgConnection highAvailabilityPgConnection) {
         return new DatabaseManagementImpl(highAvailabilityPgConnection, StatisticsMaintenanceOnHostImpl::new);
     }
 

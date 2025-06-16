@@ -16,7 +16,6 @@ import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
-import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
 @Configuration(proxyBeanMethods = false)
@@ -33,8 +32,8 @@ public class DatabaseConfig {
     }
 
     @Bean
-    public DataSource dataSource(@Nonnull final JdbcDatabaseContainer<?> jdbcDatabaseContainer,
-                                 @Nonnull final Environment environment) {
+    public DataSource dataSource(final JdbcDatabaseContainer<?> jdbcDatabaseContainer,
+                                 final Environment environment) {
         ConfigurableEnvironmentMutator.addDatasourceUrlIfNeed(jdbcDatabaseContainer, environment);
         final HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(jdbcDatabaseContainer.getJdbcUrl());

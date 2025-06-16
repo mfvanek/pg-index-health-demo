@@ -15,15 +15,14 @@ import org.springframework.core.env.MutablePropertySources;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 
 import java.util.Map;
-import javax.annotation.Nonnull;
 
 @UtilityClass
 class ConfigurableEnvironmentMutator {
 
     static final String DATASOURCE_URL_PROP_NAME = "spring.datasource.url";
 
-    static boolean addDatasourceUrlIfNeed(@Nonnull final JdbcDatabaseContainer<?> jdbcDatabaseContainer,
-                                          @Nonnull final Environment environment) {
+    static boolean addDatasourceUrlIfNeed(final JdbcDatabaseContainer<?> jdbcDatabaseContainer,
+                                          final Environment environment) {
         if (environment.getProperty(DATASOURCE_URL_PROP_NAME) == null &&
             environment instanceof ConfigurableEnvironment configurableEnvironment) {
             final MutablePropertySources mps = configurableEnvironment.getPropertySources();
