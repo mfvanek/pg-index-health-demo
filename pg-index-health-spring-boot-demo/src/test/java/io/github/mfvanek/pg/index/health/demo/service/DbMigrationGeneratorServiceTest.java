@@ -10,6 +10,7 @@ package io.github.mfvanek.pg.index.health.demo.service;
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -19,7 +20,6 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
-import javax.annotation.Nonnull;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,10 +31,10 @@ class DbMigrationGeneratorServiceTest extends BasePgIndexHealthDemoSpringBootTes
     DbMigrationGeneratorService dbMigrationGeneratorService;
 
     @MockitoBean
-    DbMigrationGenerator<ForeignKey> dbMigrationGenerator;
+    DbMigrationGenerator<@NonNull ForeignKey> dbMigrationGenerator;
 
     @Test
-    void throwsIllegalStateExceptionWhenEmptyMigrationString(@Nonnull final CapturedOutput output) {
+    void throwsIllegalStateExceptionWhenEmptyMigrationString(final CapturedOutput output) {
         final List<ForeignKey> foreignKeys = dbMigrationGeneratorService.getForeignKeysFromDb();
         Mockito.when(dbMigrationGenerator.generate(foreignKeys)).thenReturn(List.of());
 
@@ -45,7 +45,7 @@ class DbMigrationGeneratorServiceTest extends BasePgIndexHealthDemoSpringBootTes
     }
 
     @Test
-    void logsAboutSqlExceptionWhenBadMigrationStringAndThrowsExceptionAfter(@Nonnull final CapturedOutput output) {
+    void logsAboutSqlExceptionWhenBadMigrationStringAndThrowsExceptionAfter(final CapturedOutput output) {
         final List<ForeignKey> foreignKeys = dbMigrationGeneratorService.getForeignKeysFromDb();
         Mockito.when(dbMigrationGenerator.generate(foreignKeys)).thenReturn(List.of("select * from payments"));
 

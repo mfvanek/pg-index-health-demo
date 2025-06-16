@@ -20,7 +20,6 @@ import org.postgresql.util.PGobject;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.annotation.Nonnull;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +45,7 @@ class JsonbTest extends BasePgIndexHealthDemoSpringBootTest {
     }
 
     @SneakyThrows
-    private void checkThatJsonbCanBeSavedToDatabase(@Nonnull final Payment payment) {
+    private void checkThatJsonbCanBeSavedToDatabase(final Payment payment) {
         final String withoutWhitespaces = StringUtils.deleteWhitespace(payment.getInfo());
         assertThat(withoutWhitespaces)
             .isEqualTo("{\"payment\":{\"date\":\"2022-05-27T18:31:42\",\"result\":\"success\"}}");
