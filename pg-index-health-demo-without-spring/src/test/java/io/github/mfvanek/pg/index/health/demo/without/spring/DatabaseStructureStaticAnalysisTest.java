@@ -26,6 +26,7 @@ import io.github.mfvanek.pg.core.checks.host.ForeignKeysWithUnmatchedColumnTypeC
 import io.github.mfvanek.pg.core.checks.host.FunctionsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.IndexesWithBooleanCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.IndexesWithNullValuesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.IndexesWithTimestampInTheMiddleCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.IndexesWithUnnecessaryWhereClauseCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.IntersectedForeignKeysCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.IntersectedIndexesCheckOnHost;
@@ -118,7 +119,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             new ColumnsWithFixedLengthVarcharCheckOnHost(pgConnection),
             new IndexesWithUnnecessaryWhereClauseCheckOnHost(pgConnection),
             new PrimaryKeysThatMostLikelyNaturalKeysCheckOnHost(pgConnection),
-            new ColumnsWithMoneyTypeCheckOnHost(pgConnection)
+            new ColumnsWithMoneyTypeCheckOnHost(pgConnection),
+            new IndexesWithTimestampInTheMiddleCheckOnHost(pgConnection)
         );
     }
 
