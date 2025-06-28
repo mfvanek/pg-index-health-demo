@@ -48,3 +48,6 @@ comment on column demo.buyer.middle_name is 'Patronymic of the buyer';
 comment on column demo.buyer.phone is 'Buyer''s phone number';
 comment on column demo.buyer.email is 'Buyer''s email address';
 comment on column demo.buyer.ip_address is 'Buyer''s IP address';
+
+--changeset ivan.vakhrushev:2025.06.28:buyer.create.stupid.index
+create unique index idx_buyer_pk on demo.buyer (id);
