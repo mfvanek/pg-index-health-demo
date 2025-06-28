@@ -40,3 +40,8 @@ alter table demo.order_item add constraint order_item_order_id_fk_duplicate fore
 
 --changeset ivan.vakhrushev:2024.11.01:warehouse.reference
 alter table demo.order_item add constraint order_item_warehouse_id_fk foreign key (warehouse_id) references demo.warehouse (id);
+
+--changeset ivan.vakhrushev:2025.06.28:order_item.created_at.column
+alter table if exists demo.order_item
+    add column created_at timestamptz not null default now();
+comment on column demo.order_item.created_at is 'Date and time in UTC when the order item was created';

@@ -19,3 +19,8 @@ comment on column demo.courier.email is 'Courier''s email address';
 --changeset ivan.vakhrushev:2024.10.20:courier.indexes runInTransaction:false
 create unique index concurrently if not exists idx_courier_phone_and_email_should_be_unique_very_long_name_that_will_be_truncated
 on demo.courier (phone, email);
+
+--changeset ivan.vakhrushev:2025.06.28:courier.created_at.column
+alter table if exists demo.courier
+    add column created_at timestamptz not null default now();
+comment on column demo.courier.created_at is 'Date and time in UTC when the row was created';

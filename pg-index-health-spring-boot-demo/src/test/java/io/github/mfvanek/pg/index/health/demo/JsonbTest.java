@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.postgresql.util.PGobject;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +32,7 @@ class JsonbTest extends BasePgIndexHealthDemoSpringBootTest {
                 .paymentId(rs.getLong("id"))
                 .orderId(rs.getLong("order_id"))
                 .status(rs.getInt("status"))
-                .createdAt(rs.getObject("created_at", LocalDateTime.class))
+                .createdAt(rs.getObject("created_at", OffsetDateTime.class))
                 .paymentTotal(rs.getBigDecimal("payment_total"))
                 .info(rs.getString("info"))
                 .build());
@@ -67,7 +67,7 @@ class JsonbTest extends BasePgIndexHealthDemoSpringBootTest {
         private final long paymentId;
         private final long orderId;
         private final int status;
-        private final LocalDateTime createdAt;
+        private final OffsetDateTime createdAt;
         private final BigDecimal paymentTotal;
         private final String info;
     }
