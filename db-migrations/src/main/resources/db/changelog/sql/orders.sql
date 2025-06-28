@@ -36,3 +36,6 @@ create index concurrently if not exists i_orders_preorder on demo.orders (preord
 alter table demo.orders add column courier_id bigint references demo.courier (id);
 create index on demo.orders (courier_id) where courier_id is not null;
 comment on column demo.orders.courier_id is 'Identifier of courier that should deliver the order';
+
+--changeset ivan.vakhrushev:2025.06.28:orders.created_at.column.change.type
+alter table if exists demo.orders alter column created_at type timestamptz;

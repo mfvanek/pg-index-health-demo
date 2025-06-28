@@ -21,6 +21,10 @@ create index if not exists i_buyer_last_name on demo.buyer (last_name);
 create index if not exists i_buyer_middle_name on demo.buyer (middle_name);
 create index if not exists i_buyer_names on demo.buyer (first_name, last_name, middle_name);
 
+--changeset ivan.vakhrushev:2025.06.28:buyer.created_at.column
+alter table if exists demo.buyer add column created_at timestamptz not null default now();
+comment on column demo.buyer.created_at is 'Date and time in UTC when the row was created';
+
 --changeset ivan.vakhrushev:2020.01.02:populate.data
 insert into demo.buyer (first_name, last_name, phone, email)
 values ('John', 'Smith', '89201213456', 'john@example.com'),
@@ -43,3 +47,6 @@ comment on column demo.buyer.middle_name is 'Patronymic of the buyer';
 comment on column demo.buyer.phone is 'Buyer''s phone number';
 comment on column demo.buyer.email is 'Buyer''s email address';
 comment on column demo.buyer.ip_address is 'Buyer''s IP address';
+
+--changeset ivan.vakhrushev:2025.06.28:buyer.create.stupid.index
+create unique index idx_buyer_pk on demo.buyer (id);

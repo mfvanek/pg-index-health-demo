@@ -18,6 +18,9 @@ alter table if exists demo.payment add column info jsonb;
 create sequence if not exists demo.payment_num_seq as smallint;
 alter table if exists demo.payment add column num smallint not null default nextval('demo.payment_num_seq');
 
+--changeset ivan.vakhrushev:2025.06.28:payment.created_at.column.change.type
+alter table if exists demo.payment alter column created_at type timestamptz;
+
 --changeset ivan.vakhrushev:2020.01.02:payment.populate.data
 insert into demo.payment
 select

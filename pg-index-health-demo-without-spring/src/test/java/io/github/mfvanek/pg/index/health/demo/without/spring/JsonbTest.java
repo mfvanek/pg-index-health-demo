@@ -12,14 +12,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 import org.postgresql.util.PGobject;
+import org.postgresql.util.PSQLException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @NullMarked
 class JsonbTest extends DatabaseAwareTestBase {
@@ -49,7 +55,16 @@ class JsonbTest extends DatabaseAwareTestBase {
                     updateStatement.setObject(1, fixedInfoObject);
                     updateStatement.setLong(2, paymentId);
                     final int result = updateStatement.executeUpdate();
-                    assertThat(result).isEqualTo(1);
+                    assertThat(result).isOne();
+
+                    final OffsetDateTime createdAt = resultSet.getObject("created_at", OffsetDateTime.class);
+                    assertThat(createdAt).isNotNull();
+                    final ZonedDateTime zonedDateTime = createdAt.atZoneSameInstant(ZoneId.systemDefault());
+                    assertThat(zonedDateTime).isNotNull();
+
+                    assertThatThrownBy(() -> resultSet.getObject("created_at", Instant.class))
+                        .isInstanceOf(PSQLException.class)
+                        .hasMessage("conversion to class java.time.Instant from timestamptz not supported");
                 }
             }
             connection.commit();

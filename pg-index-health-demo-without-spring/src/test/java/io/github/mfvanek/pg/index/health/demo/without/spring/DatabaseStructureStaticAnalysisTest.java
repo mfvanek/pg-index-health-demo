@@ -174,15 +174,20 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
 
                 case DUPLICATED_INDEXES -> checksAssert
                     .asInstanceOf(list(DuplicatedIndexes.class))
-                    .hasSize(1)
+                    .hasSize(2)
                     // HOW TO FIX: do not manually create index for column with unique constraint
-                    .containsExactly(DuplicatedIndexes.of(
-                        Index.of(ctx, ORDER_ITEM_TABLE, "i_order_item_sku_order_id_unique"),
-                        Index.of(ctx, ORDER_ITEM_TABLE, "order_item_sku_order_id_key")));
+                    .containsExactly(
+                        DuplicatedIndexes.of(
+                            Index.of(ctx, BUYER_TABLE, "demo.buyer_pkey"),
+                            Index.of(ctx, BUYER_TABLE, "demo.idx_buyer_pk")),
+                        DuplicatedIndexes.of(
+                            Index.of(ctx, ORDER_ITEM_TABLE, "i_order_item_sku_order_id_unique"),
+                            Index.of(ctx, ORDER_ITEM_TABLE, "order_item_sku_order_id_key"))
+                    );
 
                 case INTERSECTED_INDEXES -> checksAssert
                     .asInstanceOf(list(DuplicatedIndexes.class))
-                    .hasSize(2)
+                    .hasSize(3)
                     // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
                     .containsExactlyInAnyOrder(
                         DuplicatedIndexes.of(
@@ -190,7 +195,11 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                             Index.of(ctx, BUYER_TABLE, "demo.i_buyer_id_phone")),
                         DuplicatedIndexes.of(
                             Index.of(ctx, BUYER_TABLE, "demo.i_buyer_first_name"),
-                            Index.of(ctx, BUYER_TABLE, "demo.i_buyer_names")));
+                            Index.of(ctx, BUYER_TABLE, "demo.i_buyer_names")),
+                        DuplicatedIndexes.of(
+                            Index.of(ctx, BUYER_TABLE, "demo.i_buyer_id_phone"),
+                            Index.of(ctx, BUYER_TABLE, "demo.idx_buyer_pk"))
+                    );
 
                 case FOREIGN_KEYS_WITHOUT_INDEX -> checksAssert
                     .asInstanceOf(list(ForeignKey.class))
