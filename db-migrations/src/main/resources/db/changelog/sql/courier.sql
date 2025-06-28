@@ -21,6 +21,5 @@ create unique index concurrently if not exists idx_courier_phone_and_email_shoul
 on demo.courier (phone, email);
 
 --changeset ivan.vakhrushev:2025.06.28:courier.created_at.column
-alter table if exists demo.courier
-    add column created_at timestamptz not null default now();
+alter table if exists demo.courier add column created_at timestamptz not null default now();
 comment on column demo.courier.created_at is 'Date and time in UTC when the row was created';

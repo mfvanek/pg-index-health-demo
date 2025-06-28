@@ -22,8 +22,7 @@ create index if not exists i_buyer_middle_name on demo.buyer (middle_name);
 create index if not exists i_buyer_names on demo.buyer (first_name, last_name, middle_name);
 
 --changeset ivan.vakhrushev:2025.06.28:buyer.created_at.column
-alter table if exists demo.buyer
-    add column created_at timestamptz not null default now();
+alter table if exists demo.buyer add column created_at timestamptz not null default now();
 comment on column demo.buyer.created_at is 'Date and time in UTC when the row was created';
 
 --changeset ivan.vakhrushev:2020.01.02:populate.data
