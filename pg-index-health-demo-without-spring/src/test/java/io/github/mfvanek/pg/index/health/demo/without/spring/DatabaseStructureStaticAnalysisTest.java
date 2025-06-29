@@ -275,8 +275,11 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
 
                 case TABLES_NOT_LINKED_TO_OTHERS -> checksAssert
                     .asInstanceOf(list(Table.class))
-                    .hasSize(1)
-                    .containsExactly(Table.of(ctx, DICTIONARY_TABLE));
+                    .hasSize(2)
+                    .containsExactly(
+                        Table.of(ctx, DICTIONARY_TABLE),
+                        Table.of(ctx, "reports")
+                    );
 
                 case TABLES_WITH_ZERO_OR_ONE_COLUMN -> checksAssert
                     .asInstanceOf(list(TableWithColumns.class))
