@@ -15,3 +15,5 @@ databaseChangeLog:
         file: db/changelog/sql/payment.sql
     - include:
         file: db/changelog/sql/dictionary.sql
+    - include:
+          file: db/changelog/sql/reports.sql
