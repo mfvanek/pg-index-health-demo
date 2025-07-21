@@ -12,7 +12,7 @@ dependencyResolutionManagement {
                 .versionRef(springBoot3Version)
             library("spring-boot-v3-dependencies", "org.springframework.boot", "spring-boot-dependencies")
                 .versionRef(springBoot3Version)
-            library("liquibase-core", "org.liquibase:liquibase-core:4.32.0")
+            library("liquibase-core", "org.liquibase:liquibase-core:4.33.0")
             library("liquibase-sessionlock", "com.github.blagerweij:liquibase-sessionlock:1.6.9")
         }
     }
