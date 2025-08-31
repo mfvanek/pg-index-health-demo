@@ -24,6 +24,10 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
 
     @Test
     void deserializeShouldWork() throws JsonProcessingException {
+        assertThat(objectMapper.getRegisteredModuleIds())
+            .hasSizeGreaterThan(1)
+            .contains("PgIndexHealthModelModule");
+
         final ForeignKey original = ForeignKey.ofNotNullColumn("users", "fk_user_role", "role_id");
         final String json = objectMapper.writeValueAsString(original);
         final ForeignKey restored = objectMapper.readValue(json, ForeignKey.class);

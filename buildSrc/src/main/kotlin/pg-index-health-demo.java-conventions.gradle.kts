@@ -27,29 +27,29 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.20.2"))
-    implementation(platform("org.testcontainers:testcontainers-bom:1.21.2"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.20.3"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.21.3"))
 
     implementation("org.jspecify:jspecify:1.0.0")
     implementation("org.postgresql:postgresql:42.7.7")
 
-    testImplementation(platform("org.junit:junit-bom:5.13.2"))
-    testImplementation(platform("org.assertj:assertj-bom:3.27.3"))
+    testImplementation(platform("org.junit:junit-bom:5.13.4"))
+    testImplementation(platform("org.assertj:assertj-bom:3.27.4"))
 
-    errorprone("com.google.errorprone:error_prone_core:2.39.0")
+    errorprone("com.google.errorprone:error_prone_core:2.41.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.29")
-    errorprone("com.uber.nullaway:nullaway:0.12.7")
+    errorprone("com.uber.nullaway:nullaway:0.12.9")
 
     spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.17")
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
-    spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.11")
+    spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.14")
 }
 
 tasks.withType<JavaCompile>().configureEach {
     options.errorprone {
         disableWarningsInGeneratedCode.set(true)
-        disable("Slf4jLoggerShouldBeNonStatic", "Slf4jSignOnlyFormat")
+        disable("Slf4jLoggerShouldBeNonStatic", "Slf4jSignOnlyFormat", "BooleanLiteral")
         option("NullAway:OnlyNullMarked", "true")
         error("NullAway")
     }
@@ -92,7 +92,7 @@ pmd {
 }
 
 spotbugs {
-    toolVersion.set("4.9.3")
+    toolVersion.set("4.9.4")
     showProgress.set(true)
     effort.set(Effort.MAX)
     reportLevel.set(Confidence.LOW)
