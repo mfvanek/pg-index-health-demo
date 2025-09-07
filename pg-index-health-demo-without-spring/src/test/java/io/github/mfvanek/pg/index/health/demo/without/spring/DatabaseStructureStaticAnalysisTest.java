@@ -18,6 +18,7 @@ import io.github.mfvanek.pg.core.checks.host.ColumnsWithFixedLengthVarcharCheckO
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithJsonTypeCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithMoneyTypeCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithSerialTypesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.ColumnsWithTimestampOrTimetzTypeCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.DuplicatedForeignKeysCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.DuplicatedIndexesCheckOnHost;
@@ -120,7 +121,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             new IndexesWithUnnecessaryWhereClauseCheckOnHost(pgConnection),
             new PrimaryKeysThatMostLikelyNaturalKeysCheckOnHost(pgConnection),
             new ColumnsWithMoneyTypeCheckOnHost(pgConnection),
-            new IndexesWithTimestampInTheMiddleCheckOnHost(pgConnection)
+            new IndexesWithTimestampInTheMiddleCheckOnHost(pgConnection),
+            new ColumnsWithTimestampOrTimetzTypeCheckOnHost(pgConnection)
         );
     }
 
