@@ -1,0 +1,71 @@
+spring:
+    profiles.active: dev
+    application.name: pg-index-health-spring-boot-kotlin-demo
+    main.banner-mode: off
+    liquibase:
+        change-log: classpath:/db/changelog/db.changelog-master.yaml
+    security:
+        user:
+            name: demouser
+            password: testpwd123
+    jpa:
+        properties:
+            jakarta.persistence.query.timeout: 1000 # milliseconds
+    jdbc:
+        template:
+            query-timeout: 1s
+
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+        org.springframework.security: INFO
+
+server:
+    port: 8080
+    servlet:
+        context-path: /
+    tomcat:
+        accept-count: 10
+        max-connections: 400
+        threads:
+            max: 10
+            min-spare: 5 # actuator port uses the same configuration
+
+management:
+    server:
+        port: 8090
+    endpoints:
+        web.exposure.include: health,prometheus,liquibase,info,threaddump,heapdump,openapi,swaggerui
+        access:
+            default: read_only
+    endpoint:
+        health:
+            probes.enabled: true
+            group:
+                readiness:
+                    include: readinessState,db
+                    additional-path: server:/readyz # In order to collect probes from application main port
+    metrics:
+        distribution:
+            percentiles-histogram:
+                http.server.requests: true
+            minimum-expected-value:
+                http.server.requests: 10ms
+            maximum-expected-value:
+                http.server.requests: 10s
+            slo:
+                http.server.requests: 1s
+    health:
+        livenessstate:
+            enabled: true
+        readinessstate:
+            enabled: true
+    prometheus:
+        metrics:
+            export:
+                enabled: true
+
+springdoc:
+    show-actuator: true
+    use-management-port: true
