@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+// TODO: add similar test to kotlin demo and other tests too
 class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest {
 
     @Autowired
