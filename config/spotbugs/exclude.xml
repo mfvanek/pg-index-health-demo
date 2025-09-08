@@ -32,6 +32,10 @@
         <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
         <Class name="io.github.mfvanek.pg.index.health.demo.config.SecurityConfig"/>
     </Match>
+    <Match>
+        <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
+        <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.config.SecurityConfig$CorsConfigurer"/>
+    </Match>
 
     <Match>
         <Bug pattern="SLF4J_LOGGER_SHOULD_BE_NON_STATIC,IMC_IMMATURE_CLASS_NO_TOSTRING,WEM_WEAK_EXCEPTION_MESSAGING,CE_CLASS_ENVY"/>
