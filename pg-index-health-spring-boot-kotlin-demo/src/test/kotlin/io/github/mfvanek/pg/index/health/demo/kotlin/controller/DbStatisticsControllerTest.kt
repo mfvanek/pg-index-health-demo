@@ -7,12 +7,20 @@
 
 package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
+import io.github.mfvanek.pg.index.health.demo.kotlin.service.StatisticsCollectorService
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import org.junit.jupiter.api.Test
+import org.springframework.boot.test.system.CapturedOutput
+import org.springframework.boot.test.system.OutputCaptureExtension
 import org.springframework.http.MediaType
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.time.OffsetDateTime
 
+@org.junit.jupiter.api.extension.ExtendWith(OutputCaptureExtension::class)
 class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
+
+    @MockitoBean
+    private lateinit var statisticsCollectorService: StatisticsCollectorService
 
     @Test
     fun shouldGetLastResetDate() {
@@ -39,6 +47,8 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldResetStatisticsWithoutWait() {
+        org.mockito.Mockito.`when`(statisticsCollectorService.resetStatisticsNoWait()).thenReturn(true)
+        
         webTestClient.post()
             .uri("/db/statistics/reset")
             .contentType(MediaType.APPLICATION_JSON)
@@ -47,5 +57,20 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .exchange()
             .expectStatus().isAccepted
             .expectBody(OffsetDateTime::class.java)
+    }
+
+    @Test
+    fun shouldThrowExceptionWhenResetStatisticsWithoutWaitFails(capturedOutput: CapturedOutput) {
+        org.mockito.Mockito.`when`(statisticsCollectorService.resetStatisticsNoWait()).thenReturn(false)
+
+        webTestClient.post()
+            .uri("/db/statistics/reset")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(false)
+            .headers(this::setUpBasicAuth)
+            .exchange()
+            .expectStatus().is5xxServerError
+            .expectBody()
+            .jsonPath("$.message").isEqualTo("Statistics reset failed: Could not reset statistics")
     }
 }
