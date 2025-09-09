@@ -17,7 +17,18 @@
     </Match>
     <Match>
         <Bug pattern="PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS,SIL_SQL_IN_LOOP"/>
-        <Class name="io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService"/>
+        <Or>
+            <Class name="io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService"/>
+            <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGeneratorService"/>
+        </Or>
+    </Match>
+    <Match>
+        <Bug pattern="USBR_UNNECESSARY_STORE_BEFORE_RETURN"/>
+        <Package name="io.github.mfvanek.pg.index.health.demo.kotlin.dto.*"/>
+    </Match>
+    <Match>
+        <Bug pattern="IMC_IMMATURE_CLASS_WRONG_FIELD_ORDER"/>
+        <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.controller.DefaultController"/>
     </Match>
     <Match>
         <Bug pattern="CRLF_INJECTION_LOGS,SQL_INJECTION_JDBC"/>
