@@ -80,22 +80,17 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     fun successfullyExecutesMigrationStatements() {
         `when`(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
         
-        // Since we're testing with a real database, and the migration should succeed without throwing an exception
-        // We're checking that no exception is thrown and that the method completes normally
         org.junit.jupiter.api.assertDoesNotThrow {
             try {
                 dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()
             } catch (e: IllegalStateException) {
-                // We expect this exception because after running the migration, 
-                // there should still be foreign keys without indexes in the test database
-                // This is actually the expected behavior for this test
             }
         }
     }
-    
+
+    // TODO: do we need 100% coverage? It can cost complexity in tests
     @Test
     fun successfullyExecutesMigrationStatementsWithoutException(capturedOutput: CapturedOutput) {
-        // Create a mock service with a mocked dataSource, connection, and statement
         val mockDataSource = mock(DataSource::class.java)
         val mockConnection = mock(Connection::class.java)
         val mockStatement = mock(Statement::class.java)
@@ -111,32 +106,24 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
             mockPgContext
         )
         
-        // Mock the dependencies
-        // First call to getForeignKeysFromDb returns mockForeignKeys, second call returns empty list
         `when`(mockForeignKeysNotCoveredWithIndex.check(mockPgContext)).thenReturn(mockForeignKeys).thenReturn(emptyList())
         `when`(mockDbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
         
-        // Mock the dataSource, connection, and statement
         `when`(mockDataSource.connection).thenReturn(mockConnection)
         `when`(mockConnection.createStatement()).thenReturn(mockStatement)
-        // Mock statement.execute to return true (successful execution)
         `when`(mockStatement.execute(any(String::class.java))).thenReturn(true)
         
-        // Call the method and verify it completes successfully
         org.junit.jupiter.api.assertDoesNotThrow {
             dbMigrationGeneratorServiceWithMocks.generateMigrationsWithForeignKeysChecked()
         }
         
-        // Verify that the statement.execute was called with the correct migration
         verify(mockStatement).execute("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);")
         
-        // Verify that the success message was logged
         kotlin.test.assertTrue(capturedOutput.all.contains("Generated migrations: [CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);]"))
     }
     
     @Test
     fun logsErrorWhenCannotGetConnection(capturedOutput: CapturedOutput) {
-        // Create a mock service with a mocked dataSource that throws an exception
         val mockDataSource = mock(DataSource::class.java)
         val mockDbMigrationGenerator = mock(DbMigrationGenerator::class.java)
         val mockForeignKeysNotCoveredWithIndex = mock(DatabaseCheckOnCluster::class.java)
@@ -150,23 +137,18 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
             mockPgContext
         )
         
-        // Mock the dependencies
         `when`(mockForeignKeysNotCoveredWithIndex.check(mockPgContext)).thenReturn(mockForeignKeys)
         `when`(mockDbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
         
-        // Mock the dataSource to throw an exception when getConnection is called
         mockWhen(mockDataSource.connection).thenThrow(java.sql.SQLException("Connection failed"))
         
-        // Call the method and verify it handles the exception gracefully
         org.junit.jupiter.api.assertDoesNotThrow {
             try {
                 dbMigrationGeneratorServiceWithMockDataSource.generateMigrationsWithForeignKeysChecked()
             } catch (e: IllegalStateException) {
-                // Expected exception due to foreign keys still existing
             }
         }
         
-        // Verify that the error was logged
         kotlin.test.assertTrue(capturedOutput.all.contains("Error getting connection"))
     }
 }
