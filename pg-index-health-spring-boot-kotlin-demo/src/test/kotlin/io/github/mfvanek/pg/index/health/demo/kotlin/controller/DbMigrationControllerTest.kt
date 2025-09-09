@@ -54,9 +54,13 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .responseBody
 
         assertTrue(result != null)
-        assertTrue(result.foreignKeysBefore.isNotEmpty())
-        assertTrue(result.foreignKeysAfter.isEmpty())
-        assertTrue(result.generatedMigrations.all { it.contains("create index concurrently if not exists") })
+
+        assertEquals(1, result.foreignKeysBefore.size, "getForeignKeysBefore() should return non-empty list")
+        assertEquals(0, result.foreignKeysAfter.size, "getForeignKeysAfter() should return empty list")
+        assertTrue(result.generatedMigrations.isNotEmpty(), "getGeneratedMigrations() should return non-empty list")
+        
+        assertEquals("test_table", result.foreignKeysBefore[0].tableName, "getForeignKeysBefore() should return the actual list")
+        assertTrue(result.generatedMigrations.all { it.contains("create index concurrently if not exists") }, "getGeneratedMigrations() should return the actual list")
     }
 
     @Test
