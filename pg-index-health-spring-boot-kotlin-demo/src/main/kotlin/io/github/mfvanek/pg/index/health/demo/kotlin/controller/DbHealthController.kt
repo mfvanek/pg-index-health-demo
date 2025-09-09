@@ -33,6 +33,8 @@ class DbHealthController(
      * Collects health data from the database.
      *
      * @return response entity containing health data
+     *
+     * TODO: add swagger descriptions
      */
     @GetMapping
     fun collectHealthData(): ResponseEntity<Collection<String>> {
@@ -40,6 +42,6 @@ class DbHealthController(
             .withIndexSizeThreshold(0, MemoryUnit.MB)
             .withTableSizeThreshold(1, MemoryUnit.MB)
             .build()
-        return ResponseEntity.ok(healthLogger.logAll(exclusions, pgContext)) // TODO: is it possible to return just DTO?
+        return ResponseEntity.ok(healthLogger.logAll(exclusions, pgContext)) // TODO: is it possible to return DTO?
     }
 }
