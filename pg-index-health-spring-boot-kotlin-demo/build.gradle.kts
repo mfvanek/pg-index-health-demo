@@ -9,14 +9,6 @@ plugins {
     id("com.google.osdetector") version "1.7.3"
 }
 
-// Disable SpotBugs for Kotlin project due to compatibility issues with Kotlin bytecode analysis
-// TODO: investigate
-spotbugs {
-    tasks.withType<com.github.spotbugs.snom.SpotBugsTask>().configureEach {
-        enabled = false
-    }
-}
-
 dependencies {
     implementation(project(":db-migrations"))
     implementation(platform(libs.spring.boot.v3.dependencies))
@@ -66,7 +58,7 @@ tasks {
             jvmTarget = "21"
         }
     }
-
+    
     withType<JacocoReport> {
         reports {
             xml.required.set(true)
@@ -113,7 +105,7 @@ pitest {
             "io.github.mfvanek.pg.index.health.demo.kotlin.PgIndexHealthSpringBootKotlinDemoApplication"
         )
     )
-    excludedTestClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.kotlin.ActuatorEndpointTest"))
+    excludedTestClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.kotlin.ActuatorEndpointTest")) // TODO: add ActuatorEndpointTest class
     // Lower the mutation threshold for Kotlin demo to allow build to pass
     // TODO: Improve test coverage to meet the standard threshold
     mutationThreshold.set(50)
