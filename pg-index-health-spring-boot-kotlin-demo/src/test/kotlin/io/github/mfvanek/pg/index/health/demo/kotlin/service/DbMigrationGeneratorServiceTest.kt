@@ -13,6 +13,7 @@ import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemo
 import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.github.mfvanek.pg.model.context.PgContext
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.mock
@@ -74,20 +75,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         
         kotlin.test.assertTrue(capturedOutput.all.contains("Error running migration"))
     }
-    
-    @Test
-    fun successfullyExecutesMigrationStatements() {
-        `when`(dbMigrationGenerator!!.generate(mockForeignKeys)).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
-        
-        org.junit.jupiter.api.assertDoesNotThrow {
-            try {
-                dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
-            } catch (_: IllegalStateException) {
-            }
-        }
-    }
 
-    // TODO: do we need 100% coverage? It can cost complexity in tests
     @Test
     fun successfullyExecutesMigrationStatementsWithoutException(capturedOutput: CapturedOutput) {
         val mockDataSource = mock(DataSource::class.java)
