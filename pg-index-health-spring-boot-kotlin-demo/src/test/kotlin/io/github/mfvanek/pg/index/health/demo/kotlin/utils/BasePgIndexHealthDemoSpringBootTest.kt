@@ -23,7 +23,7 @@ import java.time.Clock
 abstract class BasePgIndexHealthDemoSpringBootTest {
 
     @Autowired
-    protected lateinit var jdbcTemplate: JdbcTemplate
+    protected var jdbcTemplate: JdbcTemplate? = null
 
     @LocalServerPort
     protected var port: Int = 8080
@@ -32,15 +32,15 @@ abstract class BasePgIndexHealthDemoSpringBootTest {
     protected var actuatorPort: Int = 8090
 
     @Autowired
-    protected lateinit var clock: Clock
+    protected var clock: Clock? = null
 
     @Autowired
-    protected lateinit var webTestClient: WebTestClient
+    protected var webTestClient: WebTestClient? = null
 
     @Autowired
-    private lateinit var securityProperties: SecurityProperties
+    private var securityProperties: SecurityProperties? = null
 
     protected fun setUpBasicAuth(httpHeaders: HttpHeaders) {
-        httpHeaders.setBasicAuth(securityProperties.user.name, securityProperties.user.password)
+        httpHeaders.setBasicAuth(securityProperties!!.user.name, securityProperties!!.user.password)
     }
 }

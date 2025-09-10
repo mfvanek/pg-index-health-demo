@@ -43,7 +43,7 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
     
     @Test
     fun shouldGenerateMigrationsWithForeignKeysChecked() {
-        val result = webTestClient.post()
+        val result = webTestClient!!.post()
             .uri("/db/migration/generate")
             .accept(MediaType.APPLICATION_JSON)
             .headers(this::setUpBasicAuth)
@@ -65,7 +65,7 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun returnsNothingWithWrongAuthorization() {
-        val result = webTestClient.post()
+        val result = webTestClient!!.post()
             .uri("/db/migration/generate")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -88,7 +88,7 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .thenReturn(emptyList()) // Before migrations
             .thenReturn(listOf(mockForeignKey)) // After migrations (simulating failed migrations)
 
-        val result = webTestClient.post()
+        val result = webTestClient!!.post()
             .uri("/db/migration/generate")
             .accept(MediaType.APPLICATION_JSON)
             .headers(this::setUpBasicAuth)

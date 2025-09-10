@@ -20,14 +20,14 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 class ForeignKeyJsonDeserializerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Autowired
-    private lateinit var objectMapper: ObjectMapper
+    private var objectMapper: ObjectMapper? = null
 
     @Test
     @Throws(JsonProcessingException::class)
     fun deserializeShouldWork() {
         val original = ForeignKey.ofNotNullColumn("users", "fk_user_role", "role_id")
-        val json = objectMapper.writeValueAsString(original)
-        val restored = objectMapper.readValue(json, ForeignKey::class.java)
+        val json = objectMapper!!.writeValueAsString(original)
+        val restored = objectMapper!!.readValue(json, ForeignKey::class.java)
         assertThat(restored)
             .isEqualTo(original)
     }
@@ -36,7 +36,7 @@ class ForeignKeyJsonDeserializerTest : BasePgIndexHealthDemoSpringBootTest() {
     fun deserializeShouldThrowExceptionWhenNoColumns() {
         val json = """{"tableName":"users","constraintName":"fk_user_role","constraintType":"FOREIGN_KEY","name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}"""
 
-        assertThatThrownBy { objectMapper.readValue(json, ForeignKey::class.java) }
+        assertThatThrownBy { objectMapper!!.readValue(json, ForeignKey::class.java) }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("columnsInConstraint cannot be empty")
     }
@@ -45,7 +45,7 @@ class ForeignKeyJsonDeserializerTest : BasePgIndexHealthDemoSpringBootTest() {
     fun deserializeShouldThrowExceptionWhenColumnsIsNotArray() {
         val json = """{"tableName":"users","constraintName":"fk_user_role","columnsInConstraint":"test","constraintType":"FOREIGN_KEY","name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}"""
 
-        assertThatThrownBy { objectMapper.readValue(json, ForeignKey::class.java) }
+        assertThatThrownBy { objectMapper!!.readValue(json, ForeignKey::class.java) }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("columnsInConstraint cannot be empty")
     }

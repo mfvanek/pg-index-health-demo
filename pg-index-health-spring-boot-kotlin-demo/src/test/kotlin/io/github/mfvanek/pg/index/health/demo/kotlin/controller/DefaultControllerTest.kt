@@ -17,13 +17,14 @@ class DefaultControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun rootPageShouldRedirectToSwaggerUi() {
-        val result = webTestClient.get()
+        val result = webTestClient!!.get()
             .uri("/")
             .accept(MediaType.APPLICATION_JSON)
             .headers(this::setUpBasicAuth)
             .exchange()
             .expectStatus().isFound
-            .expectHeader().location(String.format(Locale.ROOT, "http://localhost:%d/actuator/swagger-ui", port))
+            .expectHeader()
+            .location("http://localhost:${port}/actuator/swagger-ui")
             .expectBody()
             .returnResult()
             .responseBody

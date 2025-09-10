@@ -20,11 +20,11 @@ import java.time.OffsetDateTime
 class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @MockitoBean
-    private lateinit var statisticsCollectorService: StatisticsCollectorService
+    private var statisticsCollectorService: StatisticsCollectorService? = null
 
     @Test
     fun shouldGetLastResetDate() {
-        webTestClient.get()
+        webTestClient!!.get()
             .uri("/db/statistics/reset")
             .accept(MediaType.APPLICATION_JSON)
             .headers(this::setUpBasicAuth)
@@ -35,7 +35,7 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldResetStatisticsWithWait() {
-        webTestClient.post()
+        webTestClient!!.post()
             .uri("/db/statistics/reset")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(true)
@@ -47,9 +47,9 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldResetStatisticsWithoutWait() {
-        org.mockito.Mockito.`when`(statisticsCollectorService.resetStatisticsNoWait()).thenReturn(true)
+        org.mockito.Mockito.`when`(statisticsCollectorService!!.resetStatisticsNoWait()).thenReturn(true)
         
-        webTestClient.post()
+        webTestClient!!.post()
             .uri("/db/statistics/reset")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(false)
@@ -61,9 +61,9 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldThrowExceptionWhenResetStatisticsWithoutWaitFails(capturedOutput: CapturedOutput) {
-        org.mockito.Mockito.`when`(statisticsCollectorService.resetStatisticsNoWait()).thenReturn(false)
+        org.mockito.Mockito.`when`(statisticsCollectorService!!.resetStatisticsNoWait()).thenReturn(false)
 
-        webTestClient.post()
+        webTestClient!!.post()
             .uri("/db/statistics/reset")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(false)
