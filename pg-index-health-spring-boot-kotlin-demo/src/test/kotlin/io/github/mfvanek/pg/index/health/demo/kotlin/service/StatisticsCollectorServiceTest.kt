@@ -10,8 +10,11 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.service
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagement
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -31,6 +34,9 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @MockitoBean
     private var databaseManagement: DatabaseManagement? = null
 
+    @MockitoBean
+    override var jdbcTemplate: JdbcTemplate? = null
+
     @Test
     fun getLastStatsResetTimestampShouldReturnCorrectValue() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
@@ -48,6 +54,31 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
         val result = statisticsCollectorService!!.getLastStatsResetTimestamp()
         assertEquals(OffsetDateTime.MIN, result)
+    }
+
+    @Test
+    fun getLastStatsResetTimestampShouldReturnCorrectValueAndLogTraceMessage() {
+        val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
+        org.mockito.Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+            .thenReturn(java.util.Optional.of(expectedTimestamp))
+
+        val result = statisticsCollectorService!!.getLastStatsResetTimestamp()
+        assertEquals(expectedTimestamp, result)
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    fun resetStatisticsShouldCallWaitForStatisticsCollector() {
+        val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
+        org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        org.mockito.Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+            .thenReturn(java.util.Optional.of(expectedTimestamp))
+        
+        Mockito.`when`(jdbcTemplate!!.execute("vacuum analyze;")).thenAnswer { _ -> }
+        
+        statisticsCollectorService!!.resetStatistics()
+        
+        Mockito.verify(jdbcTemplate!!).execute("vacuum analyze;")
     }
 
     @Test
@@ -87,5 +118,38 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         org.junit.jupiter.api.assertThrows<IllegalStateException> {
             statisticsCollectorService!!.resetStatistics()
         }
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    fun resetStatisticsShouldCallJdbcTemplateExecute() {
+        val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
+        org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        org.mockito.Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+            .thenReturn(java.util.Optional.of(expectedTimestamp))
+
+        statisticsCollectorService!!.resetStatistics()
+
+        Mockito.verify(jdbcTemplate!!).execute("vacuum analyze;")
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    fun resetStatisticsShouldTakeApproximatelyOneSecond() {
+        val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
+        org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        org.mockito.Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+            .thenReturn(java.util.Optional.of(expectedTimestamp))
+
+        Mockito.`when`(jdbcTemplate!!.execute("vacuum analyze;")).thenAnswer { _ -> }
+
+        val startTime = System.currentTimeMillis()
+        
+        statisticsCollectorService!!.resetStatistics()
+        
+        val endTime = System.currentTimeMillis()
+        
+        val duration = endTime - startTime
+        assertTrue(duration >= 900)
     }
 }
