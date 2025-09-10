@@ -91,7 +91,7 @@ pitest {
             "io.github.mfvanek.pg.index.health.demo.kotlin.PgIndexHealthSpringBootKotlinDemoApplication"
         )
     )
-    excludedTestClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.kotlin.ActuatorEndpointTest")) // TODO: add ActuatorEndpointTest class
+    excludedTestClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.kotlin.ActuatorEndpointTest"))
     
     // Prevent Pitest from removing calls to Kotlin internal methods
     avoidCallsTo.set(
