@@ -74,7 +74,7 @@ class ActuatorEndpointTest : BasePgIndexHealthDemoSpringBootTest() {
             .accept(MediaType.TEXT_HTML)
             .exchange()
             .expectStatus().isFound
-            .expectHeader().location("/actuator/swagger-ui/index.html")
+            .expectHeader().location("/actuator/swagger-ui/index.html") // TODO: fix swagger for local deployment
             .expectBody()
             .returnResult()
             .responseBody
