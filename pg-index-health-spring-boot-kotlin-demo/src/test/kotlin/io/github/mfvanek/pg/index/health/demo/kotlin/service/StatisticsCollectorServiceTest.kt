@@ -69,7 +69,6 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     }
 
     @Test
-    @Transactional(propagation = Propagation.NOT_SUPPORTED) // TODO: remove from tests
     fun resetStatisticsShouldCallWaitForStatisticsCollector() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
         org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
@@ -100,7 +99,6 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     }
 
     @Test
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     fun resetStatisticsShouldReturnTimestampWhenSuccessful() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
         org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
@@ -113,7 +111,6 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     }
 
     @Test
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     fun resetStatisticsShouldThrowExceptionWhenFailed() {
         org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(false)
 
@@ -123,7 +120,6 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     }
 
     @Test
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     fun resetStatisticsShouldCallJdbcTemplateExecute() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
         org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
@@ -136,7 +132,6 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     }
 
     @Test
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     fun resetStatisticsShouldTakeApproximatelyOneSecond() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
         org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
