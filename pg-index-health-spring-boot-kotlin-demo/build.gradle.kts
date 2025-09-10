@@ -67,7 +67,7 @@ tasks {
         afterEvaluate {
             classDirectories.setFrom(files(classDirectories.files.map {
                 fileTree(it) {
-                    exclude("**/PgIndexHealthSpringBootKotlinDemoApplication.class")
+                    exclude("**/PgIndexHealthSpringBootKotlinDemoApplicationKt.class")
                 }
             }))
         }
