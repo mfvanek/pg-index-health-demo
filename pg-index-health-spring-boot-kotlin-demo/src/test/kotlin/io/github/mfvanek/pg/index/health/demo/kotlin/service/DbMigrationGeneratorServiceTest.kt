@@ -14,48 +14,47 @@ import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.github.mfvanek.pg.model.context.PgContext
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
 import org.springframework.test.context.bean.override.mockito.MockitoBean
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.anyList
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when` as mockWhen
 import java.sql.Connection
 import java.sql.Statement
 import javax.sql.DataSource
-import org.mockito.Mockito.verify
-import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.`when` as mockWhen
 
 @org.junit.jupiter.api.extension.ExtendWith(OutputCaptureExtension::class)
 class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Autowired
-    private lateinit var dbMigrationGeneratorService: DbMigrationGeneratorService
+    private var dbMigrationGeneratorService: DbMigrationGeneratorService? = null
 
     @MockitoBean
-    private lateinit var dbMigrationGenerator: DbMigrationGenerator<ForeignKey>
+    private var dbMigrationGenerator: DbMigrationGenerator<ForeignKey>? = null
     
     @MockitoBean
-    private lateinit var foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>
+    private var foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>? = null
     
     @MockitoBean
-    private lateinit var pgContext: PgContext
+    private var pgContext: PgContext? = null
     
     private val mockForeignKeys = listOf<ForeignKey>(mock(ForeignKey::class.java))
 
     @BeforeEach
     fun setUp() {
-        `when`(foreignKeysNotCoveredWithIndex.check(pgContext)).thenReturn(mockForeignKeys)
+        `when`(foreignKeysNotCoveredWithIndex!!.check(pgContext)).thenReturn(mockForeignKeys)
     }
 
     @Test
     fun throwsIllegalStateExceptionWhenEmptyMigrationString(capturedOutput: CapturedOutput) {
-        `when`(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(emptyList())
+        `when`(dbMigrationGenerator!!.generate(mockForeignKeys)).thenReturn(emptyList())
 
         org.junit.jupiter.api.assertThrows<IllegalStateException> {
-            dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()
+            dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
         }.apply {
             kotlin.test.assertEquals("There should be no foreign keys not covered by the index", message)
         }
@@ -65,10 +64,10 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun logsAboutSqlExceptionWhenBadMigrationStringAndThrowsExceptionAfter(capturedOutput: CapturedOutput) {
-        `when`(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("select * from payments"))
+        `when`(dbMigrationGenerator!!.generate(mockForeignKeys)).thenReturn(listOf("select * from payments"))
 
         org.junit.jupiter.api.assertThrows<IllegalStateException> {
-            dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()
+            dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
         }.apply {
             kotlin.test.assertEquals("There should be no foreign keys not covered by the index", message)
         }
@@ -78,12 +77,12 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     
     @Test
     fun successfullyExecutesMigrationStatements() {
-        `when`(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
+        `when`(dbMigrationGenerator!!.generate(mockForeignKeys)).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
         
         org.junit.jupiter.api.assertDoesNotThrow {
             try {
-                dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()
-            } catch (e: IllegalStateException) {
+                dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
+            } catch (_: IllegalStateException) {
             }
         }
     }
@@ -145,7 +144,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         org.junit.jupiter.api.assertDoesNotThrow {
             try {
                 dbMigrationGeneratorServiceWithMockDataSource.generateMigrationsWithForeignKeysChecked()
-            } catch (e: IllegalStateException) {
+            } catch (_: IllegalStateException) {
             }
         }
         

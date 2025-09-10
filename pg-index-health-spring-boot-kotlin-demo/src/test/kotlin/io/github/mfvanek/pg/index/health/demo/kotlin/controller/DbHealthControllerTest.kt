@@ -15,7 +15,7 @@ class DbHealthControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldCollectHealthData() {
-        webTestClient.get()
+        webTestClient!!.get()
             .uri("/db/health")
             .accept(MediaType.APPLICATION_JSON)
             .headers(this::setUpBasicAuth)
