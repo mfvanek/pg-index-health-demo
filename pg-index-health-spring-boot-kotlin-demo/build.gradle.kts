@@ -108,5 +108,5 @@ pitest {
     excludedTestClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.kotlin.ActuatorEndpointTest")) // TODO: add ActuatorEndpointTest class
     // Lower the mutation threshold for Kotlin demo to allow build to pass
     // TODO: Improve test coverage to meet the standard threshold
-    mutationThreshold.set(52)
+    mutationThreshold.set(55)
 }
