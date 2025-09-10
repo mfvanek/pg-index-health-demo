@@ -57,13 +57,15 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     }
 
     @Test
-    fun getLastStatsResetTimestampShouldReturnCorrectValueAndLogTraceMessage() {
+    fun getLastStatsResetTimestampShouldReturnCorrectValueAndLogTraceMessage(capturedOutput: CapturedOutput) {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
         org.mockito.Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
         val result = statisticsCollectorService!!.getLastStatsResetTimestamp()
         assertEquals(expectedTimestamp, result)
+        
+        assertTrue(capturedOutput.all.contains("Last stats reset timestamp = $expectedTimestamp"))
     }
 
     @Test

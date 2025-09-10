@@ -3,3 +3,4 @@ logging:
         org.springframework:
             jdbc: DEBUG
             orm.jpa.JpaTransactionManager: DEBUG
+        io.github.mfvanek.pg.index.health.demo.kotlin.service.StatisticsCollectorService: TRACE
