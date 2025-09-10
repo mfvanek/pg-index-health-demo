@@ -7,9 +7,11 @@
 
 package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
+import io.github.mfvanek.pg.index.health.demo.kotlin.dto.DatabaseHealthResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
+import kotlin.test.assertTrue
 
 class DbHealthControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
@@ -21,6 +23,11 @@ class DbHealthControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .headers(this::setUpBasicAuth)
             .exchange()
             .expectStatus().isOk
-            .expectBodyList(String::class.java)
+            .expectBody(DatabaseHealthResponse::class.java)
+            .consumeWith { response ->
+                val healthResponse = response.responseBody
+                assertTrue(healthResponse != null)
+                assertTrue(healthResponse.healthData.isNotEmpty())
+            }
     }
 }
