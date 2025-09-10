@@ -66,9 +66,7 @@ class DatabaseStructureHealthConfig {
 
     @Bean
     fun databaseManagement(highAvailabilityPgConnection: HighAvailabilityPgConnection): DatabaseManagement {
-        return DatabaseManagementImpl(highAvailabilityPgConnection) { connection ->
-            StatisticsMaintenanceOnHostImpl(connection)
-        }
+        return DatabaseManagementImpl(highAvailabilityPgConnection, ::StatisticsMaintenanceOnHostImpl)
     }
 
     @Bean

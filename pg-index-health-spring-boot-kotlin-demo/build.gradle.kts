@@ -76,22 +76,6 @@ tasks {
     jacocoTestCoverageVerification {
         violationRules {
             classDirectories.setFrom(jacocoTestReport.get().classDirectories)
-            rule {
-                limit {
-                    counter = "INSTRUCTION"
-                    value = "COVEREDRATIO"
-                    // TODO: Revert to 0.97 after improving test coverage
-                    minimum = "0.92".toBigDecimal() // Meet shared config requirement
-                }
-            }
-            rule {
-                limit {
-                    counter = "BRANCH"
-                    value = "COVEREDRATIO"
-                    // TODO: Revert to 0.95 after improving test coverage
-                    minimum = "0.7".toBigDecimal() // Meet shared config requirement
-                }
-            }
         }
     }
 }
