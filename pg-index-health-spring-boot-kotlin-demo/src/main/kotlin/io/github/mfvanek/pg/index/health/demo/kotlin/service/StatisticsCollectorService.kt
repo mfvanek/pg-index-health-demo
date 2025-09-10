@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit
  * @property jdbcTemplate JDBC template for executing SQL queries
  * @property databaseManagement Database management instance for statistics operations
  *
- * TODO: move private methods to the bottom of the class
  *
  */
 @Service
@@ -33,28 +32,6 @@ class StatisticsCollectorService(
 ) {
 
     private val logger = LoggerFactory.getLogger(StatisticsCollectorService::class.java)
-
-    /**
-     * Waits for the statistics collector to process the data.
-     *
-     * @throws InterruptedException if the thread is interrupted while sleeping
-     */
-    @Throws(InterruptedException::class)
-    private fun waitForStatisticsCollector() {
-        jdbcTemplate.execute("vacuum analyze;")
-        TimeUnit.MILLISECONDS.sleep(1000L) // TODO: can we wait for a result from vacuum analyze?
-    }
-
-    /**
-     * Gets the last statistics reset timestamp from the database.
-     *
-     * @return the last reset timestamp or [OffsetDateTime.MIN] if not available
-     */
-    private fun getLastStatsResetTimestampInner(): OffsetDateTime {
-        val result = databaseManagement.lastStatsResetTimestamp.orElse(OffsetDateTime.MIN)
-        logger.trace("Last stats reset timestamp = {}", result)
-        return result
-    }
 
     /**
      * Gets the last statistics reset timestamp.
@@ -87,5 +64,27 @@ class StatisticsCollectorService(
             return getLastStatsResetTimestampInner()
         }
         throw IllegalStateException("Could not reset statistics")
+    }
+
+    /**
+     * Waits for the statistics collector to process the data.
+     *
+     * @throws InterruptedException if the thread is interrupted while sleeping
+     */
+    @Throws(InterruptedException::class)
+    private fun waitForStatisticsCollector() {
+        jdbcTemplate.execute("vacuum analyze;")
+        TimeUnit.MILLISECONDS.sleep(1000L) // TODO: can we wait for a result from vacuum analyze?
+    }
+
+    /**
+     * Gets the last statistics reset timestamp from the database.
+     *
+     * @return the last reset timestamp or [OffsetDateTime.MIN] if not available
+     */
+    private fun getLastStatsResetTimestampInner(): OffsetDateTime {
+        val result = databaseManagement.lastStatsResetTimestamp.orElse(OffsetDateTime.MIN)
+        logger.trace("Last stats reset timestamp = {}", result)
+        return result
     }
 }
