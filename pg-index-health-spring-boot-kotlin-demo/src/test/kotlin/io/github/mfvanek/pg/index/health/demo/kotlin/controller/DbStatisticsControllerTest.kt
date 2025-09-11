@@ -7,22 +7,25 @@
 
 package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
+import io.github.mfvanek.pg.health.checks.management.DatabaseManagement
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.StatisticsResetResponse
-import io.github.mfvanek.pg.index.health.demo.kotlin.service.StatisticsCollectorService
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
-import java.time.OffsetDateTime
 
 @org.junit.jupiter.api.extension.ExtendWith(OutputCaptureExtension::class)
 class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @MockitoBean
-    private var statisticsCollectorService: StatisticsCollectorService? = null
+    private var databaseManagement: DatabaseManagement? = null
 
+    @org.junit.jupiter.api.BeforeEach
+    fun setUp() {
+        org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+    }
+    
     @Test
     fun shouldGetLastResetDate() {
         webTestClient!!.get()
@@ -48,8 +51,6 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldResetStatisticsWithoutWait() {
-        org.mockito.Mockito.`when`(statisticsCollectorService!!.resetStatisticsNoWait()).thenReturn(true)
-        
         webTestClient!!.post()
             .uri("/db/statistics/reset")
             .contentType(MediaType.APPLICATION_JSON)
@@ -61,8 +62,8 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
     }
 
     @Test
-    fun shouldThrowExceptionWhenResetStatisticsWithoutWaitFails(capturedOutput: CapturedOutput) {
-        org.mockito.Mockito.`when`(statisticsCollectorService!!.resetStatisticsNoWait()).thenReturn(false)
+    fun shouldThrowExceptionWhenResetStatisticsWithoutWaitFails() {
+        org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(false)
 
         webTestClient!!.post()
             .uri("/db/statistics/reset")
