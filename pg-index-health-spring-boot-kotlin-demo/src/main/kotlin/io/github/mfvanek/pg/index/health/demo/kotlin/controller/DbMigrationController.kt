@@ -10,6 +10,11 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyMigrationResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.MigrationError
 import io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGeneratorService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/db/migration")
+@Tag(name = "Database Migration", description = "Endpoints for generating database migrations")
 class DbMigrationController(
     private val dbMigrationGeneratorService: DbMigrationGeneratorService
 ) {
@@ -33,6 +39,26 @@ class DbMigrationController(
      *
      * @return response containing foreign keys and generated migrations
      */
+    @Operation(
+        summary = "Generate database migrations",
+        description = "Generates database migrations with foreign key constraints checked"
+    )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Successfully generated migrations",
+        content = [Content(
+            mediaType = "application/json",
+            schema = Schema(implementation = ForeignKeyMigrationResponse::class)
+        )]
+    )
+    @ApiResponse(
+        responseCode = "417",
+        description = "Migration generation failed",
+        content = [Content(
+            mediaType = "application/json",
+            schema = Schema(implementation = MigrationError::class)
+        )]
+    )
     @PostMapping("/generate")
     fun generateMigrationsWithForeignKeysChecked(): ForeignKeyMigrationResponse {
         return dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()

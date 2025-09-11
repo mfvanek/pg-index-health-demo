@@ -12,6 +12,11 @@ import io.github.mfvanek.pg.health.logger.HealthLogger
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.DatabaseHealthResponse
 import io.github.mfvanek.pg.model.context.PgContext
 import io.github.mfvanek.pg.model.units.MemoryUnit
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/db/health")
+@Tag(name = "Database Health", description = "Endpoints for checking database health")
 class DbHealthController(
     private val healthLogger: HealthLogger,
     private val pgContext: PgContext
@@ -33,9 +39,19 @@ class DbHealthController(
      * Collects health data from the database.
      *
      * @return database health response DTO
-     *
-     * TODO: add swagger descriptions
      */
+    @Operation(
+        summary = "Collect database health data",
+        description = "Collects comprehensive health data from the database including information about indexes, tables, and other database objects"
+    )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Successfully collected health data",
+        content = [Content(
+            mediaType = "application/json",
+            schema = Schema(implementation = DatabaseHealthResponse::class)
+        )]
+    )
     @GetMapping
     fun collectHealthData(): DatabaseHealthResponse {
         val exclusions = Exclusions.builder()
