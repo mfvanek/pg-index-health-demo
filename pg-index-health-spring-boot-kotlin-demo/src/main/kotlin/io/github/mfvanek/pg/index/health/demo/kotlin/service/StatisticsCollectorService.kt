@@ -77,7 +77,7 @@ class StatisticsCollectorService(
      */
     @Throws(InterruptedException::class)
     private fun waitForStatisticsCollector() {
-        jdbcTemplate.execute("vacuum analyze;") // TODO: Test with real database
+        jdbcTemplate.execute("vacuum analyze;")
         
         // Poll for vacuum analyze completion by checking if there are no active vacuum operations
         var attempts = 0
