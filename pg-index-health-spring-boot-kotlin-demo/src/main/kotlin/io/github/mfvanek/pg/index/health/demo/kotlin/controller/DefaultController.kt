@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.io.IOException
 
 @RestController
+@Hidden
 class DefaultController(
     @Value("\${server.port}")
     private val port: Int,
