@@ -14,6 +14,13 @@ spring:
     jdbc:
         template:
             query-timeout: 1s
+    datasource:
+        url: jdbc:postgresql://localhost:5432/demo_for_pg_index_health
+        username: demo_user
+        password: myUniquePassword
+        hikari:
+            connection-timeout: 20000
+            maximum-pool-size: 10
 
 app:
     statistics:

@@ -20,21 +20,21 @@ import io.github.mfvanek.pg.health.logger.DatabaseChecksOnCluster
 import io.github.mfvanek.pg.health.logger.HealthLogger
 import io.github.mfvanek.pg.health.logger.StandardHealthLogger
 import io.github.mfvanek.pg.model.context.PgContext
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.testcontainers.containers.JdbcDatabaseContainer
 
 // TODO: look at pg-index-health-jdbc-connection lib
 @Configuration(proxyBeanMethods = false)
 class DatabaseStructureHealthConfig {
 
     @Bean
-    fun connectionCredentials(jdbcDatabaseContainer: JdbcDatabaseContainer<*>): ConnectionCredentials {
-        return ConnectionCredentials.ofUrl(
-            jdbcDatabaseContainer.jdbcUrl,
-            jdbcDatabaseContainer.username,
-            jdbcDatabaseContainer.password
-        )
+    fun connectionCredentials(
+        @Value($$"${spring.datasource.url}") url: String,
+        @Value($$"${spring.datasource.username}") username: String,
+        @Value($$"${spring.datasource.password}") password: String
+    ): ConnectionCredentials {
+        return ConnectionCredentials.ofUrl(url, username, password)
     }
 
     @Bean
