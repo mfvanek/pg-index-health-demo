@@ -68,4 +68,3 @@ management:
 
 springdoc:
     show-actuator: true
-    use-management-port: true

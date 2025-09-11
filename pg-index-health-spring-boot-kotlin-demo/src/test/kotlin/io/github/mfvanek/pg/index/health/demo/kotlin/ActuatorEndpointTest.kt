@@ -67,18 +67,22 @@ class ActuatorEndpointTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun swaggerUiEndpointShouldReturnFound() {
-        val result = actuatorClient!!.get()
+        val mainAppClient = WebTestClient.bindToServer()
+            .baseUrl("http://localhost:$port/")
+            .defaultHeaders { super.setUpBasicAuth(it) }
+            .build()
+            
+        val result = mainAppClient.get()
             .uri { uriBuilder ->
-                uriBuilder.pathSegment("swagger-ui").build()
+                uriBuilder.path("swagger-ui/index.html").build()
             }
             .accept(MediaType.TEXT_HTML)
             .exchange()
-            .expectStatus().isFound
-            .expectHeader().location("/actuator/swagger-ui/index.html") // TODO: fix swagger for local deployment
+            .expectStatus().isOk
             .expectBody()
             .returnResult()
             .responseBody
-        assertThat(result).isNull()
+        assertThat(result).isNotNull
     }
 
     @Test
