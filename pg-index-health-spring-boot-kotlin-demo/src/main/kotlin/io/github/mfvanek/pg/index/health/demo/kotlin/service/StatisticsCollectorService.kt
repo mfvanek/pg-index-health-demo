@@ -8,7 +8,9 @@
 package io.github.mfvanek.pg.index.health.demo.kotlin.service
 
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagement
+import io.github.mfvanek.pg.index.health.demo.kotlin.config.StatisticsProperties
 import org.slf4j.LoggerFactory
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
@@ -21,14 +23,16 @@ import java.util.concurrent.TimeUnit
  *
  * @property jdbcTemplate JDBC template for executing SQL queries
  * @property databaseManagement Database management instance for statistics operations
- *
+ * @property statisticsProperties Configuration properties for statistics operations
  *
  */
 @Service
 @Transactional(readOnly = true)
+@EnableConfigurationProperties(StatisticsProperties::class)
 class StatisticsCollectorService(
     private val jdbcTemplate: JdbcTemplate,
-    private val databaseManagement: DatabaseManagement
+    private val databaseManagement: DatabaseManagement,
+    private val statisticsProperties: StatisticsProperties
 ) {
 
     private val logger = LoggerFactory.getLogger(StatisticsCollectorService::class.java)
@@ -69,12 +73,28 @@ class StatisticsCollectorService(
     /**
      * Waits for the statistics collector to process the data.
      *
-     * @throws InterruptedException if the thread is interrupted while sleeping
+     * @throws InterruptedException if the thread is interrupted while waiting
      */
     @Throws(InterruptedException::class)
     private fun waitForStatisticsCollector() {
         jdbcTemplate.execute("vacuum analyze;")
-        TimeUnit.MILLISECONDS.sleep(1000L) // TODO: can we wait for a result from vacuum analyze?
+        
+        // Poll for vacuum analyze completion by checking if there are no active vacuum operations
+        var attempts = 0
+        val maxAttempts = statisticsProperties.vacuumResultPollingAttempts
+        while (attempts < maxAttempts) {
+            val activeVacuums = jdbcTemplate.queryForObject(
+                "select count(*) from pg_stat_progress_vacuum where datname = current_database()", 
+                Int::class.java
+            ) ?: 0
+            
+            if (activeVacuums == 0) {
+                break
+            }
+            
+            TimeUnit.MILLISECONDS.sleep(100L)
+            attempts++
+        }
     }
 
     /**

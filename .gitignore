@@ -6,3 +6,4 @@ build/
 /.idea
 key-value.log
 .vscode/
+.kotlin/
