@@ -7,25 +7,20 @@
 
 package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
+import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyMigrationResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.MigrationError
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import io.github.mfvanek.pg.model.constraint.ForeignKey
-import org.junit.jupiter.api.Test
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.any
-import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster
 import io.github.mfvanek.pg.model.context.PgContext
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
+import org.junit.jupiter.api.Test
+import org.mockito.Mockito.*
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 

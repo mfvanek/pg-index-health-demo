@@ -21,7 +21,7 @@ import java.time.Clock
  * Usage in tests:
  * ```
  * @Autowired
- * private lateinit var clock: Clock
+ * private var clock: Clock? = null
  * ```
  * TODO: move to test directory?
  *

@@ -35,10 +35,6 @@
         <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGeneratorServiceTest"/>
     </Match>
     <Match>
-        <Bug pattern="IMC_IMMATURE_CLASS_WRONG_FIELD_ORDER"/>
-        <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.controller.DefaultController"/>
-    </Match>
-    <Match>
         <Bug pattern="CRLF_INJECTION_LOGS,SQL_INJECTION_JDBC"/>
     </Match>
     <Match>
