@@ -8,6 +8,7 @@
 package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.MigrationError
+import io.github.mfvanek.pg.index.health.demo.kotlin.dto.StatisticsResetResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.service.StatisticsCollectorService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -17,14 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
-import java.time.OffsetDateTime
+import org.springframework.web.bind.annotation.*
 
 /**
  * Controller for database statistics operations.
@@ -52,12 +46,13 @@ class DbStatisticsController(
         description = "Successfully retrieved the last reset timestamp",
         content = [Content(
             mediaType = "application/json",
-            schema = Schema(implementation = OffsetDateTime::class)
+            schema = Schema(implementation = StatisticsResetResponse::class)
         )]
     )
     @GetMapping("/reset")
-    fun getLastResetDate(): ResponseEntity<OffsetDateTime> {
-        return ResponseEntity.ok(statisticsCollectorService.getLastStatsResetTimestamp())
+    fun getLastResetDate(): StatisticsResetResponse {
+        val timestamp = statisticsCollectorService.getLastStatsResetTimestamp()
+        return StatisticsResetResponse(timestamp)
     }
 
     /**
@@ -80,7 +75,7 @@ class DbStatisticsController(
         description = "Statistics reset completed successfully with wait",
         content = [Content(
             mediaType = "application/json",
-            schema = Schema(implementation = OffsetDateTime::class)
+            schema = Schema(implementation = StatisticsResetResponse::class)
         )]
     )
     @ApiResponse(
@@ -88,7 +83,7 @@ class DbStatisticsController(
         description = "Statistics reset initiated successfully without wait",
         content = [Content(
             mediaType = "application/json",
-            schema = Schema(implementation = OffsetDateTime::class)
+            schema = Schema(implementation = StatisticsResetResponse::class)
         )]
     )
     @ApiResponse(
@@ -100,14 +95,16 @@ class DbStatisticsController(
         )]
     )
     @PostMapping("/reset")
-    fun doReset(@RequestBody wait: Boolean): ResponseEntity<OffsetDateTime> { // TODO: return DTO
+    fun doReset(@RequestBody wait: Boolean): ResponseEntity<StatisticsResetResponse> {
         return if (wait) {
-            ResponseEntity.ok().body(statisticsCollectorService.resetStatistics())
+            val timestamp = statisticsCollectorService.resetStatistics()
+            ResponseEntity.ok().body(StatisticsResetResponse(timestamp))
         } else {
             if (!statisticsCollectorService.resetStatisticsNoWait()) {
                 throw IllegalStateException("Could not reset statistics")
             }
-            ResponseEntity.accepted().body(statisticsCollectorService.getLastStatsResetTimestamp())
+            val timestamp = statisticsCollectorService.getLastStatsResetTimestamp()
+            ResponseEntity.accepted().body(StatisticsResetResponse(timestamp))
         }
     }
 

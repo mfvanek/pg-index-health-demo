@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
+import io.github.mfvanek.pg.index.health.demo.kotlin.dto.StatisticsResetResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.service.StatisticsCollectorService
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import org.junit.jupiter.api.Test
@@ -30,7 +31,7 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .headers(this::setUpBasicAuth)
             .exchange()
             .expectStatus().isOk
-            .expectBody(OffsetDateTime::class.java)
+            .expectBody(StatisticsResetResponse::class.java)
     }
 
     @Test
@@ -42,7 +43,7 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .headers(this::setUpBasicAuth)
             .exchange()
             .expectStatus().isOk
-            .expectBody(OffsetDateTime::class.java)
+            .expectBody(StatisticsResetResponse::class.java)
     }
 
     @Test
@@ -56,7 +57,7 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .headers(this::setUpBasicAuth)
             .exchange()
             .expectStatus().isAccepted
-            .expectBody(OffsetDateTime::class.java)
+            .expectBody(StatisticsResetResponse::class.java)
     }
 
     @Test
