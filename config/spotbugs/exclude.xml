@@ -35,6 +35,13 @@
         <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGeneratorServiceTest"/>
     </Match>
     <Match>
+        <Bug pattern="BC_BAD_CAST_TO_ABSTRACT_COLLECTION"/>
+        <Or>
+            <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGeneratorService"/>
+            <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.mapper.ForeignKeyMapper"/>
+        </Or>
+    </Match>
+    <Match>
         <Bug pattern="CRLF_INJECTION_LOGS,SQL_INJECTION_JDBC"/>
     </Match>
     <Match>
