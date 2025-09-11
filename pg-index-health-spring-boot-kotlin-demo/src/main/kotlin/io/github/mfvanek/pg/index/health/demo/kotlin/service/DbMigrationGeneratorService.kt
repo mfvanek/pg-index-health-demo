@@ -9,7 +9,9 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.service
 
 import io.github.mfvanek.pg.generator.DbMigrationGenerator
 import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster
+import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyDto
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyMigrationResponse
+import io.github.mfvanek.pg.index.health.demo.kotlin.mapper.ForeignKeyMapper
 import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.github.mfvanek.pg.model.context.PgContext
 import org.slf4j.LoggerFactory
@@ -32,7 +34,8 @@ class DbMigrationGeneratorService(
     private val dataSource: DataSource,
     private val dbMigrationGenerator: DbMigrationGenerator<ForeignKey>,
     private val foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>,
-    private val pgContext: PgContext
+    private val pgContext: PgContext,
+    private val foreignKeyMapper: ForeignKeyMapper
 ) {
 
     private val logger = LoggerFactory.getLogger(DbMigrationGeneratorService::class.java)
@@ -51,7 +54,11 @@ class DbMigrationGeneratorService(
         if (keysAfter.isNotEmpty()) {
             throw IllegalStateException("There should be no foreign keys not covered by the index")
         }
-        return ForeignKeyMigrationResponse(keysBefore, keysAfter, migrations)
+        return ForeignKeyMigrationResponse(
+            keysBefore.map { foreignKeyMapper.toForeignKeyDto(it) },
+            keysAfter.map { foreignKeyMapper.toForeignKeyDto(it) },
+            migrations
+        )
     }
 
     /**

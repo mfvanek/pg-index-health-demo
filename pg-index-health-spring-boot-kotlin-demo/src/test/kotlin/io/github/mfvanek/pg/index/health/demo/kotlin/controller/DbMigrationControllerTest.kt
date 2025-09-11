@@ -8,6 +8,8 @@
 package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
 import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster
+import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyColumnDto
+import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyDto
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyMigrationResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.MigrationError
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
@@ -25,16 +27,14 @@ import kotlin.test.assertTrue
 class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @MockitoBean
-    private lateinit var foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>
-
+    private val foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>? = null
 
     @BeforeEach
     fun setUp() {
-        `when`(foreignKeysNotCoveredWithIndex.check(any(PgContext::class.java)))
+        `when`(foreignKeysNotCoveredWithIndex!!.check(any(PgContext::class.java)))
             .thenReturn(listOf(ForeignKey.ofNotNullColumn("test_table", "fk_col", "col_name")))
             .thenReturn(emptyList())
     }
-
     
     @Test
     fun shouldGenerateMigrationsWithForeignKeysChecked() {
@@ -76,7 +76,7 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
     fun handleMigrationExceptionShouldReturnExpectedError() {
         val mockForeignKey = ForeignKey.ofNotNullColumn("demo.test_table", "fk_test_column", "test_column")
         
-        `when`(foreignKeysNotCoveredWithIndex.check(any(PgContext::class.java)))
+        `when`(foreignKeysNotCoveredWithIndex!!.check(any(PgContext::class.java)))
             .thenReturn(emptyList())
             .thenReturn(listOf(mockForeignKey))
 
@@ -99,10 +99,18 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldDirectlyTestForeignKeyMigrationResponseDtoWithNonEmptyValues() {
-        val foreignKey1 = ForeignKey.ofNotNullColumn("table1", "fk_col1", "ref_col1")
-        val foreignKey2 = ForeignKey.ofNotNullColumn("table2", "fk_col2", "ref_col2")
-        val foreignKeysBefore = listOf(foreignKey1, foreignKey2)
-        val foreignKeysAfter = listOf(foreignKey1)
+        val foreignKeyDto1 = ForeignKeyDto(
+            tableName = "table1",
+            constraintName = "fk_col1",
+            columns = listOf(ForeignKeyColumnDto(name = "ref_col1", nullable = false))
+        )
+        val foreignKeyDto2 = ForeignKeyDto(
+            tableName = "table2",
+            constraintName = "fk_col2",
+            columns = listOf(ForeignKeyColumnDto(name = "ref_col2", nullable = false))
+        )
+        val foreignKeysBefore = listOf(foreignKeyDto1, foreignKeyDto2)
+        val foreignKeysAfter = listOf(foreignKeyDto1)
         val generatedMigrations = listOf("CREATE INDEX idx1 ON table1 (col1);", "CREATE INDEX idx2 ON table2 (col2);")
 
         val response = ForeignKeyMigrationResponse(foreignKeysBefore, foreignKeysAfter, generatedMigrations)
