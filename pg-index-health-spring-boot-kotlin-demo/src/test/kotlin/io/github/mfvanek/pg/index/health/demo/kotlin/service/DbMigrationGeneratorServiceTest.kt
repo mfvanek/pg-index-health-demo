@@ -13,7 +13,6 @@ import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemo
 import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.github.mfvanek.pg.model.context.PgContext
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.mock

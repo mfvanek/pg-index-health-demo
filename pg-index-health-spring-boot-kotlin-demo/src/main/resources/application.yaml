@@ -68,3 +68,5 @@ management:
 
 springdoc:
     show-actuator: true
+    swagger-ui:
+        use-root-path: true
