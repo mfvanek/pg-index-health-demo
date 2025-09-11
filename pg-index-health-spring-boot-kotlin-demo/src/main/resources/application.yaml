@@ -15,6 +15,10 @@ spring:
         template:
             query-timeout: 1s
 
+app:
+    statistics:
+        vacuum-result-polling-attempts: 10
+
 logging:
     level:
         root: INFO
