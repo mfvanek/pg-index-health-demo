@@ -1,11 +1,13 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.9.24"
+    id("org.jetbrains.kotlin.jvm") version "2.2.20"
     id("pg-index-health-demo.java-compilation")
     id("pg-index-health-demo.java-conventions")
     id("pg-index-health-demo.forbidden-apis")
     id("pg-index-health-demo.pitest")
     alias(libs.plugins.spring.boot.v3)
-    kotlin("plugin.spring") version "1.9.24"
+    kotlin("plugin.spring") version "2.2.20"
     id("com.google.osdetector") version "1.7.3"
 }
 
@@ -52,10 +54,10 @@ dependencies {
 }
 
 tasks {
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_21
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "21"
         }
     }
     

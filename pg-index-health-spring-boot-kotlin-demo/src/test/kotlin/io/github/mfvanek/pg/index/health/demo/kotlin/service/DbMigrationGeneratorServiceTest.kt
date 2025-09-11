@@ -47,7 +47,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @BeforeEach
     fun setUp() {
-        `when`(foreignKeysNotCoveredWithIndex!!.check(pgContext)).thenReturn(mockForeignKeys)
+        `when`(foreignKeysNotCoveredWithIndex!!.check(pgContext!!)).thenReturn(mockForeignKeys)
     }
 
     @Test
