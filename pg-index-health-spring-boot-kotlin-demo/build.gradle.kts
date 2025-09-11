@@ -43,6 +43,9 @@ dependencies {
     testImplementation("io.github.mfvanek:pg-index-health-test-starter")
     testImplementation("org.apache.httpcomponents.client5:httpclient5")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.testcontainers:junit-jupiter")
 
     // https://github.com/netty/netty/issues/11020
     if (osdetector.arch == "aarch_64") {
