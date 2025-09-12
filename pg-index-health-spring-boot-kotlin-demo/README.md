@@ -91,11 +91,11 @@ The resulting JAR will be located in `pg-index-health-spring-boot-kotlin-demo/bu
 
 ## API Endpoints
 
-| Endpoint | Method | Description |
-|---------|--------|-------------|
-| `/db/health` | GET | Collects comprehensive health data from the database |
-| `/db/migration/generate` | POST | Generates database migrations with foreign key constraints |
-| `/db/statistics` | GET | Retrieves database statistics |
+| Endpoint                 | Method | Description                                                |
+|--------------------------|--------|------------------------------------------------------------|
+| `/db/health`             | GET    | Collects comprehensive health data from the database       |
+| `/db/migration/generate` | POST   | Generates database migrations with foreign key constraints |
+| `/db/statistics`         | GET    | Retrieves database statistics                              |
 
 Protected Actuator endpoints are available on port 8090:
 - `/actuator/health`
@@ -128,7 +128,7 @@ API documentation is available via Swagger UI:
 
 - http://localhost:8080/swagger-ui.html
 
-## Contributing 
+## Contributing
 
 > TODO: add contributing.md?
 
