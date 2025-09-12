@@ -3,171 +3,63 @@
 Thank you for your interest in contributing to the pg-index-health-demo project! This document provides guidelines and instructions for contributing.
 
 ## Table of Contents
-
+- [Building and testing](#building-and-testing)
+- [Implementing new features](#implementing-new-features)
 - [Code of Conduct](#code-of-conduct)
-- [How Can I Contribute?](#how-can-i-contribute)
-  - [Reporting Bugs](#reporting-bugs)
-  - [Suggesting Enhancements](#suggesting-enhancements)
-  - [Code Contributions](#code-contributions)
-- [Development Setup](#development-setup)
-  - [Prerequisites](#prerequisites)
-  - [Building the Project](#building-the-project)
-  - [Running Tests](#running-tests)
-- [Coding Standards](#coding-standards)
-  - [Java Code Conventions](#java-code-conventions)
-  - [Kotlin Code Conventions](#kotlin-code-conventions)
-  - [SQL Conventions](#sql-conventions)
-- [Project Structure](#project-structure)
-- [Testing](#testing)
-  - [Unit Tests](#unit-tests)
-  - [Integration Tests](#integration-tests)
-- [Pull Request Process](#pull-request-process)
 - [License](#license)
+
+## Building and testing
+
+Java >= 21 is required.
+
+1. Clone the repository
+
+       git clone https://github.com/mfvanek/pg-index-health-demo.git
+       cd pg-index-health-demo
+
+2. Build with Gradle
+    * On Linux and macOS: `./gradlew build`
+    * On Windows: `.\gradlew.bat build`
+    
+   This will build the project and run tests.  
+   **You need to have [Docker](https://www.docker.com/) up and running**.
+    
+By default, [PostgreSQL from Testcontainers](https://www.testcontainers.org/) is used to run tests.  
+
+## Implementing new features
+
+This is a demo project showcasing the [pg-index-health](https://github.com/mfvanek/pg-index-health) library. 
+New features typically involve:
+
+### Extending existing demo modules
+
+The project consists of several modules:
+1. `pg-index-health-demo-without-spring` - Demo without Spring/Spring Boot
+2. `pg-index-health-spring-boot-demo` - Java Spring Boot demo
+3. `pg-index-health-spring-boot-kotlin-demo` - Kotlin Spring Boot demo
+
+When adding new features, consider which module is most appropriate for your contribution.
+
+### Adding new endpoints or services
+
+1. Follow the existing code structure and patterns
+2. Add appropriate tests (unit and integration)
+3. Update documentation in README.md files
+4. Ensure code follows the established conventions:
+   * Java code follows standard Java naming conventions
+   * Kotlin code follows official Kotlin coding conventions
+   * SQL queries use lowercase keywords and snake_case for identifiers
+
+### Write proper tests
+
+* Your code must be adequately covered by tests
+* Integration tests should use Testcontainers for database integration
+* Behavior should be tested with different scenarios
+* Tests should be placed in appropriately named test classes
 
 ## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
-
-## How Can I Contribute?
-
-### Reporting Bugs
-
-Before submitting a bug report, please check if the issue has already been reported. If not, create a new issue with the following information:
-
-1. A clear and descriptive title
-2. A detailed description of the problem
-3. Steps to reproduce the issue
-4. Expected behavior vs. actual behavior
-5. Environment information (OS, Java version, etc.)
-6. Any relevant logs or error messages
-
-### Suggesting Enhancements
-
-Enhancement suggestions are welcome! Please create an issue with:
-
-1. A clear and descriptive title
-2. A detailed explanation of the proposed enhancement
-3. The motivation behind the enhancement
-4. Any implementation ideas or examples
-
-### Code Contributions
-
-We welcome code contributions via pull requests. Follow these steps:
-
-1. Fork the repository
-2. Create a new branch for your feature or bugfix
-3. Make your changes
-4. Add or update tests as necessary
-5. Ensure all tests pass
-6. Submit a pull request with a clear description of your changes
-
-## Development Setup
-
-### Prerequisites
-
-- Java 21 or higher
-- Gradle 8.x
-- Docker (for running PostgreSQL with Testcontainers)
-- Git
-
-### Building the Project
-
-This is a multi-module Gradle project. To build all modules:
-
-```bash
-./gradlew build
-```
-
-To build a specific module:
-
-```bash
-./gradlew :pg-index-health-spring-boot-kotlin-demo:build
-```
-
-### Running Tests
-
-To run all tests:
-
-```bash
-./gradlew test
-```
-
-To run tests for a specific module:
-
-```bash
-./gradlew :pg-index-health-spring-boot-demo:test
-```
-
-To generate test coverage reports:
-
-```bash
-./gradlew jacocoTestReport
-```
-
-## Coding Standards
-
-### Java Code Conventions
-
-- Follow standard Java naming conventions
-- Use meaningful variable and method names
-- Write Javadoc for public classes and methods
-- Keep methods short and focused on a single responsibility
-- Avoid unnecessary comments that just restate what the code does
-
-### Kotlin Code Conventions
-
-- Follow official Kotlin coding conventions
-- Use idiomatic Kotlin where appropriate
-- Leverage Kotlin features like extension functions, data classes, etc.
-- Write KDoc for public classes and methods
-- Use meaningful variable and function names
-
-### SQL Conventions
-
-- Use lowercase for SQL keywords
-- Use snake_case for table and column names
-- Write clear, well-formatted SQL queries
-- Include comments for complex queries
-
-## Project Structure
-
-The project consists of several modules:
-
-1. `pg-index-health-demo-without-spring` - Demo without Spring/Spring Boot
-2. `pg-index-health-spring-boot-demo` - Java Spring Boot demo
-3. `pg-index-health-spring-boot-kotlin-demo` - Kotlin Spring Boot demo
-4. `db-migrations` - Database migration scripts
-
-Each module demonstrates different aspects of the pg-index-health library integration.
-
-## Testing
-
-### Unit Tests
-
-Unit tests should:
-- Focus on a single class or method
-- Mock external dependencies
-- Run quickly
-- Be independent of other tests
-- Cover edge cases and error conditions
-
-### Integration Tests
-
-Integration tests should:
-- Test the interaction between components
-- Use Testcontainers for database integration
-- Verify end-to-end functionality
-- Be placed in appropriately named test classes
-
-## Pull Request Process
-
-1. Ensure your code follows the project's coding standards
-2. Add or update tests for your changes
-3. Update documentation if necessary
-4. Run all tests to ensure nothing is broken
-5. Squash related commits for clarity
-6. Submit a pull request with a clear description of the changes
-7. Address any feedback during the review process
 
 ## License
 
