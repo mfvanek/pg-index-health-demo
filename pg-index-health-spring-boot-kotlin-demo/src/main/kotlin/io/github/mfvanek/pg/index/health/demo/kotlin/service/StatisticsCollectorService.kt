@@ -92,7 +92,7 @@ class StatisticsCollectorService(
                 break
             }
             
-            TimeUnit.MILLISECONDS.sleep(100L) // TODO: make property
+            TimeUnit.MILLISECONDS.sleep(statisticsProperties.pollingInterval.toMillis())
             attempts++
         }
     }

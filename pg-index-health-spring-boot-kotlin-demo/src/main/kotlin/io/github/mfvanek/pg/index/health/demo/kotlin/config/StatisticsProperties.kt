@@ -9,9 +9,13 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.bind.DefaultValue
+import java.time.Duration
 
 @ConfigurationProperties(prefix = "app.statistics")
 data class StatisticsProperties(
     @DefaultValue("10")
-    val vacuumResultPollingAttempts: Int
+    val vacuumResultPollingAttempts: Int,
+    
+    @DefaultValue("100ms")
+    val pollingInterval: Duration
 )
