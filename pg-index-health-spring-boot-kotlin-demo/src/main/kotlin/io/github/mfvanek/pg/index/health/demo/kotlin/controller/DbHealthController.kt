@@ -7,11 +7,8 @@
 
 package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
-import io.github.mfvanek.pg.health.logger.Exclusions
-import io.github.mfvanek.pg.health.logger.HealthLogger
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.DatabaseHealthResponse
-import io.github.mfvanek.pg.model.context.PgContext
-import io.github.mfvanek.pg.model.units.MemoryUnit
+import io.github.mfvanek.pg.index.health.demo.kotlin.service.DatabaseHealthService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -24,15 +21,13 @@ import org.springframework.web.bind.annotation.RestController
 /**
  * Controller for database health checks.
  *
- * @property healthLogger Logger for database health checks
- * @property pgContext PostgreSQL context
+ * @property databaseHealthService Service for database health operations
  */
 @RestController
 @RequestMapping("/db/health")
 @Tag(name = "Database Health", description = "Endpoints for checking database health")
 class DbHealthController(
-    private val healthLogger: HealthLogger,
-    private val pgContext: PgContext
+    private val databaseHealthService: DatabaseHealthService
 ) {
 
     /**
@@ -54,12 +49,6 @@ class DbHealthController(
     )
     @GetMapping
     fun collectHealthData(): DatabaseHealthResponse {
-        // TODO: move logic to service
-        val exclusions = Exclusions.builder()
-            .withIndexSizeThreshold(0, MemoryUnit.MB)
-            .withTableSizeThreshold(1, MemoryUnit.MB)
-            .build()
-        val healthData = healthLogger.logAll(exclusions, pgContext)
-        return DatabaseHealthResponse(healthData.toList())
+        return databaseHealthService.collectHealthData()
     }
 }
