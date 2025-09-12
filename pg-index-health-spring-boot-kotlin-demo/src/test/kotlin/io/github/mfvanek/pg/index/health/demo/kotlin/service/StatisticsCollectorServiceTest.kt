@@ -8,6 +8,7 @@
 package io.github.mfvanek.pg.index.health.demo.kotlin.service
 
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagement
+import io.github.mfvanek.pg.index.health.demo.kotlin.exception.StatisticsResetException
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -81,22 +82,6 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     }
 
     @Test
-    fun resetStatisticsNoWaitShouldReturnTrueWhenSuccessful() {
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
-
-        val result = statisticsCollectorService!!.resetStatisticsNoWait()
-        assertTrue(result)
-    }
-
-    @Test
-    fun resetStatisticsNoWaitShouldReturnFalseWhenFailed() {
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(false)
-
-        val result = statisticsCollectorService!!.resetStatisticsNoWait()
-        assertFalse(result)
-    }
-
-    @Test
     fun resetStatisticsShouldReturnTimestampWhenSuccessful() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
         Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
@@ -112,7 +97,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     fun resetStatisticsShouldThrowExceptionWhenFailed() {
         Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(false)
 
-        org.junit.jupiter.api.assertThrows<IllegalStateException> {
+        org.junit.jupiter.api.assertThrows<StatisticsResetException> {
             statisticsCollectorService!!.resetStatistics()
         }
     }
