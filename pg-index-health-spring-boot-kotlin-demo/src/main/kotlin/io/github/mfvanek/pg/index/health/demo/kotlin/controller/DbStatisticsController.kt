@@ -32,11 +32,6 @@ class DbStatisticsController(
     private val statisticsCollectorService: StatisticsCollectorService
 ) {
 
-    /**
-     * Gets the last statistics reset date.
-     *
-     * @return response entity containing the last reset timestamp
-     */
     @Operation(
         summary = "Get last statistics reset date",
         description = "Retrieves the timestamp of when database statistics were last reset"
@@ -55,12 +50,6 @@ class DbStatisticsController(
         return StatisticsResetResponse(timestamp)
     }
 
-    /**
-     * Resets statistics with optional wait.
-     *
-     * @param wait whether to wait for completion
-     * @return response entity containing the timestamp after reset
-     */
     @Operation(
         summary = "Reset database statistics",
         description = "Resets the database statistics counters. Can optionally wait for completion."
@@ -115,7 +104,7 @@ class DbStatisticsController(
      * @return error response
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(IllegalStateException::class)
+    @ExceptionHandler(IllegalStateException::class) // TODO: use custom exception
     fun handleStatisticsException(illegalStateException: IllegalStateException): MigrationError {
         return MigrationError(
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
