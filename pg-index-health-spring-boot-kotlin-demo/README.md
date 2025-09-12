@@ -130,8 +130,6 @@ API documentation is available via Swagger UI:
 
 ## Contributing
 
-> TODO: add contributing.md?
-
 Contributions are welcome! Please see [CONTRIBUTING.md](https://github.com/mfvanek/pg-index-health-demo/blob/master/CONTRIBUTING.md) for details.
 
 ## License
