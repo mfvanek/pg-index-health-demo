@@ -9,6 +9,7 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.service
 
 import io.github.mfvanek.pg.generator.DbMigrationGenerator
 import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster
+import io.github.mfvanek.pg.index.health.demo.kotlin.exception.MigrationException
 import io.github.mfvanek.pg.index.health.demo.kotlin.mapper.ForeignKeyMapper
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import io.github.mfvanek.pg.model.constraint.ForeignKey
@@ -53,10 +54,10 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     }
 
     @Test
-    fun throwsIllegalStateExceptionWhenEmptyMigrationString(capturedOutput: CapturedOutput) {
+    fun throwsMigrationExceptionWhenEmptyMigrationString(capturedOutput: CapturedOutput) {
         `when`(dbMigrationGenerator!!.generate(mockForeignKeys)).thenReturn(emptyList())
 
-        org.junit.jupiter.api.assertThrows<IllegalStateException> {
+        org.junit.jupiter.api.assertThrows<MigrationException> {
             dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
         }.apply {
             kotlin.test.assertEquals(expectedErrorMessage, message)
@@ -69,7 +70,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     fun logsAboutSqlExceptionWhenBadMigrationStringAndThrowsExceptionAfter(capturedOutput: CapturedOutput) {
         `when`(dbMigrationGenerator!!.generate(mockForeignKeys)).thenReturn(listOf("select * from payments"))
 
-        org.junit.jupiter.api.assertThrows<IllegalStateException> {
+        org.junit.jupiter.api.assertThrows<MigrationException> {
             dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
         }.apply {
             kotlin.test.assertEquals(expectedErrorMessage, message)
@@ -140,7 +141,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         org.junit.jupiter.api.assertDoesNotThrow {
             try {
                 dbMigrationGeneratorServiceWithMockDataSource.generateMigrationsWithForeignKeysChecked()
-            } catch (_: IllegalStateException) {
+            } catch (_: MigrationException) {
             }
         }
         

@@ -9,6 +9,7 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyMigrationResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.MigrationError
+import io.github.mfvanek.pg.index.health.demo.kotlin.exception.MigrationException
 import io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGeneratorService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -63,15 +64,15 @@ class DbMigrationController(
     /**
      * Handles migration exceptions.
      *
-     * @param illegalStateException exception to handle
+     * @param migrationException exception to handle
      * @return error response
      */
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
-    @ExceptionHandler(IllegalStateException::class)
-    fun handleMigrationException(illegalStateException: IllegalStateException): MigrationError {
+    @ExceptionHandler(MigrationException::class)
+    fun handleMigrationException(migrationException: MigrationException): MigrationError {
         return MigrationError(
             HttpStatus.EXPECTATION_FAILED.value(),
-            "Migrations failed: ${illegalStateException.message}"
+            "Migrations failed: ${migrationException.message}"
         )
     }
 }
