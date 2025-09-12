@@ -31,7 +31,7 @@ import org.mockito.Mockito.`when` as mockWhen
 @org.junit.jupiter.api.extension.ExtendWith(OutputCaptureExtension::class)
 class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     
-    private val EXPECTED_ERROR_MESSAGE = "There should be no foreign keys not covered by some index"
+    private val expectedErrorMessage = "There should be no foreign keys not covered by some index"
 
     @Autowired
     private var dbMigrationGeneratorService: DbMigrationGeneratorService? = null
@@ -59,7 +59,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         org.junit.jupiter.api.assertThrows<IllegalStateException> {
             dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
         }.apply {
-            kotlin.test.assertEquals(EXPECTED_ERROR_MESSAGE, message)
+            kotlin.test.assertEquals(expectedErrorMessage, message)
         }
         
         kotlin.test.assertTrue(capturedOutput.all.contains("Generated migrations: []"))
@@ -72,13 +72,14 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         org.junit.jupiter.api.assertThrows<IllegalStateException> {
             dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
         }.apply {
-            kotlin.test.assertEquals(EXPECTED_ERROR_MESSAGE, message)
+            kotlin.test.assertEquals(expectedErrorMessage, message)
         }
         
         kotlin.test.assertTrue(capturedOutput.all.contains("Error running migration"))
     }
 
     @Test
+    @Suppress("Unchecked_Cast")
     fun successfullyExecutesMigrationStatementsWithoutException(capturedOutput: CapturedOutput) {
         val mockDataSource = mock(DataSource::class.java)
         val mockConnection = mock(Connection::class.java)
@@ -114,6 +115,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     }
     
     @Test
+    @Suppress("Unchecked_Cast")
     fun logsErrorWhenCannotGetConnection(capturedOutput: CapturedOutput) {
         val mockDataSource = mock(DataSource::class.java)
         val mockDbMigrationGenerator = mock(DbMigrationGenerator::class.java)

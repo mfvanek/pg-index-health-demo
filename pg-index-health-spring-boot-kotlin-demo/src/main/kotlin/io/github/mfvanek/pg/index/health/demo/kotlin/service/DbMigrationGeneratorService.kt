@@ -9,7 +9,6 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.service
 
 import io.github.mfvanek.pg.generator.DbMigrationGenerator
 import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster
-import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyDto
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyMigrationResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.mapper.ForeignKeyMapper
 import io.github.mfvanek.pg.model.constraint.ForeignKey

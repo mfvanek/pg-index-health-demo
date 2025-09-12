@@ -8,14 +8,13 @@
 package io.github.mfvanek.pg.index.health.demo.kotlin
 
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
-
-import org.assertj.core.api.Assertions.assertThat
 
 class ActuatorEndpointTest : BasePgIndexHealthDemoSpringBootTest() {
 
