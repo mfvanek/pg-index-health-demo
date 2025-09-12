@@ -25,6 +25,7 @@ spring:
 app:
     statistics:
         vacuum-result-polling-attempts: 10
+        polling-interval: 100ms
 
 logging:
     level:

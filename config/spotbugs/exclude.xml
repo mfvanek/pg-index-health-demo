@@ -24,7 +24,10 @@
     </Match>
     <Match>
         <Bug pattern="USBR_UNNECESSARY_STORE_BEFORE_RETURN"/>
-        <Package name="io.github.mfvanek.pg.index.health.demo.kotlin.dto.*"/>
+        <Or>
+            <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.config.StatisticsProperties"/>
+            <Package name="io.github.mfvanek.pg.index.health.demo.kotlin.dto.*"/>
+        </Or>
     </Match>
     <Match>
         <Bug pattern="NAB_NEEDLESS_BOOLEAN_CONSTANT_CONVERSION"/>
