@@ -17,7 +17,6 @@ import io.github.mfvanek.pg.model.column.Column
 import io.github.mfvanek.pg.model.constraint.ForeignKey
 import org.springframework.boot.jackson.JsonComponent
 import java.io.IOException
-import java.util.ArrayList
 
 @JsonComponent
 class ForeignKeyJsonDeserializer : JsonDeserializer<ForeignKey>() {

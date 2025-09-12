@@ -11,11 +11,10 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import io.github.mfvanek.pg.model.constraint.ForeignKey
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 
 class ForeignKeyJsonDeserializerTest : BasePgIndexHealthDemoSpringBootTest() {
 

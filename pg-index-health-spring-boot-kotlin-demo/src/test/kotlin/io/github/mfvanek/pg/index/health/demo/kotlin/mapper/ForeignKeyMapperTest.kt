@@ -7,8 +7,6 @@
 
 package io.github.mfvanek.pg.index.health.demo.kotlin.mapper
 
-import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyColumnDto
-import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyDto
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import io.github.mfvanek.pg.model.column.Column
 import io.github.mfvanek.pg.model.constraint.ForeignKey
