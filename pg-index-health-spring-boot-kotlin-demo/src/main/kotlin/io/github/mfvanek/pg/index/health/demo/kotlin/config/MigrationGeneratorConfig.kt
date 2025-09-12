@@ -17,7 +17,6 @@ import io.github.mfvanek.pg.model.constraint.ForeignKey
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-// TODO: look at pg-index-health-generator lib
 @Configuration(proxyBeanMethods = false)
 class MigrationGeneratorConfig {
 

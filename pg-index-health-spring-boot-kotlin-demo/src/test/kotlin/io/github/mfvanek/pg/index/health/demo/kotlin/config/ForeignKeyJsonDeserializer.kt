@@ -19,7 +19,6 @@ import org.springframework.boot.jackson.JsonComponent
 import java.io.IOException
 import java.util.ArrayList
 
-// TODO: move to test directory?
 @JsonComponent
 class ForeignKeyJsonDeserializer : JsonDeserializer<ForeignKey>() {
 

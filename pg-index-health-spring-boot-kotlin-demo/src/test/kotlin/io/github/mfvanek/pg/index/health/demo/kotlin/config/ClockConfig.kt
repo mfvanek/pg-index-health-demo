@@ -23,7 +23,6 @@ import java.time.Clock
  * @Autowired
  * private var clock: Clock? = null
  * ```
- * TODO: move to test directory?
  *
  * @see Clock
  * @see java.time.Instant
