@@ -52,7 +52,7 @@ class DbMigrationGeneratorService(
         runGeneratedMigrations(migrations)
         val keysAfter = getForeignKeysFromDb()
         if (keysAfter.isNotEmpty()) {
-            throw IllegalStateException("There should be no foreign keys not covered by the index")
+            throw IllegalStateException("There should be no foreign keys not covered by some index")
         }
         return ForeignKeyMigrationResponse(
             keysBefore.map { foreignKeyMapper.toForeignKeyDto(it) },

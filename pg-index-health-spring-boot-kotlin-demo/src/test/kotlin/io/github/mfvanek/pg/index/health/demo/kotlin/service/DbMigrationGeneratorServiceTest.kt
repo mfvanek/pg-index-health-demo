@@ -30,6 +30,8 @@ import org.mockito.Mockito.`when` as mockWhen
 
 @org.junit.jupiter.api.extension.ExtendWith(OutputCaptureExtension::class)
 class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
+    
+    private val EXPECTED_ERROR_MESSAGE = "There should be no foreign keys not covered by some index"
 
     @Autowired
     private var dbMigrationGeneratorService: DbMigrationGeneratorService? = null
@@ -42,10 +44,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     
     @MockitoBean
     private var pgContext: PgContext? = null
-    
-    @MockitoBean
-    private var foreignKeyMapper: ForeignKeyMapper? = null
-    
+
     private val mockForeignKeys = listOf<ForeignKey>(mock(ForeignKey::class.java))
 
     @BeforeEach
@@ -60,7 +59,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         org.junit.jupiter.api.assertThrows<IllegalStateException> {
             dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
         }.apply {
-            kotlin.test.assertEquals("There should be no foreign keys not covered by the index", message)
+            kotlin.test.assertEquals(EXPECTED_ERROR_MESSAGE, message)
         }
         
         kotlin.test.assertTrue(capturedOutput.all.contains("Generated migrations: []"))
@@ -73,7 +72,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         org.junit.jupiter.api.assertThrows<IllegalStateException> {
             dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
         }.apply {
-            kotlin.test.assertEquals("There should be no foreign keys not covered by the index", message)
+            kotlin.test.assertEquals(EXPECTED_ERROR_MESSAGE, message)
         }
         
         kotlin.test.assertTrue(capturedOutput.all.contains("Error running migration"))

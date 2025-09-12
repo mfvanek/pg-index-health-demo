@@ -54,6 +54,7 @@ class DbHealthController(
     )
     @GetMapping
     fun collectHealthData(): DatabaseHealthResponse {
+        // TODO: move logic to service
         val exclusions = Exclusions.builder()
             .withIndexSizeThreshold(0, MemoryUnit.MB)
             .withTableSizeThreshold(1, MemoryUnit.MB)
