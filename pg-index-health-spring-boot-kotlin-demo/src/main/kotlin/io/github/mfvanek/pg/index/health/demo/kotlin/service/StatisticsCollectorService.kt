@@ -9,6 +9,7 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.service
 
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagement
 import io.github.mfvanek.pg.index.health.demo.kotlin.config.StatisticsProperties
+import io.github.mfvanek.pg.index.health.demo.kotlin.exception.StatisticsResetException
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.jdbc.core.JdbcTemplate
@@ -49,17 +50,19 @@ class StatisticsCollectorService(
     /**
      * Resets statistics without waiting for completion.
      *
-     * @return true if reset was successful, false otherwise
+     * @throws StatisticsResetException if statistics reset fails
      */
-    fun resetStatisticsNoWait(): Boolean {
-        return databaseManagement.resetStatistics()
+    fun resetStatisticsNoWait() {
+        if (!databaseManagement.resetStatistics()) {
+            throw StatisticsResetException("Could not reset statistics")
+        }
     }
 
     /**
      * Resets statistics and waits for completion.
      *
      * @return the timestamp after reset
-     * @throws IllegalStateException if statistics reset fails
+     * @throws StatisticsResetException if statistics reset fails
      */
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     fun resetStatistics(): OffsetDateTime {
@@ -67,7 +70,7 @@ class StatisticsCollectorService(
             waitForStatisticsCollector()
             return getLastStatsResetTimestampInner()
         }
-        throw IllegalStateException("Could not reset statistics")
+        throw StatisticsResetException("Could not reset statistics")
     }
 
     /**

@@ -9,6 +9,7 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.MigrationError
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.StatisticsResetResponse
+import io.github.mfvanek.pg.index.health.demo.kotlin.exception.StatisticsResetException
 import io.github.mfvanek.pg.index.health.demo.kotlin.service.StatisticsCollectorService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -89,9 +90,7 @@ class DbStatisticsController(
             val timestamp = statisticsCollectorService.resetStatistics()
             ResponseEntity.ok().body(StatisticsResetResponse(timestamp))
         } else {
-            if (!statisticsCollectorService.resetStatisticsNoWait()) {
-                throw IllegalStateException("Could not reset statistics")
-            }
+            statisticsCollectorService.resetStatisticsNoWait()
             val timestamp = statisticsCollectorService.getLastStatsResetTimestamp()
             ResponseEntity.accepted().body(StatisticsResetResponse(timestamp))
         }
@@ -100,15 +99,15 @@ class DbStatisticsController(
     /**
      * Handles statistics reset exceptions.
      *
-     * @param illegalStateException exception to handle
+     * @param statisticsResetException exception to handle
      * @return error response
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(IllegalStateException::class) // TODO: use custom exception
-    fun handleStatisticsException(illegalStateException: IllegalStateException): MigrationError {
+    @ExceptionHandler(StatisticsResetException::class)
+    fun handleStatisticsException(statisticsResetException: StatisticsResetException): MigrationError {
         return MigrationError(
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "Statistics reset failed: ${illegalStateException.message}"
+            "Statistics reset failed: ${statisticsResetException.message}"
         )
     }
 }
