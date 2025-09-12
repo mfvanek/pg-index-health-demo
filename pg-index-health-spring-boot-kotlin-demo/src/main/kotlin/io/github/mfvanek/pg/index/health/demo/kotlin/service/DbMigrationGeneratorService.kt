@@ -10,6 +10,7 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.service
 import io.github.mfvanek.pg.generator.DbMigrationGenerator
 import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyMigrationResponse
+import io.github.mfvanek.pg.index.health.demo.kotlin.exception.MigrationException
 import io.github.mfvanek.pg.index.health.demo.kotlin.mapper.ForeignKeyMapper
 import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.github.mfvanek.pg.model.context.PgContext
@@ -43,7 +44,7 @@ class DbMigrationGeneratorService(
      * Generates migrations for foreign keys and validates the result.
      *
      * @return response containing foreign keys before and after migration, and generated migrations
-     * @throws IllegalStateException if there are still foreign keys without indexes after migration
+     * @throws MigrationException if there are still foreign keys without indexes after migration
      */
     fun generateMigrationsWithForeignKeysChecked(): ForeignKeyMigrationResponse {
         val keysBefore = getForeignKeysFromDb()
@@ -51,7 +52,7 @@ class DbMigrationGeneratorService(
         runGeneratedMigrations(migrations)
         val keysAfter = getForeignKeysFromDb()
         if (keysAfter.isNotEmpty()) {
-            throw IllegalStateException("There should be no foreign keys not covered by some index")
+            throw MigrationException("There should be no foreign keys not covered by some index")
         }
         return ForeignKeyMigrationResponse(
             keysBefore.map { foreignKeyMapper.toForeignKeyDto(it) },
