@@ -13,7 +13,7 @@ import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito
+import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
@@ -40,7 +40,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun getLastStatsResetTimestampShouldReturnCorrectValue() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
-        Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+        `when`(databaseManagement!!.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
         val result = statisticsCollectorService!!.getLastStatsResetTimestamp()
@@ -49,7 +49,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun getLastStatsResetTimestampShouldReturnMinWhenNotAvailable() {
-        Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+        `when`(databaseManagement!!.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.empty())
 
         val result = statisticsCollectorService!!.getLastStatsResetTimestamp()
@@ -59,7 +59,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun getLastStatsResetTimestampShouldReturnCorrectValueAndLogTraceMessage(capturedOutput: CapturedOutput) {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
-        Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+        `when`(databaseManagement!!.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
         val result = statisticsCollectorService!!.getLastStatsResetTimestamp()
@@ -71,22 +71,22 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun resetStatisticsShouldCallWaitForStatisticsCollector() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
-        Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+        `when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        `when`(databaseManagement!!.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
         
-        Mockito.`when`(jdbcTemplate!!.execute("vacuum analyze;")).thenAnswer { _ -> }
+        `when`(jdbcTemplate!!.execute("vacuum analyze;")).thenAnswer { _ -> }
         
         statisticsCollectorService!!.resetStatistics()
         
-        Mockito.verify(jdbcTemplate!!).execute("vacuum analyze;")
+        verify(jdbcTemplate!!).execute("vacuum analyze;")
     }
 
     @Test
     fun resetStatisticsShouldReturnTimestampWhenSuccessful() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
-        Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+        `when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        `when`(databaseManagement!!.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
         val result = statisticsCollectorService!!.resetStatistics()
@@ -96,7 +96,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun resetStatisticsShouldThrowExceptionWhenFailed() {
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(false)
+        `when`(databaseManagement!!.resetStatistics()).thenReturn(false)
 
         assertThrows<StatisticsResetException> {
             statisticsCollectorService!!.resetStatistics()
@@ -106,26 +106,26 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun resetStatisticsShouldCallJdbcTemplateExecute() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
-        Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+        `when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        `when`(databaseManagement!!.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
         statisticsCollectorService!!.resetStatistics()
 
-        Mockito.verify(jdbcTemplate!!).execute("vacuum analyze;")
+        verify(jdbcTemplate!!).execute("vacuum analyze;")
     }
 
     @Test
     fun resetStatisticsShouldTakeSomeTimeDueToWaitingForVacuumAnalyze() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
-        Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+        `when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        `when`(databaseManagement!!.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
-        Mockito.`when`(jdbcTemplate!!.execute("vacuum analyze;")).thenAnswer { _ -> }
+        `when`(jdbcTemplate!!.execute("vacuum analyze;")).thenAnswer { _ -> }
 
         // Mock the query that checks for active vacuum operations to return 1 first (active), then 0 (completed)
-        Mockito.`when`(jdbcTemplate!!.queryForObject(
+        `when`(jdbcTemplate!!.queryForObject(
             "select count(*) from pg_stat_progress_vacuum where datname = current_database()", 
             Int::class.java
         )).thenReturn(1).thenReturn(0)
@@ -143,14 +143,14 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun resetStatisticsShouldHandleMaxAttemptsReached() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
-        Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+        `when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        `when`(databaseManagement!!.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
-        Mockito.`when`(jdbcTemplate!!.execute("vacuum analyze;")).thenAnswer { _ -> }
+        `when`(jdbcTemplate!!.execute("vacuum analyze;")).thenAnswer { _ -> }
 
         // Mock the query to always return 1 (active vacuum), forcing max attempts to be reached
-        Mockito.`when`(jdbcTemplate!!.queryForObject(
+        `when`(jdbcTemplate!!.queryForObject(
             "select count(*) from pg_stat_progress_vacuum where datname = current_database()", 
             Int::class.java
         )).thenReturn(1)
@@ -158,7 +158,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         statisticsCollectorService!!.resetStatistics()
         
         // Verify the query was called the expected number of times (maxAttempts)
-        Mockito.verify(jdbcTemplate!!, Mockito.times(10)).queryForObject(
+        verify(jdbcTemplate!!, times(10)).queryForObject(
             "select count(*) from pg_stat_progress_vacuum where datname = current_database()", 
             Int::class.java
         )
@@ -167,14 +167,14 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun resetStatisticsShouldHandleNullQueryResult() {
         val expectedTimestamp = OffsetDateTime.now(clock!!.zone)
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
-        Mockito.`when`(databaseManagement!!.lastStatsResetTimestamp)
+        `when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        `when`(databaseManagement!!.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
-        Mockito.`when`(jdbcTemplate!!.execute("vacuum analyze;")).thenAnswer { _ -> }
+        `when`(jdbcTemplate!!.execute("vacuum analyze;")).thenAnswer { _ -> }
 
         // Mock the query to return null first, then 0 (completed)
-        Mockito.`when`(jdbcTemplate!!.queryForObject(
+        `when`(jdbcTemplate!!.queryForObject(
             "select count(*) from pg_stat_progress_vacuum where datname = current_database()", 
             Int::class.java
         )).thenReturn(null).thenReturn(0)
