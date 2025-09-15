@@ -13,7 +13,7 @@ import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.springframework.boot.test.system.OutputCaptureExtension
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
@@ -26,7 +26,7 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @BeforeEach
     fun setUp() {
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        `when`(databaseManagement!!.resetStatistics()).thenReturn(true)
     }
     
     @Test
@@ -66,7 +66,7 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldThrowExceptionWhenResetStatisticsWithoutWaitFails() {
-        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(false)
+        `when`(databaseManagement!!.resetStatistics()).thenReturn(false)
 
         webTestClient!!.post()
             .uri("/db/statistics/reset")
