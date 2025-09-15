@@ -12,8 +12,8 @@ allprojects {
     version = "0.20.2"
 
     repositories {
-        mavenLocal()
         mavenCentral()
+        mavenLocal()
     }
 }
 
@@ -27,7 +27,7 @@ dependencies {
 
 tasks {
     wrapper {
-        gradleVersion = "8.14.2"
+        gradleVersion = "8.14.3"
     }
 
     check {

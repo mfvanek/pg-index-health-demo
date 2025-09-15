@@ -13,7 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.QueryTimeoutException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -49,7 +49,7 @@ class PgIndexHealthSpringBootDemoApplicationTest extends BasePgIndexHealthDemoSp
     @DisplayName("Throws exception when query exceeds timeout")
     void exceptionWithLongQuery() {
         assertThatThrownBy(() -> jdbcTemplate.execute("select pg_sleep(1.1);"))
-            .isInstanceOf(DataAccessResourceFailureException.class)
+            .isInstanceOf(QueryTimeoutException.class)
             .hasMessageContaining("ERROR: canceling statement due to user request");
     }
 
