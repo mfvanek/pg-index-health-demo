@@ -10,20 +10,23 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagement
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.StatisticsResetResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Mockito
 import org.springframework.boot.test.system.OutputCaptureExtension
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 
-@org.junit.jupiter.api.extension.ExtendWith(OutputCaptureExtension::class)
+@ExtendWith(OutputCaptureExtension::class)
 class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @MockitoBean
     private var databaseManagement: DatabaseManagement? = null
 
-    @org.junit.jupiter.api.BeforeEach
+    @BeforeEach
     fun setUp() {
-        org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(true)
     }
     
     @Test
@@ -63,7 +66,7 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldThrowExceptionWhenResetStatisticsWithoutWaitFails() {
-        org.mockito.Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(false)
+        Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(false)
 
         webTestClient!!.post()
             .uri("/db/statistics/reset")
