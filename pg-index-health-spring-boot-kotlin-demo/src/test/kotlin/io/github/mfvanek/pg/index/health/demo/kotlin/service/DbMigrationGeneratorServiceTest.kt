@@ -16,6 +16,9 @@ import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.github.mfvanek.pg.model.context.PgContext
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
@@ -27,9 +30,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.sql.Connection
 import java.sql.Statement
 import javax.sql.DataSource
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.mockito.Mockito.`when` as mockWhen
 
-@org.junit.jupiter.api.extension.ExtendWith(OutputCaptureExtension::class)
+@ExtendWith(OutputCaptureExtension::class)
 class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     
     private val expectedErrorMessage = "There should be no foreign keys not covered by some index"
@@ -57,26 +62,26 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     fun throwsMigrationExceptionWhenEmptyMigrationString(capturedOutput: CapturedOutput) {
         `when`(dbMigrationGenerator!!.generate(mockForeignKeys)).thenReturn(emptyList())
 
-        org.junit.jupiter.api.assertThrows<MigrationException> {
+        assertThrows<MigrationException> {
             dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
         }.apply {
-            kotlin.test.assertEquals(expectedErrorMessage, message)
+            assertEquals(expectedErrorMessage, message)
         }
-        
-        kotlin.test.assertTrue(capturedOutput.all.contains("Generated migrations: []"))
+
+        assertTrue(capturedOutput.all.contains("Generated migrations: []"))
     }
 
     @Test
     fun logsAboutSqlExceptionWhenBadMigrationStringAndThrowsExceptionAfter(capturedOutput: CapturedOutput) {
         `when`(dbMigrationGenerator!!.generate(mockForeignKeys)).thenReturn(listOf("select * from payments"))
 
-        org.junit.jupiter.api.assertThrows<MigrationException> {
+        assertThrows<MigrationException> {
             dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
         }.apply {
-            kotlin.test.assertEquals(expectedErrorMessage, message)
+            assertEquals(expectedErrorMessage, message)
         }
-        
-        kotlin.test.assertTrue(capturedOutput.all.contains("Error running migration"))
+
+        assertTrue(capturedOutput.all.contains("Error running migration"))
     }
 
     @Test
@@ -106,13 +111,13 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         `when`(mockConnection.createStatement()).thenReturn(mockStatement)
         `when`(mockStatement.execute(any(String::class.java))).thenReturn(true)
         
-        org.junit.jupiter.api.assertDoesNotThrow {
+        assertDoesNotThrow {
             dbMigrationGeneratorServiceWithMocks.generateMigrationsWithForeignKeysChecked()
         }
         
         verify(mockStatement).execute("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);")
-        
-        kotlin.test.assertTrue(capturedOutput.all.contains("Generated migrations: [CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);]"))
+
+        assertTrue(capturedOutput.all.contains("Generated migrations: [CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);]"))
     }
     
     @Test
@@ -137,14 +142,14 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         `when`(mockDbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
         
         mockWhen(mockDataSource.connection).thenThrow(java.sql.SQLException("Connection failed"))
-        
-        org.junit.jupiter.api.assertDoesNotThrow {
+
+        assertDoesNotThrow {
             try {
                 dbMigrationGeneratorServiceWithMockDataSource.generateMigrationsWithForeignKeysChecked()
             } catch (_: MigrationException) {
             }
         }
         
-        kotlin.test.assertTrue(capturedOutput.all.contains("Error getting connection"))
+        assertTrue(capturedOutput.all.contains("Error getting connection"))
     }
 }

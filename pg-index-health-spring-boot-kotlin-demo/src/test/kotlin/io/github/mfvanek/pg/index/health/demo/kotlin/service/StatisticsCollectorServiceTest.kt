@@ -11,6 +11,8 @@ import io.github.mfvanek.pg.health.checks.management.DatabaseManagement
 import io.github.mfvanek.pg.index.health.demo.kotlin.exception.StatisticsResetException
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.system.CapturedOutput
@@ -19,12 +21,11 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.time.OffsetDateTime
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @Suppress("TooManyFunctions")
-@org.junit.jupiter.api.extension.ExtendWith(OutputCaptureExtension::class)
+@ExtendWith(OutputCaptureExtension::class)
 class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Autowired
@@ -97,7 +98,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     fun resetStatisticsShouldThrowExceptionWhenFailed() {
         Mockito.`when`(databaseManagement!!.resetStatistics()).thenReturn(false)
 
-        org.junit.jupiter.api.assertThrows<StatisticsResetException> {
+        assertThrows<StatisticsResetException> {
             statisticsCollectorService!!.resetStatistics()
         }
     }
