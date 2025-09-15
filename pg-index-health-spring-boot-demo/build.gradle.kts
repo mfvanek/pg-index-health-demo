@@ -12,7 +12,7 @@ dependencies {
     implementation(project(":db-migrations"))
     implementation(platform(libs.spring.boot.v3.dependencies))
     implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.5"))
-    implementation(platform("org.springdoc:springdoc-openapi-bom:2.8.11"))
+    implementation(platform("org.springdoc:springdoc-openapi-bom:2.8.13"))
 
     implementation("org.apache.commons:commons-lang3:3.18.0")
 
@@ -43,7 +43,7 @@ dependencies {
 
     // https://github.com/netty/netty/issues/11020
     if (osdetector.arch == "aarch_64") {
-        testImplementation("io.netty:netty-all:4.2.4.Final")
+        testImplementation("io.netty:netty-all:4.2.6.Final")
     }
 }
 
