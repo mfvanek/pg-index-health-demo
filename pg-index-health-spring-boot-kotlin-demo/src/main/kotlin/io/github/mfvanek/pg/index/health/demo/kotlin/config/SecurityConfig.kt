@@ -68,9 +68,7 @@ class SecurityConfig {
     
     private class CorsConfigurer : WebMvcConfigurer {
         override fun addCorsMappings(registry: CorsRegistry) {
-            registry.addMapping("/actuator/**").allowedOrigins("http://localhost:8080") //NOSONAR
-            registry.addMapping("/api/**").allowedOrigins("http://localhost:8080") //NOSONAR
-            registry.addMapping("/").allowedOrigins("http://localhost:8080") //NOSONAR
+            registry.addMapping("/**").allowedOrigins("*") //NOSONAR
         }
     }
 }
