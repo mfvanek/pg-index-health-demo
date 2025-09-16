@@ -13,7 +13,6 @@ A Kotlin Spring Boot demo application showcasing the usage of [pg-index-health](
 - [API Endpoints](#api-endpoints)
 - [Testing](#testing)
 - [Documentation](#documentation)
-- [Contributing](#contributing)
 
 ## Overview
 
@@ -128,10 +127,6 @@ Generate test coverage report:
 API documentation is available via Swagger UI:
 
 - http://localhost:8080/swagger-ui.html
-
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](https://github.com/mfvanek/pg-index-health-demo/blob/master/CONTRIBUTING.md) for details.
 
 ## License
 
