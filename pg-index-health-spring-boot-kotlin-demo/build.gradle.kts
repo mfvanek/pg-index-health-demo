@@ -84,14 +84,6 @@ springBoot {
 }
 
 pitest {
-    excludedClasses.set(
-        listOf(
-            "io.github.mfvanek.pg.index.health.demo.kotlin.config.*",
-            "io.github.mfvanek.pg.index.health.demo.kotlin.PgIndexHealthSpringBootKotlinDemoApplication"
-        )
-    )
-    excludedTestClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.kotlin.ActuatorEndpointTest"))
-    
     // Prevent Pitest from removing calls to Kotlin internal methods
     avoidCallsTo.set(
         listOf(
