@@ -2,20 +2,20 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import com.github.spotbugs.snom.SpotBugsTask
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.2.20"
+    alias(libs.plugins.kotlin.jvm)
     id("pg-index-health-demo.java-compilation")
     id("pg-index-health-demo.java-conventions")
     id("pg-index-health-demo.forbidden-apis")
     id("pg-index-health-demo.pitest")
     alias(libs.plugins.spring.boot.v3)
-    kotlin("plugin.spring") version "2.2.20"
-    id("com.google.osdetector") version "1.7.3"
+    alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.osdetector)
 }
 
 dependencies {
     implementation(project(":db-migrations"))
     implementation(platform(libs.spring.boot.v3.dependencies))
-    implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.5"))
+    implementation(platform(libs.httpclient5.parent))
     implementation(platform(libs.springdoc.openapi.bom))
 
     implementation(libs.commons.lang3)
@@ -47,7 +47,7 @@ dependencies {
 
     // https://github.com/netty/netty/issues/11020
     if (osdetector.arch == "aarch_64") {
-        testImplementation("io.netty:netty-all:4.2.4.Final")
+        testImplementation(libs.netty.all)
     }
 }
 
