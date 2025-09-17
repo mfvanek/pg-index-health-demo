@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import com.github.spotbugs.snom.SpotBugsTask
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -10,6 +12,7 @@ plugins {
     alias(libs.plugins.spring.boot.v3)
     alias(libs.plugins.kotlin.spring)
     alias(libs.plugins.osdetector)
+    alias(libs.plugins.detekt)
 }
 
 dependencies {
@@ -49,6 +52,9 @@ dependencies {
     if (osdetector.arch == "aarch_64") {
         testImplementation(libs.netty.all)
     }
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.plugins.detekt.get().version.toString()}")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:${libs.plugins.detekt.get().version.toString()}")
 }
 
 tasks {
@@ -97,4 +103,15 @@ pitest {
             "kotlin.jdk7"
         )
     )
+}
+
+detekt {
+    toolVersion = libs.plugins.detekt.get().version.toString()
+    config.setFrom(file("${rootDir}/config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
+    autoCorrect = true
+}
+
+tasks.withType<DetektCreateBaselineTask>().configureEach {
+    jvmTarget = "21"
 }

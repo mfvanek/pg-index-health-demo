@@ -36,7 +36,7 @@ import org.mockito.Mockito.`when` as mockWhen
 
 @ExtendWith(OutputCaptureExtension::class)
 class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
-    
+
     private val expectedErrorMessage = "There should be no foreign keys not covered by some index"
 
     @Autowired
@@ -44,10 +44,10 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @MockitoBean
     private lateinit var dbMigrationGenerator: DbMigrationGenerator<ForeignKey>
-    
+
     @MockitoBean
     private lateinit var foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>
-    
+
     @MockitoBean
     private lateinit var pgContext: PgContext
 
@@ -95,7 +95,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         val mockPgContext = mock(PgContext::class.java)
         val mockForeignKeyMapper = mock(ForeignKeyMapper::class.java)
         val mockForeignKeys = listOf<ForeignKey>(mock(ForeignKey::class.java))
-        
+
         val dbMigrationGeneratorServiceWithMocks = DbMigrationGeneratorService(
             mockDataSource,
             mockDbMigrationGenerator as DbMigrationGenerator<ForeignKey>,
@@ -103,23 +103,31 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
             mockPgContext,
             mockForeignKeyMapper
         )
-        
-        `when`(mockForeignKeysNotCoveredWithIndex.check(mockPgContext)).thenReturn(mockForeignKeys).thenReturn(emptyList())
-        `when`(mockDbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
-        
+
+        `when`(
+            mockForeignKeysNotCoveredWithIndex.check(mockPgContext)
+        ).thenReturn(mockForeignKeys).thenReturn(emptyList())
+        `when`(
+            mockDbMigrationGenerator.generate(mockForeignKeys)
+        ).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
+
         `when`(mockDataSource.connection).thenReturn(mockConnection)
         `when`(mockConnection.createStatement()).thenReturn(mockStatement)
         `when`(mockStatement.execute(any(String::class.java))).thenReturn(true)
-        
+
         assertDoesNotThrow {
             dbMigrationGeneratorServiceWithMocks.generateMigrationsWithForeignKeysChecked()
         }
-        
+
         verify(mockStatement).execute("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);")
 
-        assertTrue(capturedOutput.all.contains("Generated migrations: [CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);]"))
+        assertTrue(
+            capturedOutput.all.contains(
+                "Generated migrations: [CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);]"
+            )
+        )
     }
-    
+
     @Test
     @Suppress("Unchecked_Cast")
     fun logsErrorWhenCannotGetConnection(capturedOutput: CapturedOutput) {
@@ -129,7 +137,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         val mockPgContext = mock(PgContext::class.java)
         val mockForeignKeyMapper = mock(ForeignKeyMapper::class.java)
         val mockForeignKeys = listOf<ForeignKey>(mock(ForeignKey::class.java))
-        
+
         val dbMigrationGeneratorServiceWithMockDataSource = DbMigrationGeneratorService(
             mockDataSource,
             mockDbMigrationGenerator as DbMigrationGenerator<ForeignKey>,
@@ -137,10 +145,12 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
             mockPgContext,
             mockForeignKeyMapper
         )
-        
+
         `when`(mockForeignKeysNotCoveredWithIndex.check(mockPgContext)).thenReturn(mockForeignKeys)
-        `when`(mockDbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
-        
+        `when`(
+            mockDbMigrationGenerator.generate(mockForeignKeys)
+        ).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
+
         mockWhen(mockDataSource.connection).thenThrow(java.sql.SQLException("Connection failed"))
 
         assertDoesNotThrow {
@@ -149,7 +159,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
             } catch (_: MigrationException) {
             }
         }
-        
+
         assertTrue(capturedOutput.all.contains("Error getting connection"))
     }
 }

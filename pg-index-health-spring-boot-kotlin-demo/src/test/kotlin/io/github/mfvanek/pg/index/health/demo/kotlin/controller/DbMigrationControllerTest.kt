@@ -35,7 +35,7 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .thenReturn(listOf(ForeignKey.ofNotNullColumn("test_table", "fk_col", "col_name")))
             .thenReturn(emptyList())
     }
-    
+
     @Test
     fun shouldGenerateMigrationsWithForeignKeysChecked() {
         val result = webTestClient.post()
@@ -53,9 +53,16 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
         assertEquals(1, result.foreignKeysBefore.size, "getForeignKeysBefore() should return non-empty list")
         assertEquals(0, result.foreignKeysAfter.size, "getForeignKeysAfter() should return empty list")
         assertTrue(result.generatedMigrations.isNotEmpty(), "getGeneratedMigrations() should return non-empty list")
-        
-        assertEquals("test_table", result.foreignKeysBefore[0].tableName, "getForeignKeysBefore() should return the actual list")
-        assertTrue(result.generatedMigrations.all { it.contains("create index concurrently if not exists") }, "getGeneratedMigrations() should return the actual list")
+
+        assertEquals(
+            "test_table",
+            result.foreignKeysBefore[0].tableName,
+            "getForeignKeysBefore() should return the actual list"
+        )
+        assertTrue(
+            result.generatedMigrations.all { it.contains("create index concurrently if not exists") },
+            "getGeneratedMigrations() should return the actual list"
+        )
     }
 
     @Test
@@ -75,7 +82,7 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun handleMigrationExceptionShouldReturnExpectedError() {
         val mockForeignKey = ForeignKey.ofNotNullColumn("demo.test_table", "fk_test_column", "test_column")
-        
+
         `when`(foreignKeysNotCoveredWithIndex.check(any(PgContext::class.java)))
             .thenReturn(emptyList())
             .thenReturn(listOf(mockForeignKey))
@@ -93,7 +100,7 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
         assertTrue(result != null)
         assertEquals(result.statusCode, HttpStatus.EXPECTATION_FAILED.value())
         assertEquals(result.message.contains("Migrations failed:"), true)
-        
+
         verify(foreignKeysNotCoveredWithIndex, times(2)).check(any(PgContext::class.java))
     }
 
@@ -118,11 +125,31 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
         assertEquals(2, response.foreignKeysBefore.size, "getForeignKeysBefore() should return non-empty list")
         assertEquals(1, response.foreignKeysAfter.size, "getForeignKeysAfter() should return non-empty list")
         assertEquals(2, response.generatedMigrations.size, "getGeneratedMigrations() should return non-empty list")
-        
-        assertEquals("table1", response.foreignKeysBefore[0].tableName, "getForeignKeysBefore() should return the actual list")
-        assertEquals("table2", response.foreignKeysBefore[1].tableName, "getForeignKeysBefore() should return the actual list")
-        assertEquals("table1", response.foreignKeysAfter[0].tableName, "getForeignKeysAfter() should return the actual list")
-        assertEquals("CREATE INDEX idx1 ON table1 (col1);", response.generatedMigrations[0], "getGeneratedMigrations() should return the actual list")
-        assertEquals("CREATE INDEX idx2 ON table2 (col2);", response.generatedMigrations[1], "getGeneratedMigrations() should return the actual list")
+
+        assertEquals(
+            "table1",
+            response.foreignKeysBefore[0].tableName,
+            "getForeignKeysBefore() should return the actual list"
+        )
+        assertEquals(
+            "table2",
+            response.foreignKeysBefore[1].tableName,
+            "getForeignKeysBefore() should return the actual list"
+        )
+        assertEquals(
+            "table1",
+            response.foreignKeysAfter[0].tableName,
+            "getForeignKeysAfter() should return the actual list"
+        )
+        assertEquals(
+            "CREATE INDEX idx1 ON table1 (col1);",
+            response.generatedMigrations[0],
+            "getGeneratedMigrations() should return the actual list"
+        )
+        assertEquals(
+            "CREATE INDEX idx2 ON table2 (col2);",
+            response.generatedMigrations[1],
+            "getGeneratedMigrations() should return the actual list"
+        )
     }
 }

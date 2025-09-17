@@ -28,7 +28,7 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
     fun setUp() {
         `when`(databaseManagement.resetStatistics()).thenReturn(true)
     }
-    
+
     @Test
     fun shouldGetLastResetDate() {
         webTestClient.get()

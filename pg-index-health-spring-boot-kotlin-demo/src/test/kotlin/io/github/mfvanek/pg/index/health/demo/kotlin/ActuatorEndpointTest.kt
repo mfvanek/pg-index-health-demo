@@ -43,7 +43,8 @@ class ActuatorEndpointTest : BasePgIndexHealthDemoSpringBootTest() {
             "health/readiness|{\"status\":\"UP\"}|application/json",
             "liquibase|{\"contexts\":{\"pg-index-health-spring-boot-kotlin-demo\":{\"liquibaseBeans\":{\"liquibase\":{\"changeSets\"|application/json",
             "info|\"version\":|application/json"
-        ], delimiter = '|'
+        ],
+        delimiter = '|'
     )
     fun actuatorEndpointShouldReturnOk(
         endpointName: String,
@@ -70,7 +71,7 @@ class ActuatorEndpointTest : BasePgIndexHealthDemoSpringBootTest() {
             .baseUrl("http://localhost:$port/")
             .defaultHeaders { super.setUpBasicAuth(it) }
             .build()
-            
+
         val result = mainAppClient.get()
             .uri { uriBuilder ->
                 uriBuilder.path("swagger-ui/index.html").build()

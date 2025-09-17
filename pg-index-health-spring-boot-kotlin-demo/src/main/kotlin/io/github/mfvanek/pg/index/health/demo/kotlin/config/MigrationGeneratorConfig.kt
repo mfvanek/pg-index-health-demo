@@ -26,7 +26,9 @@ class MigrationGeneratorConfig {
     }
 
     @Bean
-    fun foreignKeysNotCoveredWithIndex(haPgConnection: HighAvailabilityPgConnection): DatabaseCheckOnCluster<ForeignKey> {
+    fun foreignKeysNotCoveredWithIndex(
+        haPgConnection: HighAvailabilityPgConnection
+    ): DatabaseCheckOnCluster<ForeignKey> {
         return ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection)
     }
 }

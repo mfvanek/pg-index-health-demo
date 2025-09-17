@@ -32,7 +32,7 @@ class ForeignKeyMapperTest : BasePgIndexHealthDemoSpringBootTest() {
         assertEquals("users", dto.tableName)
         assertEquals("fk_users_roles", dto.constraintName)
         assertEquals(1, dto.columns.size)
-        
+
         val columnDto = dto.columns[0]
         assertEquals("user_id", columnDto.name)
         assertEquals(false, columnDto.nullable)
@@ -51,11 +51,11 @@ class ForeignKeyMapperTest : BasePgIndexHealthDemoSpringBootTest() {
         assertEquals("users", dto.tableName)
         assertEquals("fk_users_roles", dto.constraintName)
         assertEquals(2, dto.columns.size)
-        
+
         val firstColumnDto = dto.columns[0]
         assertEquals("user_id", firstColumnDto.name)
         assertEquals(false, firstColumnDto.nullable)
-        
+
         val secondColumnDto = dto.columns[1]
         assertEquals("role_id", secondColumnDto.name)
         assertEquals(true, secondColumnDto.nullable)
@@ -73,7 +73,7 @@ class ForeignKeyMapperTest : BasePgIndexHealthDemoSpringBootTest() {
         assertEquals("users", dto.tableName)
         assertEquals("fk_users_roles", dto.constraintName)
         assertEquals(1, dto.columns.size)
-        
+
         val columnDto = dto.columns[0]
         assertEquals("user_id", columnDto.name)
         assertEquals(true, columnDto.nullable)

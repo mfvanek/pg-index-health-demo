@@ -43,18 +43,22 @@ class DbMigrationController(
     @ApiResponse(
         responseCode = "200",
         description = "Successfully generated migrations",
-        content = [Content(
-            mediaType = "application/json",
-            schema = Schema(implementation = ForeignKeyMigrationResponse::class)
-        )]
+        content = [
+            Content(
+                mediaType = "application/json",
+                schema = Schema(implementation = ForeignKeyMigrationResponse::class)
+            )
+        ]
     )
     @ApiResponse(
         responseCode = "417",
         description = "Migration generation failed",
-        content = [Content(
-            mediaType = "application/json",
-            schema = Schema(implementation = MigrationError::class)
-        )]
+        content = [
+            Content(
+                mediaType = "application/json",
+                schema = Schema(implementation = MigrationError::class)
+            )
+        ]
     )
     @PostMapping("/generate")
     fun generateMigrationsWithForeignKeysChecked(): ForeignKeyMigrationResponse {

@@ -15,6 +15,9 @@ data class ForeignKeyDto(
     val tableName: String,
     @field:Schema(description = "Name of the foreign key constraint", example = "fk_orders_buyer_id")
     val constraintName: String,
-    @field:Schema(description = "Columns involved in the foreign key", example = "[{\"name\": \"buyer_id\", \"nullable\": false}]")
+    @field:Schema(
+        description = "Columns involved in the foreign key",
+        example = "[{\"name\": \"buyer_id\", \"nullable\": false}]"
+    )
     val columns: List<ForeignKeyColumnDto>
 )

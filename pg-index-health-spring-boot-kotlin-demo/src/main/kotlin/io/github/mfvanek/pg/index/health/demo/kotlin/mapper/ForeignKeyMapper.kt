@@ -22,7 +22,7 @@ class ForeignKeyMapper {
                 nullable = column.isNullable
             )
         }
-        
+
         return ForeignKeyDto(
             tableName = foreignKey.tableName,
             constraintName = foreignKey.constraintName,
