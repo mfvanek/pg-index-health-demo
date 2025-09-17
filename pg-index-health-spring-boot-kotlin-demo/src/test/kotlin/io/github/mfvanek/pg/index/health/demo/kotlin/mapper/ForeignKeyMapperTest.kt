@@ -18,7 +18,7 @@ import kotlin.test.assertNotNull
 class ForeignKeyMapperTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Autowired
-    private val mapper: ForeignKeyMapper? = null
+    private lateinit var mapper: ForeignKeyMapper
 
     @Test
     fun shouldMapForeignKeyToForeignKeyDto() {
@@ -26,7 +26,7 @@ class ForeignKeyMapperTest : BasePgIndexHealthDemoSpringBootTest() {
         val column = Column.ofNotNull("users", "user_id")
         val foreignKey = ForeignKey.of("users", "fk_users_roles", listOf(column))
 
-        val dto = mapper!!.toForeignKeyDto(foreignKey)
+        val dto = mapper.toForeignKeyDto(foreignKey)
 
         assertNotNull(dto)
         assertEquals("users", dto.tableName)
@@ -45,7 +45,7 @@ class ForeignKeyMapperTest : BasePgIndexHealthDemoSpringBootTest() {
         val column2 = Column.ofNullable("users", "role_id")
         val foreignKey = ForeignKey.of("users", "fk_users_roles", listOf(column1, column2))
 
-        val dto = mapper!!.toForeignKeyDto(foreignKey)
+        val dto = mapper.toForeignKeyDto(foreignKey)
 
         assertNotNull(dto)
         assertEquals("users", dto.tableName)
@@ -67,7 +67,7 @@ class ForeignKeyMapperTest : BasePgIndexHealthDemoSpringBootTest() {
         val column = Column.ofNullable("users", "user_id")
         val foreignKey = ForeignKey.of("users", "fk_users_roles", listOf(column))
 
-        val dto = mapper!!.toForeignKeyDto(foreignKey)
+        val dto = mapper.toForeignKeyDto(foreignKey)
 
         assertNotNull(dto)
         assertEquals("users", dto.tableName)

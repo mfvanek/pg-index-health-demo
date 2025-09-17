@@ -18,7 +18,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 
 class ActuatorEndpointTest : BasePgIndexHealthDemoSpringBootTest() {
 
-    private var actuatorClient: WebTestClient? = null
+    private lateinit var actuatorClient: WebTestClient
 
     @BeforeEach
     fun setUp() {
@@ -50,7 +50,7 @@ class ActuatorEndpointTest : BasePgIndexHealthDemoSpringBootTest() {
         expectedSubstring: String,
         mediaType: String
     ) {
-        val result = actuatorClient!!.get()
+        val result = actuatorClient.get()
             .uri { uriBuilder ->
                 uriBuilder.path(endpointName).build()
             }
@@ -86,7 +86,7 @@ class ActuatorEndpointTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun readinessProbeShouldBeCollectedFromApplicationMainPort() {
-        val result = webTestClient!!.get()
+        val result = webTestClient.get()
             .uri { uriBuilder ->
                 uriBuilder.pathSegment("readyz").build()
             }
@@ -100,7 +100,7 @@ class ActuatorEndpointTest : BasePgIndexHealthDemoSpringBootTest() {
         assertThat(result)
             .isEqualTo("{\"status\":\"UP\"}")
 
-        val metricsResult = actuatorClient!!.get()
+        val metricsResult = actuatorClient.get()
             .uri { uriBuilder ->
                 uriBuilder.path("prometheus").build()
             }

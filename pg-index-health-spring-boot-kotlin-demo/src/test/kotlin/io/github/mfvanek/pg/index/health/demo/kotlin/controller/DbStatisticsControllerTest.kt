@@ -22,16 +22,16 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @MockitoBean
-    private var databaseManagement: DatabaseManagement? = null
+    private lateinit var databaseManagement: DatabaseManagement
 
     @BeforeEach
     fun setUp() {
-        `when`(databaseManagement!!.resetStatistics()).thenReturn(true)
+        `when`(databaseManagement.resetStatistics()).thenReturn(true)
     }
     
     @Test
     fun shouldGetLastResetDate() {
-        webTestClient!!.get()
+        webTestClient.get()
             .uri("/db/statistics/reset")
             .accept(MediaType.APPLICATION_JSON)
             .headers(this::setUpBasicAuth)
@@ -42,7 +42,7 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldResetStatisticsWithWait() {
-        webTestClient!!.post()
+        webTestClient.post()
             .uri("/db/statistics/reset")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(true)
@@ -54,7 +54,7 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldResetStatisticsWithoutWait() {
-        webTestClient!!.post()
+        webTestClient.post()
             .uri("/db/statistics/reset")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(false)
@@ -66,9 +66,9 @@ class DbStatisticsControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun shouldThrowExceptionWhenResetStatisticsWithoutWaitFails() {
-        `when`(databaseManagement!!.resetStatistics()).thenReturn(false)
+        `when`(databaseManagement.resetStatistics()).thenReturn(false)
 
-        webTestClient!!.post()
+        webTestClient.post()
             .uri("/db/statistics/reset")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(false)

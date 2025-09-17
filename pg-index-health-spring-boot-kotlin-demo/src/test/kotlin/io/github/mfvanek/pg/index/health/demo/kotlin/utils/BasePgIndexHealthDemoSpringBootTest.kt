@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalManagementPort
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpHeaders
-import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 import java.time.Clock
@@ -22,9 +21,6 @@ import java.time.Clock
 @ActiveProfiles("test")
 abstract class BasePgIndexHealthDemoSpringBootTest {
 
-    @Autowired
-    protected var jdbcTemplate: JdbcTemplate? = null
-
     @LocalServerPort
     protected var port: Int = 8080
 
@@ -32,15 +28,15 @@ abstract class BasePgIndexHealthDemoSpringBootTest {
     protected var actuatorPort: Int = 8090
 
     @Autowired
-    protected var clock: Clock? = null
+    protected lateinit var clock: Clock
 
     @Autowired
-    protected var webTestClient: WebTestClient? = null
+    protected lateinit var webTestClient: WebTestClient
 
     @Autowired
-    private var securityProperties: SecurityProperties? = null
+    private lateinit var securityProperties: SecurityProperties
 
     protected fun setUpBasicAuth(httpHeaders: HttpHeaders) {
-        httpHeaders.setBasicAuth(securityProperties!!.user.name, securityProperties!!.user.password)
+        httpHeaders.setBasicAuth(securityProperties.user.name, securityProperties.user.password)
     }
 }
