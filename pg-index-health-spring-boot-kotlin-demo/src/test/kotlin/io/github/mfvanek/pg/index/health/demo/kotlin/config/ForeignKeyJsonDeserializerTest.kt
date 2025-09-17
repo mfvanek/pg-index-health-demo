@@ -33,7 +33,16 @@ class ForeignKeyJsonDeserializerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun deserializeShouldThrowExceptionWhenNoColumns() {
-        val json = """{"tableName":"users","constraintName":"fk_user_role","constraintType":"FOREIGN_KEY","name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}"""
+        val json = """
+            {
+                "tableName": "users",
+                "constraintName": "fk_user_role",
+                "constraintType": "FOREIGN_KEY",
+                "name": "fk_user_role",
+                "objectType": "CONSTRAINT",
+                "validateSql": "alter table users validate constraint fk_user_role;"
+            }
+        """.trimIndent()
 
         assertThatThrownBy { objectMapper.readValue(json, ForeignKey::class.java) }
             .isInstanceOf(IllegalArgumentException::class.java)
@@ -42,7 +51,17 @@ class ForeignKeyJsonDeserializerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun deserializeShouldThrowExceptionWhenColumnsIsNotArray() {
-        val json = """{"tableName":"users","constraintName":"fk_user_role","columnsInConstraint":"test","constraintType":"FOREIGN_KEY","name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}"""
+        val json = """
+            {
+                "tableName": "users",
+                "constraintName": "fk_user_role",
+                "columnsInConstraint": "test",
+                "constraintType": "FOREIGN_KEY",
+                "name": "fk_user_role",
+                "objectType": "CONSTRAINT",
+                "validateSql": "alter table users validate constraint fk_user_role;"
+            }
+        """.trimIndent()
 
         assertThatThrownBy { objectMapper.readValue(json, ForeignKey::class.java) }
             .isInstanceOf(IllegalArgumentException::class.java)

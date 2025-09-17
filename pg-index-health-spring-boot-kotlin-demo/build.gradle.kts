@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import com.github.spotbugs.snom.SpotBugsTask
-import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 
 plugins {
@@ -53,8 +52,8 @@ dependencies {
         testImplementation(libs.netty.all)
     }
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.plugins.detekt.get().version.toString()}")
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:${libs.plugins.detekt.get().version.toString()}")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.plugins.detekt.get().version}")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:${libs.plugins.detekt.get().version}")
 }
 
 tasks {

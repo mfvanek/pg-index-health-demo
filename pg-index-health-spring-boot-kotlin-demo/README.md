@@ -6,7 +6,6 @@ A Kotlin Spring Boot demo application showcasing the usage of [pg-index-health](
 
 - [Overview](#overview)
 - [Features](#features)
-- [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
   - [Configuration](#configuration)
   - [Running the Application](#running-the-application)

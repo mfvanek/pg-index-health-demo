@@ -17,7 +17,10 @@ import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.github.mfvanek.pg.model.context.PgContext
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.*
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
