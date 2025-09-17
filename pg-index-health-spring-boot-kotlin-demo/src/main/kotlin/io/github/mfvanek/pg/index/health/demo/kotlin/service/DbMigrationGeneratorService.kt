@@ -91,17 +91,27 @@ class DbMigrationGeneratorService(
         try {
             dataSource.connection.use { connection ->
                 for (migration in generatedMigrations) {
-                    try {
-                        connection.createStatement().use { statement ->
-                            statement.execute(migration)
-                        }
-                    } catch (e: SQLException) {
-                        logger.error("Error running migration", e)
-                    }
+                    executeMigration(connection, migration)
                 }
             }
         } catch (e: SQLException) {
             logger.error("Error getting connection", e)
+        }
+    }
+
+    /**
+     * Executes a single migration script.
+     *
+     * @param connection database connection
+     * @param migration migration script to execute
+     */
+    private fun executeMigration(connection: java.sql.Connection, migration: String) {
+        try {
+            connection.createStatement().use { statement ->
+                statement.execute(migration)
+            }
+        } catch (e: SQLException) {
+            logger.error("Error running migration", e)
         }
     }
 }
