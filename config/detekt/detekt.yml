@@ -1,0 +1,220 @@
+performance:
+    SpreadOperator:
+        active: false
+
+formatting:
+    active: true
+    android: false
+    AnnotationOnSeparateLine:
+        active: false
+    ChainWrapping:
+        active: true
+    CommentSpacing:
+        active: true
+    Filename:
+        active: true
+    FinalNewline:
+        active: true
+    ImportOrdering:
+        active: false
+    Indentation:
+        active: true
+        indentSize: 4
+        # continuationIndentSize: 4
+    MaximumLineLength:
+        active: true
+        maxLineLength: 240
+    ModifierOrdering:
+        active: true
+    MultiLineIfElse:
+        active: true
+    NoBlankLineBeforeRbrace:
+        active: true
+    NoConsecutiveBlankLines:
+        active: true
+    NoEmptyClassBody:
+        active: true
+    NoLineBreakAfterElse:
+        active: true
+    NoLineBreakBeforeAssignment:
+        active: true
+    NoMultipleSpaces:
+        active: true
+    NoSemicolons:
+        active: true
+    NoTrailingSpaces:
+        active: true
+    NoUnitReturn:
+        active: true
+    NoUnusedImports:
+        active: true
+    NoWildcardImports:
+        active: true
+    PackageName:
+        active: true
+    ParameterListWrapping:
+        active: true
+        # indentSize: 4
+    SpacingAroundColon:
+        active: true
+    SpacingAroundComma:
+        active: true
+    SpacingAroundCurly:
+        active: true
+    SpacingAroundDot:
+        active: true
+    SpacingAroundKeyword:
+        active: true
+    SpacingAroundOperators:
+        active: true
+    SpacingAroundParens:
+        active: true
+    SpacingAroundRangeOperator:
+        active: true
+    StringTemplate:
+        active: true
+
+style:
+    active: true
+    CollapsibleIfStatements:
+        active: false
+    DataClassContainsFunctions:
+        active: false
+        conversionFunctionPrefix: ['to']
+    DataClassShouldBeImmutable:
+        active: false
+    EqualsNullCall:
+        active: true
+    EqualsOnSignatureLine:
+        active: false
+    ExplicitItLambdaParameter:
+        active: false
+    ExpressionBodySyntax:
+        active: false
+        includeLineWrapping: false
+    ForbiddenComment:
+        active: false
+        comments: [ 'TODO:','FIXME:','STOPSHIP:' ]
+        allowedPatterns: ""
+    ForbiddenImport:
+        active: false
+        imports: [ ]
+        forbiddenPatterns: ""
+    ForbiddenVoid:
+        active: false
+        ignoreOverridden: false
+        ignoreUsageInGenerics: false
+    FunctionOnlyReturningConstant:
+        active: true
+        ignoreOverridableFunction: true
+        excludedFunctions: [ 'describeContents' ]
+    LoopWithTooManyJumpStatements:
+        active: true
+        maxJumpCount: 1
+    MagicNumber:
+        active: true
+        excludes: [ "**/test/**","**/*.Test.kt","**/*.Spec.kt","**/*.Spek.kt","**/*Properties.kt","**/*Configuration.kt" ]
+        ignoreNumbers: [ '-1','0','1','2' ]
+        ignoreHashCodeFunction: true
+        ignorePropertyDeclaration: false
+        ignoreLocalVariableDeclaration: false
+        ignoreConstantDeclaration: true
+        ignoreCompanionObjectPropertyDeclaration: true
+        ignoreAnnotation: false
+        ignoreNamedArgument: true
+        ignoreEnums: false
+        ignoreRanges: false
+    MaxLineLength:
+        active: true
+        maxLineLength: 240
+        excludePackageStatements: true
+        excludeImportStatements: true
+        excludeCommentStatements: false
+    MayBeConst:
+        active: true
+    ModifierOrder:
+        active: true
+    NestedClassesVisibility:
+        active: false
+    NewLineAtEndOfFile:
+        active: true
+    NoTabs:
+        active: true
+    OptionalAbstractKeyword:
+        active: true
+    OptionalUnit:
+        active: false
+    PreferToOverPairSyntax:
+        active: true
+    ProtectedMemberInFinalClass:
+        active: true
+    RedundantExplicitType:
+        active: false
+    RedundantVisibilityModifierRule:
+        active: true
+    ReturnCount:
+        active: true
+        max: 2
+        excludedFunctions: [ "equals" ]
+        excludeLabeled: false
+        excludeReturnFromLambda: true
+        excludeGuardClauses: false
+    SafeCast:
+        active: true
+    SerialVersionUIDInSerializableClass:
+        active: false
+    SpacingBetweenPackageAndImports:
+        active: false
+    ThrowsCount:
+        active: true
+        max: 2
+    TrailingWhitespace:
+        active: false
+    UnderscoresInNumericLiterals:
+        active: false
+        acceptableLength: 5
+    UnnecessaryAbstractClass:
+        active: false
+    UnnecessaryApply:
+        active: false
+    UnnecessaryInheritance:
+        active: true
+    UnnecessaryLet:
+        active: false
+    UnnecessaryParentheses:
+        active: false
+    UntilInsteadOfRangeTo:
+        active: false
+    UnusedImports:
+        active: true
+    UnusedPrivateClass:
+        active: true
+    UnusedPrivateMember:
+        active: true
+        allowedNames: "(_|ignored|expected|serialVersionUID)"
+    UseArrayLiteralsInAnnotations:
+        active: false
+    UseCheckOrError:
+        active: false
+    UseDataClass:
+        active: false
+        ignoreAnnotated: [ ]
+        allowVars: false
+    UseIfInsteadOfWhen:
+        active: false
+    UseRequire:
+        active: false
+    UselessCallOnNotNull:
+        active: true
+    UtilityClassWithPublicConstructor:
+        active: true
+    VarCouldBeVal:
+        active: false
+    WildcardImport:
+        active: true
+
+libraries:
+    LibraryEntitiesShouldNotBePublic:
+        active: false
+    ForbiddenPublicDataClass:
+        active: false
