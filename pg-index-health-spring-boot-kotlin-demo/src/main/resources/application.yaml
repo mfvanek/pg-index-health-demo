@@ -22,10 +22,12 @@ spring:
             connection-timeout: 20000
             maximum-pool-size: 10
 
-app:
-    statistics:
-        vacuum-result-polling-attempts: 10
-        polling-interval: 100ms
+pgih:
+    kotlin:
+        app:
+            statistics:
+                vacuum-result-polling-attempts: 10
+                polling-interval: 100ms
 
 logging:
     level:
