@@ -40,10 +40,12 @@ class DbStatisticsController(
     @ApiResponse(
         responseCode = "200",
         description = "Successfully retrieved the last reset timestamp",
-        content = [Content(
-            mediaType = "application/json",
-            schema = Schema(implementation = StatisticsResetResponse::class)
-        )]
+        content = [
+            Content(
+                mediaType = "application/json",
+                schema = Schema(implementation = StatisticsResetResponse::class)
+            )
+        ]
     )
     @GetMapping("/reset")
     fun getLastResetDate(): StatisticsResetResponse {
@@ -63,26 +65,32 @@ class DbStatisticsController(
     @ApiResponse(
         responseCode = "200",
         description = "Statistics reset completed successfully with wait",
-        content = [Content(
-            mediaType = "application/json",
-            schema = Schema(implementation = StatisticsResetResponse::class)
-        )]
+        content = [
+            Content(
+                mediaType = "application/json",
+                schema = Schema(implementation = StatisticsResetResponse::class)
+            )
+        ]
     )
     @ApiResponse(
         responseCode = "202",
         description = "Statistics reset initiated successfully without wait",
-        content = [Content(
-            mediaType = "application/json",
-            schema = Schema(implementation = StatisticsResetResponse::class)
-        )]
+        content = [
+            Content(
+                mediaType = "application/json",
+                schema = Schema(implementation = StatisticsResetResponse::class)
+            )
+        ]
     )
     @ApiResponse(
         responseCode = "500",
         description = "Statistics reset failed",
-        content = [Content(
-            mediaType = "application/json",
-            schema = Schema(implementation = MigrationError::class)
-        )]
+        content = [
+            Content(
+                mediaType = "application/json",
+                schema = Schema(implementation = MigrationError::class)
+            )
+        ]
     )
     @PostMapping("/reset")
     fun doReset(@RequestBody wait: Boolean): ResponseEntity<StatisticsResetResponse> {

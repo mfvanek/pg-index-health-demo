@@ -15,6 +15,7 @@ dependencyResolutionManagement {
             val osDetectorVersion = version("osdetector", "1.7.3")
             val httpClient5ParentVersion = version("httpclient5-parent", "5.5")
             val nettyAllVersion = version("netty-all", "4.2.4.Final")
+            val detektVersion = version("detekt", "1.23.8")
 
             plugin("spring-boot-v3", "org.springframework.boot")
                 .versionRef(springBoot3Version)
@@ -24,6 +25,8 @@ dependencyResolutionManagement {
                 .versionRef(kotlinVersion)
             plugin("osdetector", "com.google.osdetector")
                 .versionRef(osDetectorVersion)
+            plugin("detekt", "io.gitlab.arturbosch.detekt")
+                .versionRef(detektVersion)
 
             library("spring-boot-v3-dependencies", "org.springframework.boot", "spring-boot-dependencies")
                 .versionRef(springBoot3Version)

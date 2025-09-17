@@ -47,7 +47,7 @@ class SecurityConfig {
     @Throws(Exception::class)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .csrf { obj: AbstractHttpConfigurer<*, HttpSecurity> -> obj.disable() } //NOSONAR
+            .csrf { obj: AbstractHttpConfigurer<*, HttpSecurity> -> obj.disable() } // NOSONAR
             .authorizeHttpRequests { authz -> authz.anyRequest().authenticated() }
             .httpBasic(Customizer.withDefaults())
             .build()
@@ -65,10 +65,10 @@ class SecurityConfig {
     fun corsConfigurer(): WebMvcConfigurer {
         return CorsConfigurer()
     }
-    
+
     private class CorsConfigurer : WebMvcConfigurer {
         override fun addCorsMappings(registry: CorsRegistry) {
-            registry.addMapping("/**").allowedOrigins("*") //NOSONAR
+            registry.addMapping("/**").allowedOrigins("*") // NOSONAR
         }
     }
 }

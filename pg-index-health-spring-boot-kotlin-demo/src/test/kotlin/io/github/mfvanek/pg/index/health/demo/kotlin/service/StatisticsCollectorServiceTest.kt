@@ -63,7 +63,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
         val result = statisticsCollectorService.getLastStatsResetTimestamp()
         assertEquals(expectedTimestamp, result)
-        
+
         assertTrue(capturedOutput.all.contains("Last stats reset timestamp = $expectedTimestamp"))
     }
 
@@ -73,11 +73,11 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         `when`(databaseManagement.resetStatistics()).thenReturn(true)
         `when`(databaseManagement.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
-        
+
         `when`(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
-        
+
         statisticsCollectorService.resetStatistics()
-        
+
         verify(jdbcTemplate).execute("vacuum analyze;")
     }
 
@@ -124,17 +124,19 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         `when`(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
 
         // Mock the query that checks for active vacuum operations to return 1 first (active), then 0 (completed)
-        `when`(jdbcTemplate.queryForObject(
-            "select count(*) from pg_stat_progress_vacuum where datname = current_database()", 
-            Int::class.java
-        )).thenReturn(1).thenReturn(0)
+        `when`(
+            jdbcTemplate.queryForObject(
+                "select count(*) from pg_stat_progress_vacuum where datname = current_database()",
+                Int::class.java
+            )
+        ).thenReturn(1).thenReturn(0)
 
         val startTime = System.currentTimeMillis()
-        
+
         statisticsCollectorService.resetStatistics()
-        
+
         val endTime = System.currentTimeMillis()
-        
+
         val duration = endTime - startTime
         assertTrue(duration >= 100) // Should take some time due to polling
     }
@@ -149,16 +151,18 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         `when`(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
 
         // Mock the query to always return 1 (active vacuum), forcing max attempts to be reached
-        `when`(jdbcTemplate.queryForObject(
-            "select count(*) from pg_stat_progress_vacuum where datname = current_database()", 
-            Int::class.java
-        )).thenReturn(1)
+        `when`(
+            jdbcTemplate.queryForObject(
+                "select count(*) from pg_stat_progress_vacuum where datname = current_database()",
+                Int::class.java
+            )
+        ).thenReturn(1)
 
         statisticsCollectorService.resetStatistics()
-        
+
         // Verify the query was called the expected number of times (maxAttempts)
         verify(jdbcTemplate, times(10)).queryForObject(
-            "select count(*) from pg_stat_progress_vacuum where datname = current_database()", 
+            "select count(*) from pg_stat_progress_vacuum where datname = current_database()",
             Int::class.java
         )
     }
@@ -173,10 +177,12 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         `when`(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
 
         // Mock the query to return null first, then 0 (completed)
-        `when`(jdbcTemplate.queryForObject(
-            "select count(*) from pg_stat_progress_vacuum where datname = current_database()", 
-            Int::class.java
-        )).thenReturn(null).thenReturn(0)
+        `when`(
+            jdbcTemplate.queryForObject(
+                "select count(*) from pg_stat_progress_vacuum where datname = current_database()",
+                Int::class.java
+            )
+        ).thenReturn(null).thenReturn(0)
 
         statisticsCollectorService.resetStatistics()
     }

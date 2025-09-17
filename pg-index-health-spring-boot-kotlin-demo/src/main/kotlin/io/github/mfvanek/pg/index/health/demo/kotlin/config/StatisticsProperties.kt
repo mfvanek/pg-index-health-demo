@@ -15,7 +15,7 @@ import java.time.Duration
 data class StatisticsProperties(
     @DefaultValue("10")
     val vacuumResultPollingAttempts: Int,
-    
+
     @DefaultValue("100ms")
     val pollingInterval: Duration
 )

@@ -15,6 +15,9 @@ data class ForeignKeyMigrationResponse(
     val foreignKeysBefore: List<ForeignKeyDto>,
     @field:Schema(description = "List of foreign keys after migration")
     val foreignKeysAfter: List<ForeignKeyDto>,
-    @field:Schema(description = "List of generated migration scripts", example = "[\"ALTER TABLE orders ADD CONSTRAINT fk_orders_buyer_id FOREIGN KEY (buyer_id) REFERENCES buyer(id);\"]")
+    @field:Schema(
+        description = "List of generated migration scripts",
+        example = "[\"ALTER TABLE orders ADD CONSTRAINT fk_orders_buyer_id FOREIGN KEY (buyer_id) REFERENCES buyer(id);\"]"
+    )
     val generatedMigrations: List<String>
 )

@@ -81,20 +81,20 @@ class StatisticsCollectorService(
     @Throws(InterruptedException::class)
     private fun waitForStatisticsCollector() {
         jdbcTemplate.execute("vacuum analyze;")
-        
+
         // Poll for vacuum analyze completion by checking if there are no active vacuum operations
         var attempts = 0
         val maxAttempts = statisticsProperties.vacuumResultPollingAttempts
         while (attempts < maxAttempts) {
             val activeVacuums = jdbcTemplate.queryForObject(
-                "select count(*) from pg_stat_progress_vacuum where datname = current_database()", 
+                "select count(*) from pg_stat_progress_vacuum where datname = current_database()",
                 Int::class.java
             ) ?: 0
-            
+
             if (activeVacuums == 0) {
                 break
             }
-            
+
             TimeUnit.MILLISECONDS.sleep(statisticsProperties.pollingInterval.toMillis())
             attempts++
         }

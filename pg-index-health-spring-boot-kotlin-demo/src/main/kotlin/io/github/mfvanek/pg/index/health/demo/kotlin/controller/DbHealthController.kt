@@ -42,10 +42,12 @@ class DbHealthController(
     @ApiResponse(
         responseCode = "200",
         description = "Successfully collected health data",
-        content = [Content(
-            mediaType = "application/json",
-            schema = Schema(implementation = DatabaseHealthResponse::class)
-        )]
+        content = [
+            Content(
+                mediaType = "application/json",
+                schema = Schema(implementation = DatabaseHealthResponse::class)
+            )
+        ]
     )
     @GetMapping
     fun collectHealthData(): DatabaseHealthResponse {
