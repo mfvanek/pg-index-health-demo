@@ -33,13 +33,6 @@ This demo application demonstrates how to integrate the `pg-index-health` librar
 - Swagger/OpenAPI documentation
 - Security with basic authentication
 
-## Prerequisites
-
-- Java 21+
-- Gradle 8+
-- PostgreSQL 10+
-- Docker (optional, for containerized PostgreSQL deployment)
-
 ## Getting Started
 
 ### Configuration
