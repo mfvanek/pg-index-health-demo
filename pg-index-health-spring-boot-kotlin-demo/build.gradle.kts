@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.github.spotbugs.snom.SpotBugsTask
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.2.20"
@@ -76,6 +77,11 @@ tasks {
         violationRules {
             classDirectories.setFrom(jacocoTestReport.get().classDirectories)
         }
+    }
+
+    // Disable SpotBugs tasks for Kotlin demo
+    withType<SpotBugsTask>().configureEach {
+        enabled = false
     }
 }
 

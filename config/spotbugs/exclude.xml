@@ -17,32 +17,7 @@
     </Match>
     <Match>
         <Bug pattern="PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS,SIL_SQL_IN_LOOP"/>
-        <Or>
-            <Class name="io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService"/>
-            <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGeneratorService"/>
-        </Or>
-    </Match>
-    <Match>
-        <Bug pattern="USBR_UNNECESSARY_STORE_BEFORE_RETURN"/>
-        <Or>
-            <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.config.StatisticsProperties"/>
-            <Package name="io.github.mfvanek.pg.index.health.demo.kotlin.dto.*"/>
-        </Or>
-    </Match>
-    <Match>
-        <Bug pattern="NAB_NEEDLESS_BOOLEAN_CONSTANT_CONVERSION"/>
-        <Package name="~io\.github\.mfvanek\.pg\.index\.health\.demo\.kotlin.*"/>
-    </Match>
-    <Match>
-        <Bug pattern="OBL_UNSATISFIED_OBLIGATION"/>
-        <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGeneratorServiceTest"/>
-    </Match>
-    <Match>
-        <Bug pattern="BC_BAD_CAST_TO_ABSTRACT_COLLECTION"/>
-        <Or>
-            <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGeneratorService"/>
-            <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.mapper.ForeignKeyMapper"/>
-        </Or>
+        <Class name="io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService"/>
     </Match>
     <Match>
         <Bug pattern="CRLF_INJECTION_LOGS,SQL_INJECTION_JDBC"/>
@@ -56,10 +31,6 @@
     <Match>
         <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
         <Class name="io.github.mfvanek.pg.index.health.demo.config.SecurityConfig"/>
-    </Match>
-    <Match>
-        <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
-        <Class name="io.github.mfvanek.pg.index.health.demo.kotlin.config.SecurityConfig$CorsConfigurer"/>
     </Match>
 
     <Match>
