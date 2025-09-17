@@ -15,7 +15,7 @@ spring:
         template:
             query-timeout: 1s
     datasource:
-        url: jdbc:postgresql://localhost:5432/demo_for_pg_index_health
+        url: jdbc:postgresql://localhost:6432/demo_for_pg_index_health
         username: demo_user
         password: myUniquePassword
         hikari:

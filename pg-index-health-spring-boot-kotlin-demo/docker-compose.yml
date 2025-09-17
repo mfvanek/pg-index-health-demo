@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: demo_user
       POSTGRES_PASSWORD: myUniquePassword
     ports:
-      - "5432:5432"
+      - "6432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
