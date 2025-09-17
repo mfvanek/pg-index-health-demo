@@ -40,30 +40,30 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     private val expectedErrorMessage = "There should be no foreign keys not covered by some index"
 
     @Autowired
-    private var dbMigrationGeneratorService: DbMigrationGeneratorService? = null
+    private lateinit var dbMigrationGeneratorService: DbMigrationGeneratorService
 
     @MockitoBean
-    private var dbMigrationGenerator: DbMigrationGenerator<ForeignKey>? = null
+    private lateinit var dbMigrationGenerator: DbMigrationGenerator<ForeignKey>
     
     @MockitoBean
-    private var foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>? = null
+    private lateinit var foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>
     
     @MockitoBean
-    private var pgContext: PgContext? = null
+    private lateinit var pgContext: PgContext
 
     private val mockForeignKeys = listOf<ForeignKey>(mock(ForeignKey::class.java))
 
     @BeforeEach
     fun setUp() {
-        `when`(foreignKeysNotCoveredWithIndex!!.check(pgContext!!)).thenReturn(mockForeignKeys)
+        `when`(foreignKeysNotCoveredWithIndex.check(pgContext)).thenReturn(mockForeignKeys)
     }
 
     @Test
     fun throwsMigrationExceptionWhenEmptyMigrationString(capturedOutput: CapturedOutput) {
-        `when`(dbMigrationGenerator!!.generate(mockForeignKeys)).thenReturn(emptyList())
+        `when`(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(emptyList())
 
         assertThrows<MigrationException> {
-            dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
+            dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()
         }.apply {
             assertEquals(expectedErrorMessage, message)
         }
@@ -73,10 +73,10 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun logsAboutSqlExceptionWhenBadMigrationStringAndThrowsExceptionAfter(capturedOutput: CapturedOutput) {
-        `when`(dbMigrationGenerator!!.generate(mockForeignKeys)).thenReturn(listOf("select * from payments"))
+        `when`(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("select * from payments"))
 
         assertThrows<MigrationException> {
-            dbMigrationGeneratorService!!.generateMigrationsWithForeignKeysChecked()
+            dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()
         }.apply {
             assertEquals(expectedErrorMessage, message)
         }

@@ -27,18 +27,18 @@ import kotlin.test.assertTrue
 class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @MockitoBean
-    private val foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>? = null
+    private lateinit var foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>
 
     @BeforeEach
     fun setUp() {
-        `when`(foreignKeysNotCoveredWithIndex!!.check(any(PgContext::class.java)))
+        `when`(foreignKeysNotCoveredWithIndex.check(any(PgContext::class.java)))
             .thenReturn(listOf(ForeignKey.ofNotNullColumn("test_table", "fk_col", "col_name")))
             .thenReturn(emptyList())
     }
     
     @Test
     fun shouldGenerateMigrationsWithForeignKeysChecked() {
-        val result = webTestClient!!.post()
+        val result = webTestClient.post()
             .uri("/db/migration/generate")
             .accept(MediaType.APPLICATION_JSON)
             .headers(this::setUpBasicAuth)
@@ -60,7 +60,7 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun returnsNothingWithWrongAuthorization() {
-        val result = webTestClient!!.post()
+        val result = webTestClient.post()
             .uri("/db/migration/generate")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -76,11 +76,11 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
     fun handleMigrationExceptionShouldReturnExpectedError() {
         val mockForeignKey = ForeignKey.ofNotNullColumn("demo.test_table", "fk_test_column", "test_column")
         
-        `when`(foreignKeysNotCoveredWithIndex!!.check(any(PgContext::class.java)))
+        `when`(foreignKeysNotCoveredWithIndex.check(any(PgContext::class.java)))
             .thenReturn(emptyList())
             .thenReturn(listOf(mockForeignKey))
 
-        val result = webTestClient!!.post()
+        val result = webTestClient.post()
             .uri("/db/migration/generate")
             .accept(MediaType.APPLICATION_JSON)
             .headers(this::setUpBasicAuth)
