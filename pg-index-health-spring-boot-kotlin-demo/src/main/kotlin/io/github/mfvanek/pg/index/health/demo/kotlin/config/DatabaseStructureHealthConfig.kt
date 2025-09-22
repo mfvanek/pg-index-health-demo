@@ -29,9 +29,9 @@ class DatabaseStructureHealthConfig {
 
     @Bean
     fun connectionCredentials(
-        @Value($$"${spring.datasource.url}") url: String,
-        @Value($$"${spring.datasource.username}") username: String,
-        @Value($$"${spring.datasource.password}") password: String
+        @Value("\${spring.datasource.url}") url: String,
+        @Value("\${spring.datasource.username}") username: String,
+        @Value("\${spring.datasource.password}") password: String
     ): ConnectionCredentials {
         return ConnectionCredentials.ofUrl(url, username, password)
     }
