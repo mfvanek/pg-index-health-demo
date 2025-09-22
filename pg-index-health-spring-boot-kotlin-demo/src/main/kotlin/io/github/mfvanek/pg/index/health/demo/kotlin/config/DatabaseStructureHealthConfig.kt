@@ -20,7 +20,6 @@ import io.github.mfvanek.pg.health.logger.DatabaseChecksOnCluster
 import io.github.mfvanek.pg.health.logger.HealthLogger
 import io.github.mfvanek.pg.health.logger.StandardHealthLogger
 import io.github.mfvanek.pg.model.context.PgContext
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -29,11 +28,13 @@ class DatabaseStructureHealthConfig {
 
     @Bean
     fun connectionCredentials(
-        @Value("\${spring.datasource.url}") url: String,
-        @Value("\${spring.datasource.username}") username: String,
-        @Value("\${spring.datasource.password}") password: String
+        connectionCredentialsConfig: ConnectionCredentialsConfig
     ): ConnectionCredentials {
-        return ConnectionCredentials.ofUrl(url, username, password)
+        return ConnectionCredentials.ofUrl(
+            connectionCredentialsConfig.url,
+            connectionCredentialsConfig.username,
+            connectionCredentialsConfig.password
+        )
     }
 
     @Bean

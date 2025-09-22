@@ -4,3 +4,11 @@ logging:
             jdbc: DEBUG
             orm.jpa.JpaTransactionManager: DEBUG
         io.github.mfvanek.pg.index.health.demo.kotlin.service.StatisticsCollectorService: TRACE
+
+spring:
+    datasource:
+        url: jdbc:tc:postgresql:17.4:///
+        driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+        hikari:
+          connection-timeout: 20000
+          maximum-pool-size: 10
