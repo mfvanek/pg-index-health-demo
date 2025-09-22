@@ -22,10 +22,10 @@ import java.time.Clock
 abstract class BasePgIndexHealthDemoSpringBootTest {
 
     @LocalServerPort
-    protected var port: Int = 8080
+    protected var port: Int = 0
 
     @LocalManagementPort
-    protected var actuatorPort: Int = 8090
+    protected var actuatorPort: Int = 0
 
     @Autowired
     protected lateinit var clock: Clock
