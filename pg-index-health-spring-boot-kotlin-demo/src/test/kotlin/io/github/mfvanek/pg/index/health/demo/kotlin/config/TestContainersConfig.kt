@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.testcontainers.containers.JdbcDatabaseContainer
 import org.testcontainers.containers.PostgreSQLContainer
-import org.testcontainers.containers.wait.strategy.Wait
 import javax.sql.DataSource
 
 @Configuration(proxyBeanMethods = false)
