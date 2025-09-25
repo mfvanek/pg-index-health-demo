@@ -13,7 +13,7 @@ import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyMigrationResp
 import io.github.mfvanek.pg.index.health.demo.kotlin.exception.MigrationException
 import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.github.mfvanek.pg.model.context.PgContext
-import org.slf4j.LoggerFactory
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.sql.SQLException
@@ -36,7 +36,7 @@ class DbMigrationGeneratorService(
     private val pgContext: PgContext
 ) {
 
-    private val logger = LoggerFactory.getLogger(DbMigrationGeneratorService::class.java)
+    private val logger = KotlinLogging.logger {}
 
     /**
      * Generates migrations for foreign keys and validates the result.
@@ -76,7 +76,7 @@ class DbMigrationGeneratorService(
      */
     private fun generateMigrations(foreignKeys: List<ForeignKey>): List<String> {
         val generatedMigrations = dbMigrationGenerator.generate(foreignKeys)
-        logger.info("Generated migrations: {}", generatedMigrations)
+        logger.info { "Generated migrations: $generatedMigrations" }
         return generatedMigrations
     }
 
@@ -93,7 +93,7 @@ class DbMigrationGeneratorService(
                 }
             }
         } catch (e: SQLException) {
-            logger.error("Error getting connection", e)
+            logger.error(e) { "Error getting connection" }
         }
     }
 
@@ -109,7 +109,7 @@ class DbMigrationGeneratorService(
                 statement.execute(migration)
             }
         } catch (e: SQLException) {
-            logger.error("Error running migration", e)
+            logger.error(e) { "Error running migration" }
         }
     }
 }

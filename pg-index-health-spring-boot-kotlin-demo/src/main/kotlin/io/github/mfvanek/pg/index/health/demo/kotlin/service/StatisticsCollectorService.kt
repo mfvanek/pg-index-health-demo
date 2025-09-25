@@ -10,7 +10,7 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.service
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagement
 import io.github.mfvanek.pg.index.health.demo.kotlin.config.StatisticsProperties
 import io.github.mfvanek.pg.index.health.demo.kotlin.exception.StatisticsResetException
-import org.slf4j.LoggerFactory
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
@@ -36,7 +36,7 @@ class StatisticsCollectorService(
     private val statisticsProperties: StatisticsProperties
 ) {
 
-    private val logger = LoggerFactory.getLogger(StatisticsCollectorService::class.java)
+    private val logger = KotlinLogging.logger {}
 
     /**
      * Gets the last statistics reset timestamp.
@@ -107,7 +107,7 @@ class StatisticsCollectorService(
      */
     private fun getLastStatsResetTimestampInner(): OffsetDateTime {
         val result = databaseManagement.lastStatsResetTimestamp.orElse(OffsetDateTime.MIN)
-        logger.trace("Last stats reset timestamp = {}", result)
+        logger.trace { "Last stats reset timestamp = $result" }
         return result
     }
 }

@@ -38,10 +38,11 @@ dependencyResolutionManagement {
                 .versionRef(commonsLang3Version)
             library("httpclient5-parent", "org.apache.httpcomponents.client5", "httpclient5-parent")
                 .versionRef(httpClient5ParentVersion)
-            library("liquibase-core", "org.liquibase:liquibase-core:4.33.0")
+            library("liquibase-core", "org.liquibase:liquibase-core:4.33.0") // TODO: create version refs
             library("liquibase-sessionlock", "com.github.blagerweij:liquibase-sessionlock:1.6.9")
             library("netty-all", "io.netty", "netty-all")
                 .versionRef(nettyAllVersion)
+            library("kotlin-logging", "io.github.oshai:kotlin-logging-jvm:7.0.3")
         }
     }
 }

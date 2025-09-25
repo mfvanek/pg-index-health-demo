@@ -32,10 +32,12 @@ dependencies {
     implementation("io.github.mfvanek:pg-index-health-logger")
     implementation("io.github.mfvanek:pg-index-health-generator")
     implementation(libs.liquibase.core)
-    implementation(libs.liquibase.sessionlock)
+    implementation(libs.liquibase.sessionlock) // TODO: remove?
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    implementation(libs.kotlin.logging)
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
