@@ -36,7 +36,7 @@ class StatisticsCollectorService(
     private val statisticsProperties: StatisticsProperties
 ) {
 
-    private val logger = KotlinLogging.logger {}
+    private val logger = KotlinLogging.logger("${this::class.java.name}")
 
     /**
      * Gets the last statistics reset timestamp.
