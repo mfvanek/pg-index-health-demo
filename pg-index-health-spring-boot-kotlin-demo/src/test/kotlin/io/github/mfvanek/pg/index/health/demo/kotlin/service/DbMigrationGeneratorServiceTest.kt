@@ -10,7 +10,6 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.service
 import io.github.mfvanek.pg.generator.DbMigrationGenerator
 import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster
 import io.github.mfvanek.pg.index.health.demo.kotlin.exception.MigrationException
-import io.github.mfvanek.pg.index.health.demo.kotlin.mapper.ForeignKeyMapper
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.github.mfvanek.pg.model.context.PgContext
@@ -93,15 +92,13 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         val mockDbMigrationGenerator = mock(DbMigrationGenerator::class.java)
         val mockForeignKeysNotCoveredWithIndex = mock(DatabaseCheckOnCluster::class.java)
         val mockPgContext = mock(PgContext::class.java)
-        val mockForeignKeyMapper = mock(ForeignKeyMapper::class.java)
         val mockForeignKeys = listOf<ForeignKey>(mock(ForeignKey::class.java))
 
         val dbMigrationGeneratorServiceWithMocks = DbMigrationGeneratorService(
             mockDataSource,
             mockDbMigrationGenerator as DbMigrationGenerator<ForeignKey>,
             mockForeignKeysNotCoveredWithIndex as DatabaseCheckOnCluster<ForeignKey>,
-            mockPgContext,
-            mockForeignKeyMapper
+            mockPgContext
         )
 
         `when`(
@@ -135,15 +132,13 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         val mockDbMigrationGenerator = mock(DbMigrationGenerator::class.java)
         val mockForeignKeysNotCoveredWithIndex = mock(DatabaseCheckOnCluster::class.java)
         val mockPgContext = mock(PgContext::class.java)
-        val mockForeignKeyMapper = mock(ForeignKeyMapper::class.java)
         val mockForeignKeys = listOf<ForeignKey>(mock(ForeignKey::class.java))
 
         val dbMigrationGeneratorServiceWithMockDataSource = DbMigrationGeneratorService(
             mockDataSource,
             mockDbMigrationGenerator as DbMigrationGenerator<ForeignKey>,
             mockForeignKeysNotCoveredWithIndex as DatabaseCheckOnCluster<ForeignKey>,
-            mockPgContext,
-            mockForeignKeyMapper
+            mockPgContext
         )
 
         `when`(mockForeignKeysNotCoveredWithIndex.check(mockPgContext)).thenReturn(mockForeignKeys)
