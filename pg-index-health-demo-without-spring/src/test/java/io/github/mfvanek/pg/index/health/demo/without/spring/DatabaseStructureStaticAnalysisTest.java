@@ -40,6 +40,7 @@ import io.github.mfvanek.pg.core.checks.host.PrimaryKeysWithSerialTypesCheckOnHo
 import io.github.mfvanek.pg.core.checks.host.PrimaryKeysWithVarcharCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.SequenceOverflowCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesNotLinkedToOthersCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.TablesWherePrimaryKeyColumnsNotFirstCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithZeroOrOneColumnCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
@@ -122,7 +123,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             new PrimaryKeysThatMostLikelyNaturalKeysCheckOnHost(pgConnection),
             new ColumnsWithMoneyTypeCheckOnHost(pgConnection),
             new IndexesWithTimestampInTheMiddleCheckOnHost(pgConnection),
-            new ColumnsWithTimestampOrTimetzTypeCheckOnHost(pgConnection)
+            new ColumnsWithTimestampOrTimetzTypeCheckOnHost(pgConnection),
+            new TablesWherePrimaryKeyColumnsNotFirstCheckOnHost(pgConnection)
         );
     }
 
