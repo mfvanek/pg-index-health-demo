@@ -46,4 +46,8 @@
         <Bug pattern="SLF4J_SIGN_ONLY_FORMAT,LO_SUSPECT_LOG_CLASS"/>
         <Class name="io.github.mfvanek.pg.index.health.demo.without.spring.utils.KeyValueFileHealthLogger"/>
     </Match>
+    <Match>
+        <Bug pattern="SPP_FIELD_COULD_BE_STATIC"/>
+        <Class name="io.github.mfvanek.pg.index.health.demo.controller.DefaultController"/>
+    </Match>
 </FindBugsFilter>

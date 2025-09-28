@@ -18,6 +18,7 @@ import io.github.mfvanek.pg.core.checks.host.ColumnsWithFixedLengthVarcharCheckO
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithJsonTypeCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithMoneyTypeCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithSerialTypesCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.ColumnsWithTimestampOrTimetzTypeCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.ColumnsWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.DuplicatedForeignKeysCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.DuplicatedIndexesCheckOnHost;
@@ -39,6 +40,8 @@ import io.github.mfvanek.pg.core.checks.host.PrimaryKeysWithSerialTypesCheckOnHo
 import io.github.mfvanek.pg.core.checks.host.PrimaryKeysWithVarcharCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.SequenceOverflowCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesNotLinkedToOthersCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.TablesWhereAllColumnsNullableExceptPrimaryKeyCheckOnHost;
+import io.github.mfvanek.pg.core.checks.host.TablesWherePrimaryKeyColumnsNotFirstCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithZeroOrOneColumnCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithoutDescriptionCheckOnHost;
 import io.github.mfvanek.pg.core.checks.host.TablesWithoutPrimaryKeyCheckOnHost;
@@ -120,7 +123,10 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             new IndexesWithUnnecessaryWhereClauseCheckOnHost(pgConnection),
             new PrimaryKeysThatMostLikelyNaturalKeysCheckOnHost(pgConnection),
             new ColumnsWithMoneyTypeCheckOnHost(pgConnection),
-            new IndexesWithTimestampInTheMiddleCheckOnHost(pgConnection)
+            new IndexesWithTimestampInTheMiddleCheckOnHost(pgConnection),
+            new ColumnsWithTimestampOrTimetzTypeCheckOnHost(pgConnection),
+            new TablesWherePrimaryKeyColumnsNotFirstCheckOnHost(pgConnection),
+            new TablesWhereAllColumnsNullableExceptPrimaryKeyCheckOnHost(pgConnection)
         );
     }
 

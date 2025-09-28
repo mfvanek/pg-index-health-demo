@@ -24,8 +24,16 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
 
     @Test
     void deserializeShouldWork() throws JsonProcessingException {
+        assertThat(objectMapper.getRegisteredModuleIds())
+            .hasSizeGreaterThan(1)
+            .contains("PgIndexHealthModelModule");
+
         final ForeignKey original = ForeignKey.ofNotNullColumn("users", "fk_user_role", "role_id");
         final String json = objectMapper.writeValueAsString(original);
+        assertThat(json)
+            .isEqualTo("""
+                {"constraint":{"tableName":"users","constraintName":"fk_user_role","constraintType":"FOREIGN_KEY"},\
+                "columns":[{"tableName":"users","columnName":"role_id","notNull":true}]}""");
         final ForeignKey restored = objectMapper.readValue(json, ForeignKey.class);
         assertThat(restored)
             .isEqualTo(original);
@@ -34,27 +42,21 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
     @Test
     void deserializeShouldThrowExceptionWhenNoColumns() {
         final String json = """
-            {"tableName":"users","constraintName":"fk_user_role",\
-            "constraintType":"FOREIGN_KEY",\
-            "name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}""";
+            {"columns":[{"tableName":"users","columnName":"role_id","notNull":true}]}""";
 
         assertThatThrownBy(() -> objectMapper.readValue(json, ForeignKey.class))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("columnsInConstraint cannot be empty");
-
+            .isInstanceOf(JsonProcessingException.class)
+            .hasMessageStartingWith("Missing required field: constraint");
     }
 
     @Test
     void deserializeShouldThrowExceptionWhenColumnsIsNotArray() {
         final String json = """
-            {"tableName":"users","constraintName":"fk_user_role",\
-            "columnsInConstraint":"test",\
-            "constraintType":"FOREIGN_KEY",\
-            "name":"fk_user_role","objectType":"CONSTRAINT","validateSql":"alter table users validate constraint fk_user_role;"}""";
+            {"constraint":{"tableName":"users","constraintName":"fk_user_role","constraintType":"FOREIGN_KEY"},\
+            "columns":[]}""";
 
         assertThatThrownBy(() -> objectMapper.readValue(json, ForeignKey.class))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("columnsInConstraint cannot be empty");
-
+            .hasMessage("columns cannot be empty");
     }
 }

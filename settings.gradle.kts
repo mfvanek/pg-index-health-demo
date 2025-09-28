@@ -7,7 +7,7 @@ include("db-migrations")
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            val springBoot3Version = version("spring-boot-v3", "3.5.3")
+            val springBoot3Version = version("spring-boot-v3", "3.5.5")
             plugin("spring-boot-v3", "org.springframework.boot")
                 .versionRef(springBoot3Version)
             library("spring-boot-v3-dependencies", "org.springframework.boot", "spring-boot-dependencies")
