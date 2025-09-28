@@ -66,7 +66,8 @@ class DbHealthControllerTest extends BasePgIndexHealthDemoSpringBootTest {
                 "columns_with_money_type:0",
                 "indexes_with_timestamp_in_the_middle:0",
                 "columns_with_timestamp_or_timetz_type:0",
-                "tables_where_primary_key_columns_not_first:0"
+                "tables_where_primary_key_columns_not_first:0",
+                "tables_where_all_columns_nullable_except_pk:0"
             );
     }
 }
