@@ -14,7 +14,7 @@ dependencies {
     implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.5.1"))
     implementation(platform("org.springdoc:springdoc-openapi-bom:2.8.13"))
 
-    implementation("org.apache.commons:commons-lang3:3.18.0")
+    implementation("org.apache.commons:commons-lang3:3.19.0")
 
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
