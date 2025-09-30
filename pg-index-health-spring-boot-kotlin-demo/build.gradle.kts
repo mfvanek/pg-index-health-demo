@@ -32,7 +32,7 @@ dependencies {
     implementation("io.github.mfvanek:pg-index-health-logger")
     implementation("io.github.mfvanek:pg-index-health-generator")
     implementation(libs.liquibase.core)
-    implementation(libs.liquibase.sessionlock) // TODO: remove?
+    implementation(libs.liquibase.sessionlock)
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
