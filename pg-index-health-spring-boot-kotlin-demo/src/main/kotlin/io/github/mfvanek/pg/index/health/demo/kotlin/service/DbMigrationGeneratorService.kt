@@ -36,7 +36,7 @@ class DbMigrationGeneratorService(
     private val pgContext: PgContext
 ) {
 
-    private val logger = KotlinLogging.logger("${this::class.java.name}")
+    private val logger = KotlinLogging.logger {}
 
     /**
      * Generates migrations for foreign keys and validates the result.
