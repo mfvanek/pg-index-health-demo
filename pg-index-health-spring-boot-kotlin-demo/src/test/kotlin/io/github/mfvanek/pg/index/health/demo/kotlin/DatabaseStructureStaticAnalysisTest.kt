@@ -32,7 +32,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertTrue
 
-@Suppress("LargeClass")
 class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpringBootTest() {
 
     companion object {

@@ -31,6 +31,7 @@ dependencies {
     implementation("io.github.mfvanek:pg-index-health")
     implementation("io.github.mfvanek:pg-index-health-logger")
     implementation("io.github.mfvanek:pg-index-health-generator")
+    implementation("io.github.mfvanek:pg-index-health-model-jackson-module")
     implementation(libs.liquibase.core)
     implementation(libs.liquibase.sessionlock)
 
