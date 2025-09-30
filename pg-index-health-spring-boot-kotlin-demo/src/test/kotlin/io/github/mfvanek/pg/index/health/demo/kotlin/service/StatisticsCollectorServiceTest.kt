@@ -36,7 +36,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     private lateinit var databaseManagement: DatabaseManagement
 
     @MockitoBean
-    lateinit var jdbcTemplate: JdbcTemplate
+    override lateinit var jdbcTemplate: JdbcTemplate
 
     @Test
     fun getLastStatsResetTimestampShouldReturnCorrectValue() {
