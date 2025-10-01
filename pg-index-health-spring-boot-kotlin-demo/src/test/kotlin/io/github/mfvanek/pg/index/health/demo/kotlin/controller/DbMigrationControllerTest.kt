@@ -15,7 +15,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.util.UriBuilder
-import kotlin.test.assertTrue
 
 import org.assertj.core.api.Assertions.assertThat
 
@@ -38,10 +37,10 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .returnResult()
             .getResponseBody()
 
-        assertTrue(result != null)
-        assertThat(result.foreignKeysBefore).isNotEmpty()
-        assertThat(result.foreignKeysAfter).isEmpty()
-        assertThat(result.generatedMigrations).allMatch { s -> s.contains("create index concurrently if not exists") }
+        assertThat(result).isNotNull()
+        assertThat(result!!.foreignKeysBefore).isNotEmpty()
+        assertThat(result!!.foreignKeysAfter).isEmpty()
+        assertThat(result!!.generatedMigrations).allMatch { s -> s.contains("create index concurrently if not exists") }
     }
 
     @Test

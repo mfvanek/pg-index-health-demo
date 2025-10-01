@@ -30,8 +30,8 @@ import java.sql.Connection
 import java.sql.Statement
 import javax.sql.DataSource
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import org.mockito.Mockito.`when` as mockWhen
+import org.assertj.core.api.Assertions.assertThat
 
 @ExtendWith(OutputCaptureExtension::class)
 class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
@@ -67,7 +67,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
             assertEquals(expectedErrorMessage, message)
         }
 
-        assertTrue(capturedOutput.all.contains("Generated migrations: []"))
+        assertThat(capturedOutput.all).contains("Generated migrations: []")
     }
 
     @Test
@@ -80,7 +80,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
             assertEquals(expectedErrorMessage, message)
         }
 
-        assertTrue(capturedOutput.all.contains("Error running migration"))
+        assertThat(capturedOutput.all).contains("Error running migration")
     }
 
     @Test
@@ -118,11 +118,9 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
         verify(mockStatement).execute("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);")
 
-        assertTrue(
-            capturedOutput.all.contains(
-                "Generated migrations: [CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);]"
-            )
-        )
+        assertThat(
+            capturedOutput.all
+        ).contains("Generated migrations: [CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);]")
     }
 
     @Test
@@ -155,6 +153,6 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
             }
         }
 
-        assertTrue(capturedOutput.all.contains("Error getting connection"))
+        assertThat(capturedOutput.all).contains("Error getting connection")
     }
 }

@@ -11,7 +11,7 @@ import io.github.mfvanek.pg.index.health.demo.kotlin.dto.DatabaseHealthResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
-import kotlin.test.assertTrue
+import org.assertj.core.api.Assertions.assertThat
 
 class DbHealthControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
@@ -26,8 +26,8 @@ class DbHealthControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .expectBody(DatabaseHealthResponse::class.java)
             .consumeWith { response ->
                 val healthResponse = response.responseBody
-                assertTrue(healthResponse != null)
-                assertTrue(healthResponse.healthData.isNotEmpty())
+                assertThat(healthResponse).isNotNull()
+                assertThat(healthResponse!!.healthData).isNotEmpty()
             }
     }
 }

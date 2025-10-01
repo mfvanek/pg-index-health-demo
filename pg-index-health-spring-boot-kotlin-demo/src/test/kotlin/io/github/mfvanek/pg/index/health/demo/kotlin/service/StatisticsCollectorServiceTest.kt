@@ -24,7 +24,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.time.OffsetDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import org.assertj.core.api.Assertions.assertThat
 
 @ExtendWith(OutputCaptureExtension::class)
 class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
@@ -66,7 +66,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         val result = statisticsCollectorService.getLastStatsResetTimestamp()
         assertEquals(expectedTimestamp, result)
 
-        assertTrue(capturedOutput.all.contains("Last stats reset timestamp = $expectedTimestamp"))
+        assertThat(capturedOutput.all).contains("Last stats reset timestamp = $expectedTimestamp")
     }
 
     @Test
@@ -140,7 +140,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         val endTime = System.currentTimeMillis()
 
         val duration = endTime - startTime
-        assertTrue(duration >= 100) // Should take some time due to polling
+        assertThat(duration).isGreaterThanOrEqualTo(100) // Should take some time due to polling
     }
 
     @Test
