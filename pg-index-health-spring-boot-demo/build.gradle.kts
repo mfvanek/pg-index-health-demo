@@ -5,16 +5,15 @@ plugins {
     id("pg-index-health-demo.forbidden-apis")
     id("pg-index-health-demo.pitest")
     alias(libs.plugins.spring.boot.v3)
-    id("com.google.osdetector") version "1.7.3"
+    alias(libs.plugins.osdetector)
 }
 
 dependencies {
     implementation(project(":db-migrations"))
     implementation(platform(libs.spring.boot.v3.dependencies))
-    implementation(platform("org.apache.httpcomponents.client5:httpclient5-parent:5.5.1"))
-    implementation(platform("org.springdoc:springdoc-openapi-bom:2.8.13"))
+    implementation(platform(libs.springdoc.openapi.bom))
 
-    implementation("org.apache.commons:commons-lang3:3.19.0")
+    implementation(libs.commons.lang3)
 
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -43,7 +42,7 @@ dependencies {
 
     // https://github.com/netty/netty/issues/11020
     if (osdetector.arch == "aarch_64") {
-        testImplementation("io.netty:netty-all:4.2.6.Final")
+        testImplementation(libs.netty.all)
     }
 }
 
@@ -61,6 +60,27 @@ tasks {
     jacocoTestCoverageVerification {
         violationRules {
             classDirectories.setFrom(jacocoTestReport.get().classDirectories)
+            rule {
+                limit {
+                    counter = "CLASS"
+                    value = "MISSEDCOUNT"
+                    maximum = "0.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "METHOD"
+                    value = "MISSEDCOUNT"
+                    maximum = "0.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "LINE"
+                    value = "MISSEDCOUNT"
+                    maximum = "1.0".toBigDecimal()
+                }
+            }
             rule {
                 limit {
                     counter = "INSTRUCTION"

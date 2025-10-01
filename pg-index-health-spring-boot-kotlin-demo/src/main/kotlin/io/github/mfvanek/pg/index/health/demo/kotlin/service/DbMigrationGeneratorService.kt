@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional
 import java.sql.SQLException
 import javax.sql.DataSource
 
+private val logger = KotlinLogging.logger {}
+
 /**
  * Service for generating database migrations.
  *
@@ -35,9 +37,6 @@ class DbMigrationGeneratorService(
     private val foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>,
     private val pgContext: PgContext
 ) {
-
-    private val logger = KotlinLogging.logger {}
-
     /**
      * Generates migrations for foreign keys and validates the result.
      *

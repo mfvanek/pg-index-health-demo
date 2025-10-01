@@ -25,7 +25,6 @@ class DatabaseHealthService(
     private val healthLogger: HealthLogger,
     private val pgContext: PgContext
 ) {
-
     /**
      * Collects health data from the database.
      *

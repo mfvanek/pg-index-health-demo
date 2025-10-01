@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue
 import java.time.Duration
 
 @ConfigurationProperties(prefix = "pgih.kotlin.app.statistics")
-data class StatisticsProperties(
+class StatisticsProperties(
     @DefaultValue("10")
     val vacuumResultPollingAttempts: Int,
 

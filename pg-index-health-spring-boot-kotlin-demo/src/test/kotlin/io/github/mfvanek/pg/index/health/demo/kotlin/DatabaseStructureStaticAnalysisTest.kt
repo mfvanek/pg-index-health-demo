@@ -27,7 +27,6 @@ import io.github.mfvanek.pg.model.predicates.SkipLiquibaseTablesPredicate
 import io.github.mfvanek.pg.model.sequence.SequenceState
 import io.github.mfvanek.pg.model.table.Table
 import io.github.mfvanek.pg.model.table.TableWithColumns
-
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.InstanceOfAssertFactories.list
 import org.junit.jupiter.api.DisplayName
@@ -46,7 +45,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
     fun checkPostgresVersion() {
         val pgVersion: String? = jdbcTemplate.queryForObject("select version();", String::class.java)
         assertThat(pgVersion)
-            .startsWith("PostgreSQL 17.4")
+            .startsWith("PostgreSQL 17.6")
     }
 
     @Test

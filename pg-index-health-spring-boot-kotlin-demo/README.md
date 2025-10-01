@@ -119,7 +119,3 @@ Generate test coverage report:
 API documentation is available via Swagger UI:
 
 - http://localhost:8080/swagger-ui.html
-
-## License
-
-This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/mfvanek/pg-index-health-demo/blob/master/LICENSE) file for details.

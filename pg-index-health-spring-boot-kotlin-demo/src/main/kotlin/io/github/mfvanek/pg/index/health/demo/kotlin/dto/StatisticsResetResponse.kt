@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import java.time.OffsetDateTime
 
 @Schema(description = "Response containing timestamp information for statistics operations")
-data class StatisticsResetResponse(
+class StatisticsResetResponse(
     @field:Schema(
         description = "Timestamp of the statistics reset operation",
         example = "2025-09-11T17:00:00+03:00"

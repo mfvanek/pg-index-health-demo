@@ -16,4 +16,8 @@ dependencies {
     implementation("org.gradle:test-retry-gradle-plugin:1.6.2")
     implementation("io.freefair.gradle:lombok-plugin:9.0.0")
     implementation("de.thetaphi:forbiddenapis:3.9")
+    val kotlinVersion = "2.0.21"
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    implementation("org.jetbrains.kotlin.plugin.spring:org.jetbrains.kotlin.plugin.spring.gradle.plugin:$kotlinVersion")
+    implementation(libs.detekt)
 }

@@ -9,9 +9,9 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.DatabaseHealthResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
-import org.assertj.core.api.Assertions.assertThat
 
 class DbHealthControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 

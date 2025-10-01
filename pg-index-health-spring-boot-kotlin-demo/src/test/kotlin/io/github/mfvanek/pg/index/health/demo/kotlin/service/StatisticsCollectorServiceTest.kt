@@ -10,8 +10,9 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.service
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagement
 import io.github.mfvanek.pg.index.health.demo.kotlin.exception.StatisticsResetException
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
@@ -24,7 +25,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.time.OffsetDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import org.assertj.core.api.Assertions.assertThat
 
 @ExtendWith(OutputCaptureExtension::class)
 class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
@@ -99,9 +99,9 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     fun resetStatisticsShouldThrowExceptionWhenFailed() {
         `when`(databaseManagement.resetStatistics()).thenReturn(false)
 
-        assertThrows<StatisticsResetException> {
-            statisticsCollectorService.resetStatistics()
-        }
+        assertThatThrownBy { statisticsCollectorService.resetStatistics() }
+            .isInstanceOf(StatisticsResetException::class.java)
+            .hasMessage("Could not reset statistics")
     }
 
     @Test
@@ -113,7 +113,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
         statisticsCollectorService.resetStatistics()
 
-        verify(jdbcTemplate).execute("vacuum analyze;")
+        verify(jdbcTemplate).execute("vacuum analyze;") // TODO
     }
 
     @Test

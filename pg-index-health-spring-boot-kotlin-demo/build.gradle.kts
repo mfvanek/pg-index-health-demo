@@ -1,23 +1,13 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import com.github.spotbugs.snom.SpotBugsTask
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    id("pg-index-health-demo.java-compilation")
-    id("pg-index-health-demo.java-conventions")
-    id("pg-index-health-demo.forbidden-apis")
+    id("pg-index-health-demo.kotlin-conventions")
     id("pg-index-health-demo.pitest")
     alias(libs.plugins.spring.boot.v3)
-    alias(libs.plugins.kotlin.spring)
     alias(libs.plugins.osdetector)
-    alias(libs.plugins.detekt)
 }
 
 dependencies {
     implementation(project(":db-migrations"))
     implementation(platform(libs.spring.boot.v3.dependencies))
-    implementation(platform(libs.httpclient5.parent))
     implementation(platform(libs.springdoc.openapi.bom))
 
     implementation(libs.commons.lang3)
@@ -54,24 +44,10 @@ dependencies {
     if (osdetector.arch == "aarch_64") {
         testImplementation(libs.netty.all)
     }
-
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.plugins.detekt.get().version}")
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:${libs.plugins.detekt.get().version}")
 }
 
 tasks {
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_21
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-        }
-    }
-    
     withType<JacocoReport> {
-        reports {
-            xml.required.set(true)
-            html.required.set(true)
-        }
         afterEvaluate {
             classDirectories.setFrom(files(classDirectories.files.map {
                 fileTree(it) {
@@ -82,15 +58,44 @@ tasks {
     }
 
     jacocoTestCoverageVerification {
-        dependsOn(jacocoTestReport)
         violationRules {
             classDirectories.setFrom(jacocoTestReport.get().classDirectories)
+            rule {
+                limit {
+                    counter = "CLASS"
+                    value = "MISSEDCOUNT"
+                    maximum = "0.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "METHOD"
+                    value = "MISSEDCOUNT"
+                    maximum = "2.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "LINE"
+                    value = "MISSEDCOUNT"
+                    maximum = "0.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "INSTRUCTION"
+                    value = "COVEREDRATIO"
+                    minimum = "0.97".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "BRANCH"
+                    value = "COVEREDRATIO"
+                    minimum = "0.99".toBigDecimal()
+                }
+            }
         }
-    }
-
-    // Disable SpotBugs tasks for Kotlin demo
-    withType<SpotBugsTask>().configureEach {
-        enabled = false
     }
 }
 
@@ -106,18 +111,11 @@ pitest {
             "kotlin.jdk7"
         )
     )
-    
-    // Weaken pitest requirements for Kotlin demo
-    mutationThreshold.set(94)
-}
-
-detekt {
-    toolVersion = libs.plugins.detekt.get().version.toString()
-    config.setFrom(file("${rootDir}/config/detekt/detekt.yml"))
-    buildUponDefaultConfig = true
-    autoCorrect = true
-}
-
-tasks.withType<DetektCreateBaselineTask>().configureEach {
-    jvmTarget = "21"
+    excludedClasses.set(
+        listOf(
+            "io.github.mfvanek.pg.index.health.demo.kotlin.config.*",
+            "io.github.mfvanek.pg.index.health.demo.kotlin.PgIndexHealthSpringBootKotlinDemoApplicationKt"
+        )
+    )
+    excludedTestClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.kotlin.ActuatorEndpointTest"))
 }

@@ -24,6 +24,7 @@ import java.time.Clock
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@Suppress("UnnecessaryAbstractClass")
 abstract class BasePgIndexHealthDemoSpringBootTest {
 
     @Autowired
@@ -50,7 +51,7 @@ abstract class BasePgIndexHealthDemoSpringBootTest {
 
     companion object {
 
-        private val postgres: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:17.4")
+        private val postgres: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:17.6")
 
         @JvmStatic
         @DynamicPropertySource

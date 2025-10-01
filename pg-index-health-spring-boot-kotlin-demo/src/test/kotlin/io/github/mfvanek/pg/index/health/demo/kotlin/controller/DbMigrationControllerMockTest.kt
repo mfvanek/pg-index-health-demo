@@ -11,13 +11,12 @@ import io.github.mfvanek.pg.index.health.demo.kotlin.dto.MigrationError
 import io.github.mfvanek.pg.index.health.demo.kotlin.exception.MigrationException
 import io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGeneratorService
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
-
-import org.assertj.core.api.Assertions.assertThat
 
 class DbMigrationControllerMockTest : BasePgIndexHealthDemoSpringBootTest() {
 
@@ -48,11 +47,9 @@ class DbMigrationControllerMockTest : BasePgIndexHealthDemoSpringBootTest() {
         assertThat(result)
             .isNotNull
             .isInstanceOf(MigrationError::class.java)
-        assertThat(
-            result!!.statusCode
-        ).isEqualTo(HttpStatus.EXPECTATION_FAILED.value())
-        assertThat(
-            result!!.message
-        ).contains("Migrations failed: There should be no foreign keys not covered by some index")
+        assertThat(result!!.statusCode)
+            .isEqualTo(HttpStatus.EXPECTATION_FAILED.value())
+        assertThat(result.message)
+            .contains("Migrations failed: There should be no foreign keys not covered by some index")
     }
 }
