@@ -10,13 +10,12 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.controller
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.ForeignKeyMigrationResponse
 import io.github.mfvanek.pg.index.health.demo.kotlin.dto.MigrationError
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.util.UriBuilder
-
-import org.assertj.core.api.Assertions.assertThat
 
 class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
@@ -39,8 +38,9 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
 
         assertThat(result).isNotNull()
         assertThat(result!!.foreignKeysBefore).isNotEmpty()
-        assertThat(result!!.foreignKeysAfter).isEmpty()
-        assertThat(result!!.generatedMigrations).allMatch { s -> s.contains("create index concurrently if not exists") }
+        assertThat(result.foreignKeysAfter).isEmpty()
+        assertThat(result.generatedMigrations)
+            .allMatch { s -> s.contains("create index concurrently if not exists") }
     }
 
     @Test

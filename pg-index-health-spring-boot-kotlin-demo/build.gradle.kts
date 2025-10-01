@@ -1,17 +1,8 @@
-import com.github.spotbugs.snom.SpotBugsTask
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    id("pg-index-health-demo.java-compilation")
-    id("pg-index-health-demo.java-conventions")
-    id("pg-index-health-demo.forbidden-apis")
+    id("pg-index-health-demo.kotlin-conventions")
     id("pg-index-health-demo.pitest")
     alias(libs.plugins.spring.boot.v3)
-    alias(libs.plugins.kotlin.spring)
     alias(libs.plugins.osdetector)
-    alias(libs.plugins.detekt)
 }
 
 dependencies {
@@ -53,24 +44,9 @@ dependencies {
     if (osdetector.arch == "aarch_64") {
         testImplementation(libs.netty.all)
     }
-
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.plugins.detekt.get().version}")
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:${libs.plugins.detekt.get().version}")
 }
 
 tasks {
-    val projectJvmTarget = JvmTarget.JVM_21
-    kotlin {
-        compilerOptions {
-            jvmTarget = projectJvmTarget
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-        }
-    }
-
-    withType<DetektCreateBaselineTask>().configureEach {
-        jvmTarget = projectJvmTarget.target
-    }
-
     withType<JacocoReport> {
         afterEvaluate {
             classDirectories.setFrom(files(classDirectories.files.map {
@@ -121,11 +97,6 @@ tasks {
             }
         }
     }
-
-    // Disable SpotBugs tasks for Kotlin demo
-    withType<SpotBugsTask>().configureEach {
-        enabled = false
-    }
 }
 
 springBoot {
@@ -143,11 +114,4 @@ pitest {
 
     // Weaken pitest requirements for Kotlin demo
     mutationThreshold.set(94)
-}
-
-detekt {
-    toolVersion = libs.plugins.detekt.get().version.toString()
-    config.setFrom(file("${rootDir}/config/detekt/detekt.yml"))
-    buildUponDefaultConfig = true
-    autoCorrect = true
 }

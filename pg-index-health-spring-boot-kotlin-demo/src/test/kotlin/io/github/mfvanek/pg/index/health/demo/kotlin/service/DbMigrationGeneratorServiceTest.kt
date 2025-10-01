@@ -13,10 +13,11 @@ import io.github.mfvanek.pg.index.health.demo.kotlin.exception.MigrationExceptio
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.github.mfvanek.pg.model.context.PgContext
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatCode
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.mock
@@ -29,14 +30,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.sql.Connection
 import java.sql.Statement
 import javax.sql.DataSource
-import kotlin.test.assertEquals
 import org.mockito.Mockito.`when` as mockWhen
-import org.assertj.core.api.Assertions.assertThat
 
 @ExtendWith(OutputCaptureExtension::class)
 class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
-
-    private val expectedErrorMessage = "There should be no foreign keys not covered by some index"
 
     @Autowired
     private lateinit var dbMigrationGeneratorService: DbMigrationGeneratorService
@@ -61,26 +58,24 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     fun throwsMigrationExceptionWhenEmptyMigrationString(capturedOutput: CapturedOutput) {
         `when`(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(emptyList())
 
-        assertThrows<MigrationException> {
-            dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()
-        }.apply {
-            assertEquals(expectedErrorMessage, message)
-        }
+        assertThatThrownBy { dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked() }
+            .isInstanceOf(MigrationException::class.java)
+            .hasMessage("There should be no foreign keys not covered by some index")
 
-        assertThat(capturedOutput.all).contains("Generated migrations: []")
+        assertThat(capturedOutput.all)
+            .contains("Generated migrations: []")
     }
 
     @Test
     fun logsAboutSqlExceptionWhenBadMigrationStringAndThrowsExceptionAfter(capturedOutput: CapturedOutput) {
         `when`(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("select * from payments"))
 
-        assertThrows<MigrationException> {
-            dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()
-        }.apply {
-            assertEquals(expectedErrorMessage, message)
-        }
+        assertThatThrownBy { dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked() }
+            .isInstanceOf(MigrationException::class.java)
+            .hasMessage("There should be no foreign keys not covered by some index")
 
-        assertThat(capturedOutput.all).contains("Error running migration")
+        assertThat(capturedOutput.all)
+            .contains("Error running migration")
     }
 
     @Test
@@ -112,15 +107,13 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
         `when`(mockConnection.createStatement()).thenReturn(mockStatement)
         `when`(mockStatement.execute(any(String::class.java))).thenReturn(true)
 
-        assertDoesNotThrow {
-            dbMigrationGeneratorServiceWithMocks.generateMigrationsWithForeignKeysChecked()
-        }
+        assertThatCode { dbMigrationGeneratorServiceWithMocks.generateMigrationsWithForeignKeysChecked() }
+            .doesNotThrowAnyException()
 
         verify(mockStatement).execute("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);")
 
-        assertThat(
-            capturedOutput.all
-        ).contains("Generated migrations: [CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);]")
+        assertThat(capturedOutput.all)
+            .contains("Generated migrations: [CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);]")
     }
 
     @Test
@@ -146,13 +139,11 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
         mockWhen(mockDataSource.connection).thenThrow(java.sql.SQLException("Connection failed"))
 
-        assertDoesNotThrow {
-            try {
-                dbMigrationGeneratorServiceWithMockDataSource.generateMigrationsWithForeignKeysChecked()
-            } catch (_: MigrationException) {
-            }
-        }
+        assertThatThrownBy { dbMigrationGeneratorServiceWithMockDataSource.generateMigrationsWithForeignKeysChecked() }
+            .isInstanceOf(MigrationException::class.java)
+            .hasMessage("There should be no foreign keys not covered by some index")
 
-        assertThat(capturedOutput.all).contains("Error getting connection")
+        assertThat(capturedOutput.all)
+            .contains("Error getting connection")
     }
 }

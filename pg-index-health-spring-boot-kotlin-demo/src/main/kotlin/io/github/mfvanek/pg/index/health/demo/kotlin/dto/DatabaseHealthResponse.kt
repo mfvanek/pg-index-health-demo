@@ -10,7 +10,7 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.dto
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "Response containing database health information")
-data class DatabaseHealthResponse(
+class DatabaseHealthResponse(
     @field:Schema(
         description = "List of health data entries in format 'check_name:count'",
         example = """["bloated_tables:0", "tables_with_missing_indexes:0", "tables_without_primary_key:1", 

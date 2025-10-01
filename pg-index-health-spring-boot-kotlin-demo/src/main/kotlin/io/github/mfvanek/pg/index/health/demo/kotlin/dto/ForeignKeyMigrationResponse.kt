@@ -11,7 +11,7 @@ import io.github.mfvanek.pg.model.constraint.ForeignKey
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "Response containing foreign key migration information")
-data class ForeignKeyMigrationResponse(
+class ForeignKeyMigrationResponse(
     @field:Schema(description = "List of foreign keys before migration")
     val foreignKeysBefore: List<ForeignKey>,
     @field:Schema(description = "List of foreign keys after migration")

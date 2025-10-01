@@ -20,22 +20,10 @@ plugins {
     id("com.github.spotbugs")
     id("net.ltgt.errorprone")
     id("io.freefair.lombok")
-}
-
-configurations.configureEach {
-    exclude("org.hamcrest")
+    id("pg-index-health-demo.java-common-deps")
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.20.3"))
-    implementation(platform("org.testcontainers:testcontainers-bom:1.21.3"))
-
-    implementation("org.jspecify:jspecify:1.0.0")
-    implementation("org.postgresql:postgresql:42.7.8")
-
-    testImplementation(platform("org.junit:junit-bom:6.0.0"))
-    testImplementation(platform("org.assertj:assertj-bom:3.27.6"))
-
     errorprone("com.google.errorprone:error_prone_core:2.42.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.29")
     errorprone("com.uber.nullaway:nullaway:0.12.10")
