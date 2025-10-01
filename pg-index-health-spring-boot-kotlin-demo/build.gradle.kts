@@ -82,8 +82,16 @@ tasks {
     }
 
     jacocoTestCoverageVerification {
+        dependsOn(jacocoTestReport)
         violationRules {
             classDirectories.setFrom(jacocoTestReport.get().classDirectories)
+            rule {
+                limit {
+                    counter = "METHOD"
+                    value = "MISSEDCOUNT"
+                    maximum = "2.0".toBigDecimal()
+                }
+            }
         }
     }
 
