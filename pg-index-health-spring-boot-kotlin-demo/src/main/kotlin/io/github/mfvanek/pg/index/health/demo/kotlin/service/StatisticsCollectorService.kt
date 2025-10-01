@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.OffsetDateTime
 import java.util.concurrent.TimeUnit
 
+private val logger = KotlinLogging.logger {}
+
 /**
  * Service for collecting and resetting database statistics.
  *
@@ -35,9 +37,6 @@ class StatisticsCollectorService(
     private val databaseManagement: DatabaseManagement,
     private val statisticsProperties: StatisticsProperties
 ) {
-
-    private val logger = KotlinLogging.logger {}
-
     /**
      * Gets the last statistics reset timestamp.
      *

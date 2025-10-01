@@ -78,21 +78,21 @@ tasks {
                 limit {
                     counter = "LINE"
                     value = "MISSEDCOUNT"
-                    maximum = "1.0".toBigDecimal()
+                    maximum = "0.0".toBigDecimal()
                 }
             }
             rule {
                 limit {
                     counter = "INSTRUCTION"
                     value = "COVEREDRATIO"
-                    minimum = "0.92".toBigDecimal()
+                    minimum = "0.97".toBigDecimal()
                 }
             }
             rule {
                 limit {
                     counter = "BRANCH"
                     value = "COVEREDRATIO"
-                    minimum = "0.7".toBigDecimal()
+                    minimum = "0.99".toBigDecimal()
                 }
             }
         }
@@ -111,7 +111,11 @@ pitest {
             "kotlin.jdk7"
         )
     )
-
-    // Weaken pitest requirements for Kotlin demo
-    mutationThreshold.set(94)
+    excludedClasses.set(
+        listOf(
+            "io.github.mfvanek.pg.index.health.demo.kotlin.config.*",
+            "io.github.mfvanek.pg.index.health.demo.kotlin.PgIndexHealthSpringBootKotlinDemoApplicationKt"
+        )
+    )
+    excludedTestClasses.set(listOf("io.github.mfvanek.pg.index.health.demo.kotlin.ActuatorEndpointTest"))
 }
