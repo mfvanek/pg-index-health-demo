@@ -8,17 +8,10 @@ include("db-migrations")
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            val springDocVersion = version("springdoc-openapi", "2.8.13")
-            val commonsLang3Version = version("commons-lang3", "3.18.0")
-            val springBoot3Version = version("spring-boot-v3", "3.5.5")
+            val springBoot3Version = version("spring-boot-v3", "3.5.6")
             val kotlinVersion = version("kotlin", "2.0.21")
             val osDetectorVersion = version("osdetector", "1.7.3")
-            val httpClient5ParentVersion = version("httpclient5-parent", "5.5")
-            val nettyAllVersion = version("netty-all", "4.2.4.Final")
             val detektVersion = version("detekt", "1.23.8")
-            val liquibaseCoreVersion = version("liquibase-core", "4.33.0")
-            val liquibaseSessionLockVersion = version("liquibase-sessionlock", "1.6.9")
-            val kotlinLoggingVersion = version("kotlin-logging", "7.0.3")
 
             plugin("spring-boot-v3", "org.springframework.boot")
                 .versionRef(springBoot3Version)
@@ -30,23 +23,14 @@ dependencyResolutionManagement {
                 .versionRef(osDetectorVersion)
             plugin("detekt", "io.gitlab.arturbosch.detekt")
                 .versionRef(detektVersion)
-
             library("spring-boot-v3-dependencies", "org.springframework.boot", "spring-boot-dependencies")
                 .versionRef(springBoot3Version)
-            library("springdoc-openapi-bom", "org.springdoc", "springdoc-openapi-bom")
-                .versionRef(springDocVersion)
-            library("commons-lang3", "org.apache.commons", "commons-lang3")
-                .versionRef(commonsLang3Version)
-            library("httpclient5-parent", "org.apache.httpcomponents.client5", "httpclient5-parent")
-                .versionRef(httpClient5ParentVersion)
-            library("liquibase-core", "org.liquibase", "liquibase-core")
-                .versionRef(liquibaseCoreVersion)
-            library("liquibase-sessionlock", "com.github.blagerweij", "liquibase-sessionlock")
-                .versionRef(liquibaseSessionLockVersion)
-            library("netty-all", "io.netty", "netty-all")
-                .versionRef(nettyAllVersion)
-            library("kotlin-logging", "io.github.oshai", "kotlin-logging-jvm")
-                .versionRef(kotlinLoggingVersion)
+            library("springdoc-openapi-bom", "org.springdoc:springdoc-openapi-bom:2.8.13")
+            library("commons-lang3", "org.apache.commons:commons-lang3:3.19.0")
+            library("liquibase-core", "org.liquibase:liquibase-core:5.0.0")
+            library("liquibase-sessionlock", "com.github.blagerweij:liquibase-sessionlock:1.6.9")
+            library("netty-all", "io.netty:netty-all:4.2.4.Final")
+            library("kotlin-logging", "io.github.oshai:kotlin-logging-jvm:7.0.3")
         }
     }
 }

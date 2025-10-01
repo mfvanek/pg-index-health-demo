@@ -1,6 +1,6 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import com.github.spotbugs.snom.SpotBugsTask
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -17,7 +17,6 @@ plugins {
 dependencies {
     implementation(project(":db-migrations"))
     implementation(platform(libs.spring.boot.v3.dependencies))
-    implementation(platform(libs.httpclient5.parent))
     implementation(platform(libs.springdoc.openapi.bom))
 
     implementation(libs.commons.lang3)
@@ -60,18 +59,19 @@ dependencies {
 }
 
 tasks {
+    val projectJvmTarget = JvmTarget.JVM_21
     kotlin {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_21
+            jvmTarget = projectJvmTarget
             freeCompilerArgs = listOf("-Xjsr305=strict")
         }
     }
-    
+
+    withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = projectJvmTarget.target
+    }
+
     withType<JacocoReport> {
-        reports {
-            xml.required.set(true)
-            html.required.set(true)
-        }
         afterEvaluate {
             classDirectories.setFrom(files(classDirectories.files.map {
                 fileTree(it) {
@@ -82,9 +82,43 @@ tasks {
     }
 
     jacocoTestCoverageVerification {
-        dependsOn(jacocoTestReport)
         violationRules {
             classDirectories.setFrom(jacocoTestReport.get().classDirectories)
+            rule {
+                limit {
+                    counter = "CLASS"
+                    value = "MISSEDCOUNT"
+                    maximum = "0.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "METHOD"
+                    value = "MISSEDCOUNT"
+                    maximum = "2.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "LINE"
+                    value = "MISSEDCOUNT"
+                    maximum = "1.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "INSTRUCTION"
+                    value = "COVEREDRATIO"
+                    minimum = "0.92".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "BRANCH"
+                    value = "COVEREDRATIO"
+                    minimum = "0.7".toBigDecimal()
+                }
+            }
         }
     }
 
@@ -106,7 +140,7 @@ pitest {
             "kotlin.jdk7"
         )
     )
-    
+
     // Weaken pitest requirements for Kotlin demo
     mutationThreshold.set(94)
 }
@@ -116,8 +150,4 @@ detekt {
     config.setFrom(file("${rootDir}/config/detekt/detekt.yml"))
     buildUponDefaultConfig = true
     autoCorrect = true
-}
-
-tasks.withType<DetektCreateBaselineTask>().configureEach {
-    jvmTarget = "21"
 }

@@ -20,6 +20,8 @@ Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) l
   * Without Spring/Spring Boot
 * [pg-index-health-spring-boot-demo](pg-index-health-spring-boot-demo)
   * With Spring Boot
+* [pg-index-health-spring-boot-kotlin-demo](pg-index-health-spring-boot-kotlin-demo)
+  * With Spring Boot in Kotlin 
 
 ## Tech stack
 
@@ -28,9 +30,9 @@ Demo project for [pg-index-health](https://github.com/mfvanek/pg-index-health) l
 
 ### Previous versions
 
-If you search for version with [Embedded PostgreSQL](https://github.com/mfvanek/pg-index-health-demo/blob/4269907dc3e5be92fbe90346755bd107260c0c55/src/main/java/io/github/mfvanek/pg/index/health/demo/DemoApp.java#L28)
+If you search for a version with [Embedded PostgreSQL](https://github.com/mfvanek/pg-index-health-demo/blob/4269907dc3e5be92fbe90346755bd107260c0c55/src/main/java/io/github/mfvanek/pg/index/health/demo/DemoApp.java#L28)
 please take a look at release [0.6.1](https://github.com/mfvanek/pg-index-health-demo/releases/tag/v.0.6.1)  
-If you search for Java 8 compatible example please take a look at release [0.6.2](https://github.com/mfvanek/pg-index-health-demo/releases/tag/v.0.6.2)
+If you search for a Java 8 compatible example, please take a look at release [0.6.2](https://github.com/mfvanek/pg-index-health-demo/releases/tag/v.0.6.2)
 
 ## Advantages
 

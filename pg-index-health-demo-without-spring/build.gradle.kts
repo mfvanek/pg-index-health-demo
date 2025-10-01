@@ -18,7 +18,7 @@ dependencies {
     implementation("org.apache.commons:commons-dbcp2:2.13.0")
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
-    implementation("ch.qos.logback:logback-classic:1.5.18")
+    implementation("ch.qos.logback:logback-classic:1.5.19")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
@@ -28,4 +28,46 @@ dependencies {
     testImplementation("org.mockito:mockito-core")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+}
+
+tasks {
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                limit {
+                    counter = "CLASS"
+                    value = "MISSEDCOUNT"
+                    maximum = "0.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "METHOD"
+                    value = "MISSEDCOUNT"
+                    maximum = "0.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "LINE"
+                    value = "MISSEDCOUNT"
+                    maximum = "1.0".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "INSTRUCTION"
+                    value = "COVEREDRATIO"
+                    minimum = "0.92".toBigDecimal()
+                }
+            }
+            rule {
+                limit {
+                    counter = "BRANCH"
+                    value = "COVEREDRATIO"
+                    minimum = "0.7".toBigDecimal()
+                }
+            }
+        }
+    }
 }
