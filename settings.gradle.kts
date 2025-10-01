@@ -8,11 +8,9 @@ include("db-migrations")
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            val springBoot3Version = version("spring-boot-v3", "3.5.3")
             val springDocVersion = version("springdoc-openapi", "2.8.13")
             val commonsLang3Version = version("commons-lang3", "3.18.0")
             val springBoot3Version = version("spring-boot-v3", "3.5.5")
-            val kotlinVersion = version("kotlin", "2.2.20")
             val kotlinVersion = version("kotlin", "2.0.21")
             val osDetectorVersion = version("osdetector", "1.7.3")
             val httpClient5ParentVersion = version("httpclient5-parent", "5.5")
