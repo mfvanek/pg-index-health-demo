@@ -73,7 +73,7 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.14.0"
+    toolVersion = "7.17.0"
     isConsoleOutput = true
     ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
     ruleSets = listOf()
