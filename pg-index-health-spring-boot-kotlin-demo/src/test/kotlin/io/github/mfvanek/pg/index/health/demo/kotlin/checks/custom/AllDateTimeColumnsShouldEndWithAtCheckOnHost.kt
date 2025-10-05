@@ -8,35 +8,20 @@
 package io.github.mfvanek.pg.index.health.demo.kotlin.checks.custom
 
 import io.github.mfvanek.pg.connection.PgConnection
-import io.github.mfvanek.pg.core.checks.common.CheckInfo
-import io.github.mfvanek.pg.core.checks.common.ExecutionTopology
-import io.github.mfvanek.pg.core.checks.common.QueryExecutor
-import io.github.mfvanek.pg.core.checks.common.ResultSetExtractor
+import io.github.mfvanek.pg.core.checks.common.StandardCheckInfo
 import io.github.mfvanek.pg.core.checks.extractors.ColumnWithTypeExtractor
 import io.github.mfvanek.pg.core.checks.host.AbstractCheckOnHost
 import io.github.mfvanek.pg.core.utils.NamedParametersParser
-import io.github.mfvanek.pg.core.utils.QueryExecutors
 import io.github.mfvanek.pg.model.column.ColumnWithType
 import io.github.mfvanek.pg.model.context.PgContext
-import io.github.mfvanek.pg.model.dbobject.DbObject
 
 class AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection: PgConnection) : AbstractCheckOnHost<ColumnWithType>(
     ColumnWithType::class.java,
     pgConnection,
-    CustomCheckInfo()
-) {
-    override fun doCheck(pgContext: PgContext): List<ColumnWithType> {
-        return executeQuery(pgContext, ColumnWithTypeExtractor.of())
-    }
-
-    class CustomCheckInfo : CheckInfo {
-        override fun getName(): String {
-            return "ALL_DATETIME_COLUMNS_SHOULD_END_WITH_AT"
-        }
-
-        override fun getSqlQuery(): String {
-            return NamedParametersParser.parse(
-                """
+    StandardCheckInfo.ofStatic(
+        "ALL_DATETIME_COLUMNS_SHOULD_END_WITH_AT",
+        NamedParametersParser.parse(
+            """
                 select
                     t.oid::regclass::text as table_name,
                     col.attnotnull as column_not_null,
@@ -55,28 +40,11 @@ class AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection: PgConnection) :
                     right(col.attname, length('_at')) != '_at' and /* should end with _at */
                     nsp.nspname = :schema_name_param::text
                 order by table_name, column_name;
-                """.trimIndent()
-            )
-        }
-
-        override fun getQueryExecutor(): QueryExecutor =
-            object : QueryExecutor {
-                override fun <T : DbObject> executeQuery(
-                    pgConnection: PgConnection,
-                    pgContext: PgContext,
-                    sqlQuery: String,
-                    rse: ResultSetExtractor<T>
-                ): List<T> {
-                    return QueryExecutors.executeQueryWithSchema(pgConnection, pgContext, sqlQuery, rse)
-                }
-            }
-
-        override fun isRuntime(): Boolean {
-            return false
-        }
-
-        override fun getExecutionTopology(): ExecutionTopology {
-            return ExecutionTopology.ON_PRIMARY
-        }
+            """.trimIndent()
+        )
+    )
+) {
+    override fun doCheck(pgContext: PgContext): List<ColumnWithType> {
+        return executeQuery(pgContext, ColumnWithTypeExtractor.of())
     }
 }
