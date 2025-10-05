@@ -62,7 +62,7 @@ app:
 
 2. Set up the database:
    ```bash
-   docker-compose -f pg-index-health-spring-boot-kotlin-demo/docker-compose.yml up -d
+   docker-compose -f docker-compose.yml up -d
    ```
 
 3. Build and run the application:
