@@ -13,6 +13,7 @@ import io.github.mfvanek.pg.core.checks.common.CheckTypeAware;
 import io.github.mfvanek.pg.core.checks.common.DatabaseCheckOnHost;
 import io.github.mfvanek.pg.core.checks.common.Diagnostic;
 import io.github.mfvanek.pg.core.checks.host.StandardChecksOnHost;
+import io.github.mfvanek.pg.index.health.demo.without.spring.checks.custom.AllDateTimeColumnsShouldEndWithAtCheckOnHost;
 import io.github.mfvanek.pg.index.health.demo.without.spring.support.DatabaseAwareTestBase;
 import io.github.mfvanek.pg.model.column.Column;
 import io.github.mfvanek.pg.model.column.ColumnWithSerialType;
@@ -41,6 +42,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,6 +52,7 @@ import static org.assertj.core.api.InstanceOfAssertFactories.list;
 class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
 
     private static final int SKIPPED_CHECKS_COUNT = 4; // indexes with bloat, tables with bloat, unused indexes, tables with missing indexes
+    private static final int CUSTOM_CHECKS_COUNT = 1;
     private static final String BUYER_TABLE = "demo.buyer";
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
     private static final String ORDERS_TABLE = "demo.orders";
@@ -62,7 +65,9 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
 
     DatabaseStructureStaticAnalysisTest() {
         final PgConnection pgConnection = PgConnectionImpl.of(getDataSource(), getHost());
-        this.checks = new StandardChecksOnHost().apply(pgConnection);
+        final List<DatabaseCheckOnHost<? extends @NonNull DbObject>> all = new ArrayList<>(new StandardChecksOnHost().apply(pgConnection));
+        all.add(new AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection));
+        this.checks = List.copyOf(all);
     }
 
     @Test
@@ -82,7 +87,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
     void completenessTest() {
         assertThat(checks)
             .filteredOn(c -> c.getName().equals(Diagnostic.SEQUENCE_OVERFLOW.getName()) || c.isStatic())
-            .hasSize(Diagnostic.values().length - SKIPPED_CHECKS_COUNT)
+            .hasSize(Diagnostic.values().length - SKIPPED_CHECKS_COUNT + CUSTOM_CHECKS_COUNT)
             .filteredOn(c -> !c.getName().equals(Diagnostic.SEQUENCE_OVERFLOW.getName()))
             .as("Only static checks should present in list")
             .allMatch(CheckTypeAware::isStatic);
@@ -101,7 +106,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
     @Test
     void databaseStructureCheckForDemoSchema() {
         assertThat(checks)
-            .hasSameSizeAs(Diagnostic.values());
+            .hasSize(Diagnostic.values().length + CUSTOM_CHECKS_COUNT);
 
         checks.stream()
             .filter(check -> check.getName().equals(Diagnostic.SEQUENCE_OVERFLOW.getName()) || check.isStatic())
