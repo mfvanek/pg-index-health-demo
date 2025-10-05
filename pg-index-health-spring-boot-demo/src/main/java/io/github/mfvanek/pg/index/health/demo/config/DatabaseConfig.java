@@ -24,7 +24,7 @@ public class DatabaseConfig {
     @SuppressWarnings({"java:S2095", "java:S1452"})
     @Bean(initMethod = "start", destroyMethod = "stop")
     public JdbcDatabaseContainer<?> jdbcDatabaseContainer() {
-        return new PostgreSQLContainer<>("postgres:17.6")
+        return new PostgreSQLContainer<>("postgres:18.0")
             .withDatabaseName("demo_for_pg_index_health")
             .withUsername("demo_user")
             .withPassword("myUniquePassword")

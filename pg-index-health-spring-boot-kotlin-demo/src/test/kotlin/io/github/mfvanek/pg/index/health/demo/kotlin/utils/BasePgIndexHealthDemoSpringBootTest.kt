@@ -51,7 +51,7 @@ abstract class BasePgIndexHealthDemoSpringBootTest {
 
     companion object {
 
-        private val postgres: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:17.6")
+        private val postgres: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:18.0")
 
         @JvmStatic
         @DynamicPropertySource

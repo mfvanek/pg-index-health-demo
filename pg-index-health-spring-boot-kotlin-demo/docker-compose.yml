@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   postgresql:
-    image: postgres:17.6
+    image: postgres:18.0
     container_name: pg-index-health-postgres
     environment:
       POSTGRES_DB: demo_for_pg_index_health
@@ -11,7 +9,7 @@ services:
     ports:
       - "6432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/18/docker
     restart: unless-stopped
 
 volumes:
