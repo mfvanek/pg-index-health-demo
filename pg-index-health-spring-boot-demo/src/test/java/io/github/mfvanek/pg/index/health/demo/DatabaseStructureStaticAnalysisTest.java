@@ -41,6 +41,7 @@ import static org.assertj.core.api.InstanceOfAssertFactories.list;
 
 class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBootTest {
 
+    private static final int CUSTOM_CHECKS_COUNT = 1;
     private static final String BUYER_TABLE = "demo.buyer";
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
     private static final String ORDERS_TABLE = "demo.orders";
@@ -65,7 +66,7 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
     @Test
     void databaseStructureCheckForPublicSchema() {
         assertThat(checks)
-            .hasSize(Diagnostic.values().length);
+            .hasSize(Diagnostic.values().length + CUSTOM_CHECKS_COUNT);
 
         checks.forEach(check ->
             assertThat(check.check(SkipLiquibaseTablesPredicate.ofDefault()))
@@ -77,7 +78,7 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
     @Test
     void databaseStructureCheckForDemoSchema() {
         assertThat(checks)
-            .hasSize(Diagnostic.values().length);
+            .hasSize(Diagnostic.values().length + CUSTOM_CHECKS_COUNT);
 
         checks.stream()
             // Skip all runtime checks except SEQUENCE_OVERFLOW

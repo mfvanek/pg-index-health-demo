@@ -34,6 +34,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
+private const val CUSTOM_CHECKS_COUNT = 1
+
 internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpringBootTest() {
     @Autowired
     private lateinit var ctx: PgContext
@@ -52,7 +54,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
     @Test
     fun databaseStructureCheckForPublicSchema() {
         assertThat(checks)
-            .hasSize(Diagnostic.entries.size)
+            .hasSize(Diagnostic.entries.size + CUSTOM_CHECKS_COUNT)
 
         checks.forEach { check ->
             assertThat(check.check(SkipLiquibaseTablesPredicate.ofDefault()))
@@ -65,7 +67,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     fun databaseStructureCheckForDemoSchema() {
         assertThat(checks)
-            .hasSize(Diagnostic.entries.size)
+            .hasSize(Diagnostic.entries.size + CUSTOM_CHECKS_COUNT)
 
         checks.filter { check -> check.name == Diagnostic.SEQUENCE_OVERFLOW.getName() || check.isStatic }
             .forEach { check ->

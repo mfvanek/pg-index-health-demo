@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.kotlin.utils
 
+import io.github.mfvanek.pg.index.health.demo.kotlin.checks.custom.CustomChecksConfig
 import org.junit.jupiter.api.BeforeAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.SecurityProperties
@@ -22,7 +23,10 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.testcontainers.containers.PostgreSQLContainer
 import java.time.Clock
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+    classes = [CustomChecksConfig::class],
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 @ActiveProfiles("test")
 @Suppress("UnnecessaryAbstractClass")
 abstract class BasePgIndexHealthDemoSpringBootTest {
