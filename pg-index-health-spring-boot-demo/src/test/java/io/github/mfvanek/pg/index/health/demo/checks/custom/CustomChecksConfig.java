@@ -18,4 +18,9 @@ public class CustomChecksConfig {
     AllDateTimeColumnsShouldEndWithAtCheckOnHost allDateTimeColumnsShouldEndWithAtCheckOnHost(final PgConnection pgConnection) {
         return new AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection);
     }
+
+    @Bean
+    AllPrimaryKeysMustBeNamedAsIdCheckOnHost allPrimaryKeysMustBeNamedAsIdCheckOnHost(final PgConnection pgConnection) {
+        return new AllPrimaryKeysMustBeNamedAsIdCheckOnHost(pgConnection);
+    }
 }

@@ -20,4 +20,11 @@ class CustomChecksConfig {
     ): AllDateTimeColumnsShouldEndWithAtCheckOnHost {
         return AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection)
     }
+
+    @Bean
+    fun allPrimaryKeysMustBeNamedAsIdCheckOnHost(
+        pgConnection: PgConnection
+    ): AllPrimaryKeysMustBeNamedAsIdCheckOnHost {
+        return AllPrimaryKeysMustBeNamedAsIdCheckOnHost(pgConnection)
+    }
 }

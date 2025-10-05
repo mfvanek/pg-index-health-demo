@@ -34,7 +34,14 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-private const val CUSTOM_CHECKS_COUNT = 1
+private const val CUSTOM_CHECKS_COUNT = 2
+private const val BUYER_TABLE = "demo.buyer"
+private const val ORDER_ITEM_TABLE = "demo.order_item"
+private const val ORDERS_TABLE = "demo.orders"
+private const val ORDER_ID_COLUMN = "order_id"
+private const val DICTIONARY_TABLE = "demo.\"dictionary-to-delete\""
+private const val COURIER_TABLE = "demo.courier"
+private const val REPORTS_TABLE = "demo.reports"
 
 internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpringBootTest() {
     @Autowired
@@ -265,7 +272,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .hasSize(2)
                             .containsExactly(
                                 Table.of(ctx, DICTIONARY_TABLE),
-                                Table.of(ctx, "reports")
+                                Table.of(ctx, REPORTS_TABLE)
                             )
 
                     "TABLES_WITH_ZERO_OR_ONE_COLUMN" ->
@@ -315,17 +322,22 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 ColumnWithType.ofVarchar(Column.ofNotNull(ctx, "warehouse", "name"))
                             )
 
+                    "ALL_PRIMARY_KEYS_MUST_BE_NAMED_AS_ID" ->
+                        checksAssert
+                            .asInstanceOf(list(TableWithColumns::class.java))
+                            .hasSize(1)
+                            .containsExactly(
+                                TableWithColumns.of(
+                                    Table.of(ctx, REPORTS_TABLE),
+                                    listOf(
+                                        Column.ofNotNull(ctx, REPORTS_TABLE, "report_date"),
+                                        Column.ofNotNull(ctx, REPORTS_TABLE, "shop_id")
+                                    )
+                                )
+                            )
+
                     else -> checksAssert.isEmpty()
                 }
             }
-    }
-
-    companion object {
-        private const val BUYER_TABLE = "demo.buyer"
-        private const val ORDER_ITEM_TABLE = "demo.order_item"
-        private const val ORDERS_TABLE = "demo.orders"
-        private const val ORDER_ID_COLUMN = "order_id"
-        private const val DICTIONARY_TABLE = "demo.\"dictionary-to-delete\""
-        private const val COURIER_TABLE = "demo.courier"
     }
 }

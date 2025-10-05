@@ -41,13 +41,14 @@ import static org.assertj.core.api.InstanceOfAssertFactories.list;
 
 class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBootTest {
 
-    private static final int CUSTOM_CHECKS_COUNT = 1;
+    private static final int CUSTOM_CHECKS_COUNT = 2;
     private static final String BUYER_TABLE = "demo.buyer";
     private static final String ORDER_ITEM_TABLE = "demo.order_item";
     private static final String ORDERS_TABLE = "demo.orders";
     private static final String ORDER_ID_COLUMN = "order_id";
     private static final String DICTIONARY_TABLE = "demo.\"dictionary-to-delete\"";
     private static final String COURIER_TABLE = "demo.courier";
+    private static final String REPORTS_TABLE = "demo.reports";
 
     @Autowired
     private PgContext ctx;
@@ -200,7 +201,7 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
                         .hasSize(2)
                         .containsExactly(
                             Table.of(ctx, DICTIONARY_TABLE),
-                            Table.of(ctx, "reports")
+                            Table.of(ctx, REPORTS_TABLE)
                         );
 
                     case "TABLES_WITH_ZERO_OR_ONE_COLUMN" -> checksAssert
@@ -240,6 +241,15 @@ class DatabaseStructureStaticAnalysisTest extends BasePgIndexHealthDemoSpringBoo
                             ColumnWithType.ofVarchar(Column.ofNotNull(ctx, COURIER_TABLE, "phone")),
                             ColumnWithType.ofVarchar(Column.ofNotNull(ctx, ORDER_ITEM_TABLE, "sku")),
                             ColumnWithType.ofVarchar(Column.ofNotNull(ctx, "warehouse", "name"))
+                        );
+
+                    case "ALL_PRIMARY_KEYS_MUST_BE_NAMED_AS_ID" -> checksAssert
+                        .asInstanceOf(list(TableWithColumns.class))
+                        .hasSize(1)
+                        .containsExactly(
+                            TableWithColumns.of(Table.of(ctx, REPORTS_TABLE), List.of(
+                                Column.ofNotNull(ctx, REPORTS_TABLE, "report_date"),
+                                Column.ofNotNull(ctx, REPORTS_TABLE, "shop_id")))
                         );
 
                     default -> checksAssert.isEmpty();
