@@ -11,7 +11,7 @@ springdoc-openapi-bom = "org.springdoc:springdoc-openapi-bom:2.8.13"
 commons-lang3 = "org.apache.commons:commons-lang3:3.19.0"
 liquibase-core = "org.liquibase:liquibase-core:5.0.1"
 liquibase-sessionlock = "com.github.blagerweij:liquibase-sessionlock:1.6.9"
-netty-all = "io.netty:netty-all:4.2.4.Final"
+netty-all = "io.netty:netty-all:4.2.6.Final"
 kotlin-logging = "io.github.oshai:kotlin-logging-jvm:7.0.3"
 
 [plugins]
