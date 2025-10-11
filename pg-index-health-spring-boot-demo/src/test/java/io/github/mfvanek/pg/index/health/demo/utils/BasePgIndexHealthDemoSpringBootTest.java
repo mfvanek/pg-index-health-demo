@@ -7,6 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.utils;
 
+import io.github.mfvanek.pg.index.health.demo.checks.custom.CustomChecksConfig;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -20,7 +21,10 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.Clock;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+    classes = CustomChecksConfig.class,
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 @ActiveProfiles("test")
 public abstract class BasePgIndexHealthDemoSpringBootTest {
 

@@ -14,9 +14,9 @@ import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFacto
 import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactoryImpl
 import io.github.mfvanek.pg.connection.factory.PgConnectionFactoryImpl
 import io.github.mfvanek.pg.core.statistics.StatisticsMaintenanceOnHostImpl
+import io.github.mfvanek.pg.health.checks.cluster.StandardChecksOnCluster
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagement
 import io.github.mfvanek.pg.health.checks.management.DatabaseManagementImpl
-import io.github.mfvanek.pg.health.logger.DatabaseChecksOnCluster
 import io.github.mfvanek.pg.health.logger.HealthLogger
 import io.github.mfvanek.pg.health.logger.StandardHealthLogger
 import io.github.mfvanek.pg.model.context.PgContext
@@ -55,8 +55,9 @@ class DatabaseStructureHealthConfig {
     ): HealthLogger {
         return StandardHealthLogger(
             connectionCredentials,
-            highAvailabilityPgConnectionFactory
-        ) { connection -> DatabaseChecksOnCluster(connection) }
+            highAvailabilityPgConnectionFactory,
+            StandardChecksOnCluster()
+        )
     }
 
     @Bean

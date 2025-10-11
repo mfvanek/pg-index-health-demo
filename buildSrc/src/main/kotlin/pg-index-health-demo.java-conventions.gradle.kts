@@ -61,7 +61,7 @@ tasks {
 }
 
 lombok {
-    version = "1.18.38"
+    version = "1.18.42"
 }
 
 checkstyle {

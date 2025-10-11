@@ -12,5 +12,5 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Consts {
 
-    public static final String PG_VERSION = "17.6";
+    public static final String PG_VERSION = "18.0";
 }

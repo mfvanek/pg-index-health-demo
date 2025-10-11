@@ -11,14 +11,16 @@ import io.github.mfvanek.pg.connection.HighAvailabilityPgConnection;
 import io.github.mfvanek.pg.connection.factory.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactory;
 import io.github.mfvanek.pg.core.utils.ClockHolder;
+import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster;
 import io.github.mfvanek.pg.health.logger.AbstractHealthLogger;
-import io.github.mfvanek.pg.health.logger.DatabaseChecksOnCluster;
 import io.github.mfvanek.pg.health.logger.LoggingKey;
+import io.github.mfvanek.pg.model.dbobject.DbObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.function.Function;
 
 public class KeyValueFileHealthLogger extends AbstractHealthLogger {
@@ -27,7 +29,7 @@ public class KeyValueFileHealthLogger extends AbstractHealthLogger {
 
     public KeyValueFileHealthLogger(final ConnectionCredentials credentials,
                                     final HighAvailabilityPgConnectionFactory connectionFactory,
-                                    final Function<HighAvailabilityPgConnection, DatabaseChecksOnCluster> databaseChecksFactory) {
+                                    final Function<HighAvailabilityPgConnection, List<DatabaseCheckOnCluster<? extends DbObject>>> databaseChecksFactory) {
         super(credentials, connectionFactory, databaseChecksFactory);
     }
 
