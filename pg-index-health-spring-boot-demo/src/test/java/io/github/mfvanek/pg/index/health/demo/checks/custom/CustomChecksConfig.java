@@ -10,6 +10,7 @@ package io.github.mfvanek.pg.index.health.demo.checks.custom;
 import io.github.mfvanek.pg.connection.PgConnection;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.simple.JdbcClient;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class CustomChecksConfig {
@@ -20,7 +21,8 @@ public class CustomChecksConfig {
     }
 
     @Bean
-    AllPrimaryKeysMustBeNamedAsIdCheckOnHost allPrimaryKeysMustBeNamedAsIdCheckOnHost(final PgConnection pgConnection) {
-        return new AllPrimaryKeysMustBeNamedAsIdCheckOnHost(pgConnection);
+    AllPrimaryKeysMustBeNamedAsIdCheckOnHost allPrimaryKeysMustBeNamedAsIdCheckOnHost(final PgConnection pgConnection,
+                                                                                      final JdbcClient jdbcClient) {
+        return new AllPrimaryKeysMustBeNamedAsIdCheckOnHost(pgConnection, jdbcClient);
     }
 }

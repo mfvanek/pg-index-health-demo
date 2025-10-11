@@ -11,17 +11,20 @@ import io.github.mfvanek.pg.connection.PgConnection
 import io.github.mfvanek.pg.core.checks.common.StandardCheckInfo
 import io.github.mfvanek.pg.core.checks.extractors.TableWithColumnsExtractor
 import io.github.mfvanek.pg.core.checks.host.AbstractCheckOnHost
-import io.github.mfvanek.pg.core.utils.NamedParametersParser
 import io.github.mfvanek.pg.model.context.PgContext
 import io.github.mfvanek.pg.model.table.TableWithColumns
+import org.springframework.jdbc.core.simple.JdbcClient
+import java.sql.ResultSet
 
-class AllPrimaryKeysMustBeNamedAsIdCheckOnHost(pgConnection: PgConnection) : AbstractCheckOnHost<TableWithColumns>(
+class AllPrimaryKeysMustBeNamedAsIdCheckOnHost(
+    pgConnection: PgConnection,
+    private val jdbcClient: JdbcClient,
+) : AbstractCheckOnHost<TableWithColumns>(
     TableWithColumns::class.java,
     pgConnection,
     StandardCheckInfo.ofStatic(
         "ALL_PRIMARY_KEYS_MUST_BE_NAMED_AS_ID",
-        NamedParametersParser.parse(
-            """
+        """
                 select
                     pc.oid::regclass::text as table_name,
                     pg_table_size(pc.oid) as table_size,
@@ -38,11 +41,15 @@ class AllPrimaryKeysMustBeNamedAsIdCheckOnHost(pgConnection: PgConnection) : Abs
                 group by pc.relname, pc.oid, c.conkey
                 having bool_and(col.attname <> 'id') /* the primary key is not named 'id' */
                 order by table_name;
-            """.trimIndent()
-        )
+        """.trimIndent()
     )
 ) {
+    private val extractor = TableWithColumnsExtractor.of()
+
     override fun doCheck(pgContext: PgContext): List<TableWithColumns> {
-        return executeQuery(pgContext, TableWithColumnsExtractor.of())
+        return jdbcClient.sql(checkInfo.getSqlQuery())
+            .param("schema_name_param", pgContext.schemaName)
+            .query<TableWithColumns> { rs: ResultSet, rowNum: Int -> extractor.mapRow(rs, rowNum) }
+            .list()
     }
 }

@@ -8,22 +8,27 @@
 package io.github.mfvanek.pg.index.health.demo.checks.custom;
 
 import io.github.mfvanek.pg.connection.PgConnection;
+import io.github.mfvanek.pg.core.checks.common.ResultSetExtractor;
 import io.github.mfvanek.pg.core.checks.common.StandardCheckInfo;
 import io.github.mfvanek.pg.core.checks.extractors.TableWithColumnsExtractor;
 import io.github.mfvanek.pg.core.checks.host.AbstractCheckOnHost;
-import io.github.mfvanek.pg.core.utils.NamedParametersParser;
 import io.github.mfvanek.pg.model.context.PgContext;
 import io.github.mfvanek.pg.model.table.TableWithColumns;
 import org.jspecify.annotations.NullMarked;
+import org.springframework.jdbc.core.simple.JdbcClient;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class AllPrimaryKeysMustBeNamedAsIdCheckOnHost extends AbstractCheckOnHost<TableWithColumns> {
 
-    public AllPrimaryKeysMustBeNamedAsIdCheckOnHost(final PgConnection pgConnection) {
+    private final JdbcClient jdbcClient;
+    private final ResultSetExtractor<TableWithColumns> extractor = TableWithColumnsExtractor.of();
+
+    public AllPrimaryKeysMustBeNamedAsIdCheckOnHost(final PgConnection pgConnection, final JdbcClient jdbcClient) {
         super(TableWithColumns.class, pgConnection,
-            StandardCheckInfo.ofStatic("ALL_PRIMARY_KEYS_MUST_BE_NAMED_AS_ID", NamedParametersParser.parse("""
+            StandardCheckInfo.ofStatic("ALL_PRIMARY_KEYS_MUST_BE_NAMED_AS_ID", """
                 select
                     pc.oid::regclass::text as table_name,
                     pg_table_size(pc.oid) as table_size,
@@ -39,11 +44,15 @@ public class AllPrimaryKeysMustBeNamedAsIdCheckOnHost extends AbstractCheckOnHos
                     nsp.nspname = :schema_name_param::text
                 group by pc.relname, pc.oid, c.conkey
                 having bool_and(col.attname <> 'id') /* the primary key is not named 'id' */
-                order by table_name;""")));
+                order by table_name;"""));
+        this.jdbcClient = Objects.requireNonNull(jdbcClient, "jdbcClient cannot be null");
     }
 
     @Override
     protected List<TableWithColumns> doCheck(final PgContext pgContext) {
-        return executeQuery(pgContext, TableWithColumnsExtractor.of());
+        return jdbcClient.sql(checkInfo.getSqlQuery())
+            .param("schema_name_param", pgContext.getSchemaName())
+            .query(extractor::mapRow)
+            .list();
     }
 }
