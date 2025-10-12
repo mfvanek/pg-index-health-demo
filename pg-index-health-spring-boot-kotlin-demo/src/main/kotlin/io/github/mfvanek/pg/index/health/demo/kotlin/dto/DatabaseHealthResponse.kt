@@ -21,7 +21,7 @@ class DatabaseHealthResponse(
             "btree_indexes_on_array_columns:1", "sequence_overflow:1", "primary_keys_with_serial_types:1", 
             "duplicated_foreign_keys:1", "intersected_foreign_keys:0", "possible_object_name_overflow:1", 
             "tables_not_linked_to_others:0", "foreign_keys_with_unmatched_column_type:1", "tables_with_zero_or_one_column:0", 
-            "objects_not_following_naming_convention:2", "columns_not_following_naming_convention:1", "primary_keys_with_varchar:0", 
+            "objects_not_following_naming_convention:3", "columns_not_following_naming_convention:1", "primary_keys_with_varchar:0", 
             "columns_with_fixed_length_varchar:12", "indexes_with_unnecessary_where_clause:0", "primary_keys_that_most_likely_natural_keys:0", 
             "columns_with_money_type:0", "indexes_with_timestamp_in_the_middle:0"]"""
     )

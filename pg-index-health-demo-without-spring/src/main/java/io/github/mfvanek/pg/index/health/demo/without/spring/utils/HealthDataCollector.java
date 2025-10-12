@@ -9,7 +9,7 @@ package io.github.mfvanek.pg.index.health.demo.without.spring.utils;
 
 import io.github.mfvanek.pg.connection.factory.ConnectionCredentials;
 import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFactory;
-import io.github.mfvanek.pg.health.logger.DatabaseChecksOnCluster;
+import io.github.mfvanek.pg.health.checks.cluster.StandardChecksOnCluster;
 import io.github.mfvanek.pg.health.logger.Exclusions;
 import io.github.mfvanek.pg.health.logger.HealthLogger;
 import io.github.mfvanek.pg.model.context.PgContext;
@@ -29,7 +29,7 @@ public final class HealthDataCollector {
             .withIndexSizeThreshold(0, MemoryUnit.MB)
             .withTableSizeThreshold(1, MemoryUnit.MB)
             .build();
-        final HealthLogger healthLogger = new KeyValueFileHealthLogger(credentials, connectionFactory, DatabaseChecksOnCluster::new);
+        final HealthLogger healthLogger = new KeyValueFileHealthLogger(credentials, connectionFactory, new StandardChecksOnCluster());
         final PgContext context = PgContext.of("demo");
         final List<String> healthData = healthLogger.logAll(exclusions, context);
         healthData.forEach(log::info);

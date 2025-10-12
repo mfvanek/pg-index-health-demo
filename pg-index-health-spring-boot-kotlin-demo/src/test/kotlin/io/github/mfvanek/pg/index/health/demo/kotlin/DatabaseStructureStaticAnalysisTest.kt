@@ -12,6 +12,7 @@ import io.github.mfvanek.pg.core.checks.common.Diagnostic
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import io.github.mfvanek.pg.model.column.Column
 import io.github.mfvanek.pg.model.column.ColumnWithSerialType
+import io.github.mfvanek.pg.model.column.ColumnWithType
 import io.github.mfvanek.pg.model.constraint.Constraint
 import io.github.mfvanek.pg.model.constraint.ConstraintType
 import io.github.mfvanek.pg.model.constraint.DuplicatedForeignKeys
@@ -33,6 +34,15 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
+private const val CUSTOM_CHECKS_COUNT = 2
+private const val BUYER_TABLE = "demo.buyer"
+private const val ORDER_ITEM_TABLE = "demo.order_item"
+private const val ORDERS_TABLE = "demo.orders"
+private const val ORDER_ID_COLUMN = "order_id"
+private const val DICTIONARY_TABLE = "demo.\"dictionary-to-delete\""
+private const val COURIER_TABLE = "demo.courier"
+private const val REPORTS_TABLE = "demo.reports"
+
 internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpringBootTest() {
     @Autowired
     private lateinit var ctx: PgContext
@@ -45,17 +55,17 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
     fun checkPostgresVersion() {
         val pgVersion: String? = jdbcTemplate.queryForObject("select version();", String::class.java)
         assertThat(pgVersion)
-            .startsWith("PostgreSQL 17.6")
+            .startsWith("PostgreSQL 18.0")
     }
 
     @Test
     fun databaseStructureCheckForPublicSchema() {
         assertThat(checks)
-            .hasSize(Diagnostic.entries.size)
+            .hasSize(Diagnostic.entries.size + CUSTOM_CHECKS_COUNT)
 
         checks.forEach { check ->
             assertThat(check.check(SkipLiquibaseTablesPredicate.ofDefault()))
-                .`as`(check.diagnostic.name)
+                .`as`(check.name)
                 .isEmpty()
         }
     }
@@ -64,21 +74,22 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     fun databaseStructureCheckForDemoSchema() {
         assertThat(checks)
-            .hasSize(Diagnostic.entries.size)
+            .hasSize(Diagnostic.entries.size + CUSTOM_CHECKS_COUNT)
 
-        checks.filter { check -> check.diagnostic == Diagnostic.SEQUENCE_OVERFLOW || check.isStatic }
+        checks.filter { check -> check.name == Diagnostic.SEQUENCE_OVERFLOW.getName() || check.isStatic }
             .forEach { check ->
                 val checksAssert = assertThat(check.check(ctx))
-                    .`as`(check.diagnostic.name)
-                when (check.diagnostic) {
-                    Diagnostic.INVALID_INDEXES ->
+                    .`as`(check.name)
+
+                when (check.name) {
+                    "INVALID_INDEXES" ->
                         checksAssert
                             .asInstanceOf(list(Index::class.java))
                             .hasSize(1)
-                            // HOW TO FIX: drop index concurrently, fix data in table, then create index concurrently again
+                            // HOW TO FIX: drop index concurrently, fix data in the table, then create index concurrently again
                             .containsExactly(Index.of(ctx, BUYER_TABLE, "i_buyer_email"))
 
-                    Diagnostic.DUPLICATED_INDEXES ->
+                    "DUPLICATED_INDEXES" ->
                         checksAssert
                             .asInstanceOf(list(DuplicatedIndexes::class.java))
                             .hasSize(2)
@@ -94,7 +105,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 )
                             )
 
-                    Diagnostic.INTERSECTED_INDEXES ->
+                    "INTERSECTED_INDEXES" ->
                         checksAssert
                             .asInstanceOf(list(DuplicatedIndexes::class.java))
                             .hasSize(3)
@@ -114,7 +125,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 )
                             )
 
-                    Diagnostic.FOREIGN_KEYS_WITHOUT_INDEX ->
+                    "FOREIGN_KEYS_WITHOUT_INDEX" ->
                         checksAssert
                             .asInstanceOf(list(ForeignKey::class.java))
                             .hasSize(5)
@@ -139,7 +150,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 ForeignKey.ofNullableColumn("demo.payment", "payment_order_id_fkey", ORDER_ID_COLUMN)
                             )
 
-                    Diagnostic.TABLES_WITHOUT_PRIMARY_KEY ->
+                    "TABLES_WITHOUT_PRIMARY_KEY" ->
                         checksAssert
                             .asInstanceOf(list(Table::class.java))
                             .hasSize(2)
@@ -149,7 +160,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 Table.of(ctx, "payment")
                             )
 
-                    Diagnostic.INDEXES_WITH_NULL_VALUES ->
+                    "INDEXES_WITH_NULL_VALUES" ->
                         checksAssert
                             .asInstanceOf(list(IndexWithColumns::class.java))
                             .hasSize(1)
@@ -158,7 +169,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 IndexWithColumns.ofNullable(ctx, BUYER_TABLE, "demo.i_buyer_middle_name", "middle_name")
                             )
 
-                    Diagnostic.INDEXES_WITH_BOOLEAN ->
+                    "INDEXES_WITH_BOOLEAN" ->
                         checksAssert
                             .asInstanceOf(list(IndexWithColumns::class.java))
                             .hasSize(1)
@@ -171,7 +182,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 )
                             )
 
-                    Diagnostic.NOT_VALID_CONSTRAINTS ->
+                    "NOT_VALID_CONSTRAINTS" ->
                         checksAssert
                             .asInstanceOf(list(Constraint::class.java))
                             .hasSize(1)
@@ -183,7 +194,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 )
                             )
 
-                    Diagnostic.BTREE_INDEXES_ON_ARRAY_COLUMNS ->
+                    "BTREE_INDEXES_ON_ARRAY_COLUMNS" ->
                         checksAssert
                             .asInstanceOf(list(IndexWithColumns::class.java))
                             .hasSize(1)
@@ -196,13 +207,13 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 )
                             )
 
-                    Diagnostic.SEQUENCE_OVERFLOW ->
+                    "SEQUENCE_OVERFLOW" ->
                         checksAssert
                             .asInstanceOf(list(SequenceState::class.java))
                             .hasSize(1)
                             .containsExactly(SequenceState.of(ctx, "payment_num_seq", "smallint", 8.44))
 
-                    Diagnostic.PRIMARY_KEYS_WITH_SERIAL_TYPES ->
+                    "PRIMARY_KEYS_WITH_SERIAL_TYPES" ->
                         checksAssert
                             .asInstanceOf(list(ColumnWithSerialType::class.java))
                             .hasSize(1)
@@ -213,7 +224,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 )
                             )
 
-                    Diagnostic.DUPLICATED_FOREIGN_KEYS ->
+                    "DUPLICATED_FOREIGN_KEYS" ->
                         checksAssert
                             .asInstanceOf(list(DuplicatedForeignKeys::class.java))
                             .hasSize(1)
@@ -232,7 +243,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 )
                             )
 
-                    Diagnostic.POSSIBLE_OBJECT_NAME_OVERFLOW ->
+                    "POSSIBLE_OBJECT_NAME_OVERFLOW" ->
                         checksAssert
                             .asInstanceOf(list(AnyObject::class.java))
                             .hasSize(1)
@@ -243,7 +254,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 )
                             )
 
-                    Diagnostic.FOREIGN_KEYS_WITH_UNMATCHED_COLUMN_TYPE ->
+                    "FOREIGN_KEYS_WITH_UNMATCHED_COLUMN_TYPE" ->
                         checksAssert
                             .asInstanceOf(list(ForeignKey::class.java))
                             .hasSize(1)
@@ -255,31 +266,36 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 )
                             )
 
-                    Diagnostic.TABLES_NOT_LINKED_TO_OTHERS ->
+                    "TABLES_NOT_LINKED_TO_OTHERS" ->
                         checksAssert
                             .asInstanceOf(list(Table::class.java))
                             .hasSize(2)
                             .containsExactly(
                                 Table.of(ctx, DICTIONARY_TABLE),
-                                Table.of(ctx, "reports")
+                                Table.of(ctx, REPORTS_TABLE)
                             )
 
-                    Diagnostic.TABLES_WITH_ZERO_OR_ONE_COLUMN ->
+                    "TABLES_WITH_ZERO_OR_ONE_COLUMN" ->
                         checksAssert
                             .asInstanceOf(list(TableWithColumns::class.java))
                             .hasSize(1)
                             .containsExactly(TableWithColumns.withoutColumns(ctx, DICTIONARY_TABLE))
 
-                    Diagnostic.OBJECTS_NOT_FOLLOWING_NAMING_CONVENTION ->
+                    "OBJECTS_NOT_FOLLOWING_NAMING_CONVENTION" ->
                         checksAssert
                             .asInstanceOf(list(AnyObject::class.java))
-                            .hasSize(2)
+                            .hasSize(3)
                             .containsExactly(
+                                AnyObject.ofType(
+                                    ctx,
+                                    "\"dictionary-to-delete_dict-id_not_null\"",
+                                    PgObjectType.CONSTRAINT
+                                ),
                                 AnyObject.ofType(ctx, "\"dictionary-to-delete_dict-id_seq\"", PgObjectType.SEQUENCE),
                                 AnyObject.ofType(ctx, DICTIONARY_TABLE, PgObjectType.TABLE)
                             )
 
-                    Diagnostic.COLUMNS_WITHOUT_DESCRIPTION, Diagnostic.COLUMNS_NOT_FOLLOWING_NAMING_CONVENTION ->
+                    "COLUMNS_WITHOUT_DESCRIPTION", "COLUMNS_NOT_FOLLOWING_NAMING_CONVENTION" ->
                         checksAssert
                             .asInstanceOf(list(Column::class.java))
                             .hasSize(1)
@@ -287,36 +303,41 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 Column.ofNotNull(ctx, DICTIONARY_TABLE, "\"dict-id\"")
                             )
 
-                    Diagnostic.COLUMNS_WITH_FIXED_LENGTH_VARCHAR ->
+                    "COLUMNS_WITH_FIXED_LENGTH_VARCHAR" ->
                         checksAssert
-                            .asInstanceOf(list(Column::class.java))
+                            .asInstanceOf(list(ColumnWithType::class.java))
                             .hasSize(12)
                             .containsExactly(
-                                Column.ofNotNull(ctx, BUYER_TABLE, "email"),
-                                Column.ofNotNull(ctx, BUYER_TABLE, "first_name"),
-                                Column.ofNullable(ctx, BUYER_TABLE, "ip_address"),
-                                Column.ofNotNull(ctx, BUYER_TABLE, "last_name"),
-                                Column.ofNullable(ctx, BUYER_TABLE, "middle_name"),
-                                Column.ofNotNull(ctx, BUYER_TABLE, "phone"),
-                                Column.ofNotNull(ctx, COURIER_TABLE, "email"),
-                                Column.ofNotNull(ctx, COURIER_TABLE, "first_name"),
-                                Column.ofNotNull(ctx, COURIER_TABLE, "last_name"),
-                                Column.ofNotNull(ctx, COURIER_TABLE, "phone"),
-                                Column.ofNotNull(ctx, ORDER_ITEM_TABLE, "sku"),
-                                Column.ofNotNull(ctx, "warehouse", "name")
+                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, BUYER_TABLE, "email")),
+                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, BUYER_TABLE, "first_name")),
+                                ColumnWithType.ofVarchar(Column.ofNullable(ctx, BUYER_TABLE, "ip_address")),
+                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, BUYER_TABLE, "last_name")),
+                                ColumnWithType.ofVarchar(Column.ofNullable(ctx, BUYER_TABLE, "middle_name")),
+                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, BUYER_TABLE, "phone")),
+                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, COURIER_TABLE, "email")),
+                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, COURIER_TABLE, "first_name")),
+                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, COURIER_TABLE, "last_name")),
+                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, COURIER_TABLE, "phone")),
+                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, ORDER_ITEM_TABLE, "sku")),
+                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, "warehouse", "name"))
+                            )
+
+                    "ALL_PRIMARY_KEYS_MUST_BE_NAMED_AS_ID" ->
+                        checksAssert
+                            .asInstanceOf(list(TableWithColumns::class.java))
+                            .hasSize(1)
+                            .containsExactly(
+                                TableWithColumns.of(
+                                    Table.of(ctx, REPORTS_TABLE),
+                                    listOf(
+                                        Column.ofNotNull(ctx, REPORTS_TABLE, "report_date"),
+                                        Column.ofNotNull(ctx, REPORTS_TABLE, "shop_id")
+                                    )
+                                )
                             )
 
                     else -> checksAssert.isEmpty()
                 }
             }
-    }
-
-    companion object {
-        private const val BUYER_TABLE = "demo.buyer"
-        private const val ORDER_ITEM_TABLE = "demo.order_item"
-        private const val ORDERS_TABLE = "demo.orders"
-        private const val ORDER_ID_COLUMN = "order_id"
-        private const val DICTIONARY_TABLE = "demo.\"dictionary-to-delete\""
-        private const val COURIER_TABLE = "demo.courier"
     }
 }
