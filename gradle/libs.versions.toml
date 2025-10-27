@@ -1,6 +1,6 @@
 [versions]
 detekt = "1.23.8"
-spring-boot-v3 = "3.5.6"
+spring-boot-v3 = "3.5.7"
 
 [libraries]
 detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
