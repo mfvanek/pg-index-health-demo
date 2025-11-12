@@ -7,7 +7,7 @@ detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin",
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 detekt-libraries = { group = "io.gitlab.arturbosch.detekt", name = "detekt-rules-libraries", version.ref = "detekt" }
 spring-boot-v3-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot-v3" }
-springdoc-openapi-bom = "org.springdoc:springdoc-openapi-bom:2.8.13"
+springdoc-openapi-bom = "org.springdoc:springdoc-openapi-bom:2.8.14"
 commons-lang3 = "org.apache.commons:commons-lang3:3.19.0"
 liquibase-core = "org.liquibase:liquibase-core:5.0.1"
 liquibase-sessionlock = "com.github.blagerweij:liquibase-sessionlock:1.6.9"
