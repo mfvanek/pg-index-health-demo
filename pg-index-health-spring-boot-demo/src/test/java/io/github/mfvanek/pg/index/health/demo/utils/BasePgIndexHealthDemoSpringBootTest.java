@@ -10,7 +10,7 @@ package io.github.mfvanek.pg.index.health.demo.utils;
 import io.github.mfvanek.pg.index.health.demo.checks.custom.CustomChecksConfig;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.boot.security.autoconfigure.SecurityProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -18,9 +18,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 
 import java.time.Clock;
 
+@AutoConfigureWebTestClient
 @SpringBootTest(
     classes = CustomChecksConfig.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
