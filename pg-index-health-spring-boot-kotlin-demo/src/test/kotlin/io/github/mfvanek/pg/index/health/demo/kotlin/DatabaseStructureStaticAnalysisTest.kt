@@ -35,13 +35,13 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 private const val CUSTOM_CHECKS_COUNT = 2
-private const val BUYER_TABLE = "demo.buyer"
-private const val ORDER_ITEM_TABLE = "demo.order_item"
-private const val ORDERS_TABLE = "demo.orders"
+private const val BUYER_TABLE = "buyer"
+private const val ORDER_ITEM_TABLE = "order_item"
+private const val ORDERS_TABLE = "orders"
 private const val ORDER_ID_COLUMN = "order_id"
-private const val DICTIONARY_TABLE = "demo.\"dictionary-to-delete\""
-private const val COURIER_TABLE = "demo.courier"
-private const val REPORTS_TABLE = "demo.reports"
+private const val DICTIONARY_TABLE = "\"dictionary-to-delete\""
+private const val COURIER_TABLE = "courier"
+private const val REPORTS_TABLE = "reports"
 
 internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpringBootTest() {
     @Autowired
@@ -80,6 +80,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
             .forEach { check ->
                 val checksAssert = assertThat(check.check(ctx))
                     .`as`(check.name)
+                    .usingRecursiveFieldByFieldElementComparator()
 
                 when (check.name) {
                     "INVALID_INDEXES" ->
@@ -96,8 +97,8 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             // HOW TO FIX: do not manually create index for column with unique constraint
                             .containsExactly(
                                 DuplicatedIndexes.of(
-                                    Index.of(ctx, BUYER_TABLE, "demo.buyer_pkey"),
-                                    Index.of(ctx, BUYER_TABLE, "demo.idx_buyer_pk")
+                                    Index.of(ctx, BUYER_TABLE, "buyer_pkey"),
+                                    Index.of(ctx, BUYER_TABLE, "idx_buyer_pk")
                                 ),
                                 DuplicatedIndexes.of(
                                     Index.of(ctx, ORDER_ITEM_TABLE, "i_order_item_sku_order_id_unique"),
@@ -110,18 +111,18 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .asInstanceOf(list(DuplicatedIndexes::class.java))
                             .hasSize(3)
                             // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
-                            .containsExactlyInAnyOrder(
+                            .containsExactly(
                                 DuplicatedIndexes.of(
-                                    Index.of(ctx, BUYER_TABLE, "demo.buyer_pkey"),
-                                    Index.of(ctx, BUYER_TABLE, "demo.i_buyer_id_phone")
+                                    Index.of(ctx, BUYER_TABLE, "buyer_pkey"),
+                                    Index.of(ctx, BUYER_TABLE, "i_buyer_id_phone")
                                 ),
                                 DuplicatedIndexes.of(
-                                    Index.of(ctx, BUYER_TABLE, "demo.i_buyer_first_name"),
-                                    Index.of(ctx, BUYER_TABLE, "demo.i_buyer_names")
+                                    Index.of(ctx, BUYER_TABLE, "i_buyer_first_name"),
+                                    Index.of(ctx, BUYER_TABLE, "i_buyer_names")
                                 ),
                                 DuplicatedIndexes.of(
-                                    Index.of(ctx, BUYER_TABLE, "demo.i_buyer_id_phone"),
-                                    Index.of(ctx, BUYER_TABLE, "demo.idx_buyer_pk")
+                                    Index.of(ctx, BUYER_TABLE, "i_buyer_id_phone"),
+                                    Index.of(ctx, BUYER_TABLE, "idx_buyer_pk")
                                 )
                             )
 
@@ -130,7 +131,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .asInstanceOf(list(ForeignKey::class.java))
                             .hasSize(5)
                             // HOW TO FIX: create indexes on columns under foreign key constraint
-                            .containsExactlyInAnyOrder(
+                            .containsExactly(
                                 ForeignKey.ofNotNullColumn(
                                     ORDER_ITEM_TABLE,
                                     "order_item_order_id_fkey",
@@ -147,7 +148,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                     "warehouse_id"
                                 ),
                                 ForeignKey.ofNotNullColumn(ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
-                                ForeignKey.ofNullableColumn("demo.payment", "payment_order_id_fkey", ORDER_ID_COLUMN)
+                                ForeignKey.ofNullableColumn("payment", "payment_order_id_fkey", ORDER_ID_COLUMN)
                             )
 
                     "TABLES_WITHOUT_PRIMARY_KEY" ->
@@ -166,7 +167,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .hasSize(1)
                             // HOW TO FIX: consider excluding null values from index if it's possible
                             .containsExactly(
-                                IndexWithColumns.ofNullable(ctx, BUYER_TABLE, "demo.i_buyer_middle_name", "middle_name")
+                                IndexWithColumns.ofNullable(ctx, BUYER_TABLE, "i_buyer_middle_name", "middle_name")
                             )
 
                     "INDEXES_WITH_BOOLEAN" ->
@@ -176,7 +177,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .contains(
                                 IndexWithColumns.ofSingle(
                                     ORDERS_TABLE,
-                                    "demo.i_orders_preorder",
+                                    "i_orders_preorder",
                                     1L,
                                     Column.ofNotNull(ORDERS_TABLE, "preorder")
                                 )
@@ -201,7 +202,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .containsExactly(
                                 IndexWithColumns.ofSingle(
                                     ORDER_ITEM_TABLE,
-                                    "demo.order_item_categories_idx",
+                                    "order_item_categories_idx",
                                     8192L,
                                     Column.ofNullable(ORDER_ITEM_TABLE, "categories")
                                 )
@@ -220,7 +221,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .containsExactly(
                                 ColumnWithSerialType.ofBigSerial(
                                     Column.ofNotNull(ctx, COURIER_TABLE, "id"),
-                                    "demo.courier_id_seq"
+                                    "courier_id_seq"
                                 )
                             )
 
@@ -249,7 +250,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .hasSize(1)
                             .containsExactly(
                                 AnyObject.ofType(
-                                    "demo.idx_courier_phone_and_email_should_be_unique_very_long_name_tha",
+                                    "idx_courier_phone_and_email_should_be_unique_very_long_name_tha",
                                     PgObjectType.INDEX
                                 )
                             )

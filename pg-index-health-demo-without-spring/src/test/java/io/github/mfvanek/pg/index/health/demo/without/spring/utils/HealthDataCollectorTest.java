@@ -43,16 +43,16 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
     @Test
     void shouldCollectHealthData() {
         final List<String> expected = List.of(
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tinvalid_indexes\t1",
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tduplicated_indexes\t2",
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tintersected_indexes\t3",
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tunused_indexes\t8",
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tforeign_keys_without_index\t5",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tbloated_tables\t0",
             "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_with_missing_indexes\t0",
             "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_without_primary_key\t1",
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tindexes_with_null_values\t1",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tduplicated_indexes\t2",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tforeign_keys_without_index\t5",
             "2000-01-01T00:00:00Z\tdb_indexes_health\tbloated_indexes\t0",
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tbloated_tables\t0",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tindexes_with_null_values\t1",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tintersected_indexes\t3",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tinvalid_indexes\t1",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tunused_indexes\t8",
             "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_without_description\t0",
             "2000-01-01T00:00:00Z\tdb_indexes_health\tcolumns_without_description\t1",
             "2000-01-01T00:00:00Z\tdb_indexes_health\tcolumns_with_json_type\t0",
@@ -84,6 +84,6 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
         final List<String> healthData = HealthDataCollector.collectHealthData(getConnectionFactory(), getConnectionCredentials());
         assertThat(healthData)
             .hasSameSizeAs(Diagnostic.values())
-            .containsExactlyInAnyOrder(expected.toArray(new String[0]));
+            .containsExactly(expected.toArray(new String[0]));
     }
 }

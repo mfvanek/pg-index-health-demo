@@ -111,6 +111,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             .hasSize(Diagnostic.values().length + CUSTOM_CHECKS_COUNT);
 
         checks.stream()
+            // Skip all runtime checks except SEQUENCE_OVERFLOW
             .filter(check -> check.getName().equals(Diagnostic.SEQUENCE_OVERFLOW.getName()) || check.isStatic())
             .forEach(check -> {
                 final ListAssert<? extends DbObject> checksAssert = assertThat(check.check(ctx))
