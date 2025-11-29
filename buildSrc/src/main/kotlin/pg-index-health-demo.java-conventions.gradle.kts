@@ -24,14 +24,14 @@ plugins {
 }
 
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.42.0")
+    errorprone("com.google.errorprone:error_prone_core:2.45.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.29")
-    errorprone("com.uber.nullaway:nullaway:0.12.10")
+    errorprone("com.uber.nullaway:nullaway:0.12.12")
 
     spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.17")
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
-    spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.15")
+    spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.7.1")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -80,7 +80,7 @@ pmd {
 }
 
 spotbugs {
-    toolVersion.set("4.9.6")
+    toolVersion.set("4.9.8")
     showProgress.set(true)
     effort.set(Effort.MAX)
     reportLevel.set(Confidence.LOW)

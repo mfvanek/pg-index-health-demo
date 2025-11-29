@@ -53,13 +53,13 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
 
     private static final int SKIPPED_CHECKS_COUNT = 4; // indexes with bloat, tables with bloat, unused indexes, tables with missing indexes
     private static final int CUSTOM_CHECKS_COUNT = 2;
-    private static final String BUYER_TABLE = "demo.buyer";
-    private static final String ORDER_ITEM_TABLE = "demo.order_item";
-    private static final String ORDERS_TABLE = "demo.orders";
+    private static final String BUYER_TABLE = "buyer";
+    private static final String ORDER_ITEM_TABLE = "order_item";
+    private static final String ORDERS_TABLE = "orders";
     private static final String ORDER_ID_COLUMN = "order_id";
-    private static final String DICTIONARY_TABLE = "demo.\"dictionary-to-delete\"";
-    private static final String COURIER_TABLE = "demo.courier";
-    private static final String REPORTS_TABLE = "demo.reports";
+    private static final String DICTIONARY_TABLE = "\"dictionary-to-delete\"";
+    private static final String COURIER_TABLE = "courier";
+    private static final String REPORTS_TABLE = "reports";
 
     private final PgContext ctx = PgContext.of("demo");
     private final List<DatabaseCheckOnHost<? extends @NonNull DbObject>> checks;
@@ -111,17 +111,21 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             .hasSize(Diagnostic.values().length + CUSTOM_CHECKS_COUNT);
 
         checks.stream()
+            // Skip all runtime checks except SEQUENCE_OVERFLOW
             .filter(check -> check.getName().equals(Diagnostic.SEQUENCE_OVERFLOW.getName()) || check.isStatic())
             .forEach(check -> {
                 final ListAssert<? extends DbObject> checksAssert = assertThat(check.check(ctx))
-                    .as(check.getName());
+                    .as(check.getName())
+                    .usingRecursiveFieldByFieldElementComparator();
 
                 switch (check.getName()) {
                     case "INVALID_INDEXES" -> checksAssert
                         .asInstanceOf(list(Index.class))
                         .hasSize(1)
-                        // HOW TO FIX: drop index concurrently, fix data in table, then create index concurrently again
-                        .containsExactly(Index.of(ctx, BUYER_TABLE, "i_buyer_email"));
+                        // HOW TO FIX: drop index concurrently, fix data in the table, then create index concurrently again
+                        .containsExactly(
+                            Index.of(ctx, BUYER_TABLE, "i_buyer_email")
+                        );
 
                     case "DUPLICATED_INDEXES" -> checksAssert
                         .asInstanceOf(list(DuplicatedIndexes.class))
@@ -129,100 +133,114 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                         // HOW TO FIX: do not manually create index for column with unique constraint
                         .containsExactly(
                             DuplicatedIndexes.of(
-                                Index.of(ctx, BUYER_TABLE, "demo.buyer_pkey"),
-                                Index.of(ctx, BUYER_TABLE, "demo.idx_buyer_pk")),
+                                Index.of(ctx, BUYER_TABLE, "buyer_pkey", 16_384L),
+                                Index.of(ctx, BUYER_TABLE, "idx_buyer_pk", 16_384L)),
                             DuplicatedIndexes.of(
-                                Index.of(ctx, ORDER_ITEM_TABLE, "i_order_item_sku_order_id_unique"),
-                                Index.of(ctx, ORDER_ITEM_TABLE, "order_item_sku_order_id_key"))
+                                Index.of(ctx, ORDER_ITEM_TABLE, "i_order_item_sku_order_id_unique", 8_192L),
+                                Index.of(ctx, ORDER_ITEM_TABLE, "order_item_sku_order_id_key", 8_192L))
                         );
 
                     case "INTERSECTED_INDEXES" -> checksAssert
                         .asInstanceOf(list(DuplicatedIndexes.class))
                         .hasSize(3)
                         // HOW TO FIX: consider using an index with a different column order or just delete unnecessary indexes
-                        .containsExactlyInAnyOrder(
+                        .containsExactly(
                             DuplicatedIndexes.of(
-                                Index.of(ctx, BUYER_TABLE, "demo.buyer_pkey"),
-                                Index.of(ctx, BUYER_TABLE, "demo.i_buyer_id_phone")),
+                                Index.of(ctx, BUYER_TABLE, "buyer_pkey", 16_384L),
+                                Index.of(ctx, BUYER_TABLE, "i_buyer_id_phone", 16_384L)),
                             DuplicatedIndexes.of(
-                                Index.of(ctx, BUYER_TABLE, "demo.i_buyer_first_name"),
-                                Index.of(ctx, BUYER_TABLE, "demo.i_buyer_names")),
+                                Index.of(ctx, BUYER_TABLE, "i_buyer_first_name", 16_384L),
+                                Index.of(ctx, BUYER_TABLE, "i_buyer_names", 16_384L)),
                             DuplicatedIndexes.of(
-                                Index.of(ctx, BUYER_TABLE, "demo.i_buyer_id_phone"),
-                                Index.of(ctx, BUYER_TABLE, "demo.idx_buyer_pk"))
+                                Index.of(ctx, BUYER_TABLE, "i_buyer_id_phone", 16_384L),
+                                Index.of(ctx, BUYER_TABLE, "idx_buyer_pk", 16_384L))
                         );
 
                     case "FOREIGN_KEYS_WITHOUT_INDEX" -> checksAssert
                         .asInstanceOf(list(ForeignKey.class))
                         .hasSize(5)
                         // HOW TO FIX: create indexes on columns under foreign key constraint
-                        .containsExactlyInAnyOrder(
-                            ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN),
-                            ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fk_duplicate", ORDER_ID_COLUMN),
-                            ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_warehouse_id_fk", "warehouse_id"),
-                            ForeignKey.ofNotNullColumn(ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
-                            ForeignKey.ofNullableColumn("demo.payment", "payment_order_id_fkey", ORDER_ID_COLUMN));
+                        .containsExactly(
+                            ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN),
+                            ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_order_id_fk_duplicate", ORDER_ID_COLUMN),
+                            ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_warehouse_id_fk", "warehouse_id"),
+                            ForeignKey.ofNotNullColumn(ctx, ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
+                            ForeignKey.ofNullableColumn(ctx, "payment", "payment_order_id_fkey", ORDER_ID_COLUMN));
 
                     case "TABLES_WITHOUT_PRIMARY_KEY" -> checksAssert
                         .asInstanceOf(list(Table.class))
                         .hasSize(2)
-                        // HOW TO FIX: add primary key to the table
+                        // HOW TO FIX: add a primary key to the table
                         .containsExactly(
                             Table.of(ctx, DICTIONARY_TABLE),
-                            Table.of(ctx, "payment")
+                            Table.of(ctx, "payment", 4_276_224L)
                         );
 
                     case "INDEXES_WITH_NULL_VALUES" -> checksAssert
                         .asInstanceOf(list(IndexWithColumns.class))
                         .hasSize(1)
-                        // HOW TO FIX: consider excluding null values from index if it's possible
-                        .containsExactly(IndexWithColumns.ofNullable(ctx, BUYER_TABLE, "demo.i_buyer_middle_name", "middle_name"));
+                        // HOW TO FIX: consider excluding null values from the index if it's possible
+                        .containsExactly(
+                            IndexWithColumns.ofSingle(Index.of(ctx, BUYER_TABLE, "i_buyer_middle_name", 16_384L), Column.ofNullable(ctx, BUYER_TABLE, "middle_name"))
+                        );
 
                     case "INDEXES_WITH_BOOLEAN" -> checksAssert
                         .asInstanceOf(list(IndexWithColumns.class))
                         .hasSize(1)
-                        .contains(IndexWithColumns.ofSingle(ORDERS_TABLE, "demo.i_orders_preorder", 1L,
-                            Column.ofNotNull(ORDERS_TABLE, "preorder")));
+                        .containsExactly(
+                            IndexWithColumns.ofSingle(ctx, ORDERS_TABLE, "i_orders_preorder", 8_192L, Column.ofNotNull(ctx, ORDERS_TABLE, "preorder"))
+                        );
 
                     case "NOT_VALID_CONSTRAINTS" -> checksAssert
                         .asInstanceOf(list(Constraint.class))
                         .hasSize(1)
-                        .contains(Constraint.ofType(ORDER_ITEM_TABLE, "order_item_amount_less_than_100", ConstraintType.CHECK));
+                        .containsExactly(
+                            Constraint.ofType(ctx, ORDER_ITEM_TABLE, "order_item_amount_less_than_100", ConstraintType.CHECK)
+                        );
 
                     case "BTREE_INDEXES_ON_ARRAY_COLUMNS" -> checksAssert
                         .asInstanceOf(list(IndexWithColumns.class))
                         .hasSize(1)
-                        .containsExactly(IndexWithColumns.ofSingle(ORDER_ITEM_TABLE, "demo.order_item_categories_idx", 8_192L,
-                            Column.ofNullable(ORDER_ITEM_TABLE, "categories")));
+                        .containsExactly(
+                            IndexWithColumns.ofSingle(ctx, ORDER_ITEM_TABLE, "order_item_categories_idx", 8_192L, Column.ofNullable(ctx, ORDER_ITEM_TABLE, "categories"))
+                        );
 
                     case "SEQUENCE_OVERFLOW" -> checksAssert
                         .asInstanceOf(list(SequenceState.class))
                         .hasSize(1)
-                        .containsExactly(SequenceState.of(ctx, "payment_num_seq", "smallint", 8.44));
+                        .containsExactly(
+                            SequenceState.of(ctx, "payment_num_seq", "smallint", 8.44)
+                        );
 
                     case "PRIMARY_KEYS_WITH_SERIAL_TYPES" -> checksAssert
                         .asInstanceOf(list(ColumnWithSerialType.class))
                         .hasSize(1)
-                        .containsExactly(ColumnWithSerialType.ofBigSerial(Column.ofNotNull(ctx, COURIER_TABLE, "id"), "demo.courier_id_seq"));
+                        .containsExactly(
+                            ColumnWithSerialType.ofBigSerial(ctx, Column.ofNotNull(ctx, COURIER_TABLE, "id"), "courier_id_seq")
+                        );
 
                     case "DUPLICATED_FOREIGN_KEYS" -> checksAssert
                         .asInstanceOf(list(DuplicatedForeignKeys.class))
                         .hasSize(1)
-                        .containsExactly(DuplicatedForeignKeys.of(
-                            ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fk_duplicate", ORDER_ID_COLUMN),
-                            ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN))
+                        .containsExactly(
+                            DuplicatedForeignKeys.of(
+                                ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_order_id_fk_duplicate", ORDER_ID_COLUMN),
+                                ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN))
                         );
 
                     case "POSSIBLE_OBJECT_NAME_OVERFLOW" -> checksAssert
                         .asInstanceOf(list(AnyObject.class))
                         .hasSize(1)
                         .containsExactly(
-                            AnyObject.ofType("demo.idx_courier_phone_and_email_should_be_unique_very_long_name_tha", PgObjectType.INDEX));
+                            AnyObject.ofType(ctx, "idx_courier_phone_and_email_should_be_unique_very_long_name_tha", PgObjectType.INDEX)
+                        );
 
                     case "FOREIGN_KEYS_WITH_UNMATCHED_COLUMN_TYPE" -> checksAssert
                         .asInstanceOf(list(ForeignKey.class))
                         .hasSize(1)
-                        .containsExactly(ForeignKey.ofNotNullColumn(ORDER_ITEM_TABLE, "order_item_warehouse_id_fk", "warehouse_id"));
+                        .containsExactly(
+                            ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_warehouse_id_fk", "warehouse_id")
+                        );
 
                     case "TABLES_NOT_LINKED_TO_OTHERS" -> checksAssert
                         .asInstanceOf(list(Table.class))
@@ -235,7 +253,9 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                     case "TABLES_WITH_ZERO_OR_ONE_COLUMN" -> checksAssert
                         .asInstanceOf(list(TableWithColumns.class))
                         .hasSize(1)
-                        .containsExactly(TableWithColumns.withoutColumns(ctx, DICTIONARY_TABLE));
+                        .containsExactly(
+                            TableWithColumns.ofNotNullColumn(ctx, DICTIONARY_TABLE, "\"dict-id\"")
+                        );
 
                     case "OBJECTS_NOT_FOLLOWING_NAMING_CONVENTION" -> checksAssert
                         .asInstanceOf(list(AnyObject.class))
@@ -275,10 +295,15 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                         .asInstanceOf(list(TableWithColumns.class))
                         .hasSize(1)
                         .containsExactly(
-                            TableWithColumns.of(Table.of(ctx, REPORTS_TABLE), List.of(
-                                Column.ofNotNull(ctx, REPORTS_TABLE, "report_date"),
-                                Column.ofNotNull(ctx, REPORTS_TABLE, "shop_id")))
+                            TableWithColumns.of(
+                                Table.of(ctx, REPORTS_TABLE),
+                                List.of(
+                                    Column.ofNotNull(ctx, REPORTS_TABLE, "report_date"),
+                                    Column.ofNotNull(ctx, REPORTS_TABLE, "shop_id")))
                         );
+
+                    case "TABLES_WITH_INHERITANCE" -> checksAssert
+                        .hasSize(3); // it's a bug https://github.com/mfvanek/pg-index-health/issues/767
 
                     default -> checksAssert
                         .isEmpty();

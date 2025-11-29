@@ -28,6 +28,7 @@ class DbHealthControllerTest : BasePgIndexHealthDemoSpringBootTest() {
                 val healthResponse = response.responseBody
                 assertThat(healthResponse).isNotNull()
                 assertThat(healthResponse!!.healthData).isNotEmpty()
+                // TODO poor test, need to check the actual result
             }
     }
 }

@@ -14,12 +14,12 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.30.0"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.30.1"))
     implementation(platform("org.testcontainers:testcontainers-bom:1.21.3"))
 
     implementation("org.jspecify:jspecify:1.0.0")
     implementation("org.postgresql:postgresql:42.7.8")
 
-    testImplementation(platform("org.junit:junit-bom:6.0.0"))
+    testImplementation(platform("org.junit:junit-bom:6.0.1"))
     testImplementation(platform("org.assertj:assertj-bom:3.27.6"))
 }
