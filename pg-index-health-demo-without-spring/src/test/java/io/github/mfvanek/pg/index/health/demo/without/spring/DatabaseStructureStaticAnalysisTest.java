@@ -302,6 +302,9 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                                     Column.ofNotNull(ctx, REPORTS_TABLE, "shop_id")))
                         );
 
+                    case "TABLES_WITH_INHERITANCE" -> checksAssert
+                        .hasSize(3); // it's a bug https://github.com/mfvanek/pg-index-health/issues/767
+
                     default -> checksAssert
                         .isEmpty();
                 }
