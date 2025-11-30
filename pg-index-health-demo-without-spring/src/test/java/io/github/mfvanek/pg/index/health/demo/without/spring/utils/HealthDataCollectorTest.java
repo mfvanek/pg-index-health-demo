@@ -80,7 +80,8 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
             "2000-01-01T00:00:00Z\tdb_indexes_health\tcolumns_with_timestamp_or_timetz_type\t0",
             "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_where_primary_key_columns_not_first\t0",
             "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_where_all_columns_nullable_except_pk\t0",
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tcolumns_with_char_type\t0");
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tcolumns_with_char_type\t0",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_with_inheritance\t0");
         final List<String> healthData = HealthDataCollector.collectHealthData(getConnectionFactory(), getConnectionCredentials());
         assertThat(healthData)
             .hasSameSizeAs(Diagnostic.values())
