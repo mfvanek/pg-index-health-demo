@@ -337,10 +337,6 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 )
                             )
 
-                    "TABLES_WITH_INHERITANCE" ->
-                        checksAssert
-                            .hasSize(3); // it's a bug https://github.com/mfvanek/pg-index-health/issues/767
-
                     else -> checksAssert.isEmpty()
                 }
             }
