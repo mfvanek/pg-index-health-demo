@@ -15,7 +15,7 @@ dependencies {
 
     implementation(libs.liquibase.core)
     implementation(libs.liquibase.sessionlock)
-    implementation("org.apache.commons:commons-dbcp2:2.13.0")
+    implementation("org.apache.commons:commons-dbcp2:2.14.0")
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:postgresql")
     implementation("ch.qos.logback:logback-classic:1.5.21")
