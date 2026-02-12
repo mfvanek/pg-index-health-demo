@@ -15,7 +15,7 @@ plugins {
 dependencies {
     testImplementation("org.junit.platform:junit-platform-launcher")
 
-    pitest("it.mulders.stryker:pit-dashboard-reporter:0.3.10")
+    pitest("it.mulders.stryker:pit-dashboard-reporter:0.3.12")
 }
 
 pitest {
