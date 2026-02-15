@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2025. Ivan Vakhrushev and others.
+ * Copyright (c) 2019-2026. Ivan Vakhrushev and others.
  * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
@@ -32,9 +32,10 @@ public class MigrationsGenerator {
 
     public static List<ForeignKey> getForeignKeysNotCoveredWithIndex(final HighAvailabilityPgConnectionFactory connectionFactory,
                                                                      final ConnectionCredentials credentials) {
-        final HighAvailabilityPgConnection haPgConnection = connectionFactory.of(credentials);
-        final DatabaseCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex = new ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection);
-        return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
+        try (HighAvailabilityPgConnection haPgConnection = connectionFactory.of(credentials)) {
+            final DatabaseCheckOnCluster<ForeignKey> foreignKeysNotCoveredWithIndex = new ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection);
+            return foreignKeysNotCoveredWithIndex.check(PgContext.of("demo"));
+        }
     }
 
     @SuppressWarnings("StringSplitter")
