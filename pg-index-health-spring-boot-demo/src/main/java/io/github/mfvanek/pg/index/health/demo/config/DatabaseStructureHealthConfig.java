@@ -45,7 +45,7 @@ public class DatabaseStructureHealthConfig {
         return new StandardHealthLogger(connectionCredentials, highAvailabilityPgConnectionFactory, new StandardChecksOnCluster());
     }
 
-    @Bean
+    @Bean(destroyMethod = "close")
     public HighAvailabilityPgConnection highAvailabilityPgConnection(
         final ConnectionCredentials connectionCredentials,
         final HighAvailabilityPgConnectionFactory highAvailabilityPgConnectionFactory) {

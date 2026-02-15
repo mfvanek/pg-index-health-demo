@@ -60,7 +60,7 @@ class DatabaseStructureHealthConfig {
         )
     }
 
-    @Bean
+    @Bean(destroyMethod = "close")
     fun highAvailabilityPgConnection(
         connectionCredentials: ConnectionCredentials,
         highAvailabilityPgConnectionFactory: HighAvailabilityPgConnectionFactory
