@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2025. Ivan Vakhrushev and others.
+ * Copyright (c) 2019-2026. Ivan Vakhrushev and others.
  * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
@@ -14,8 +14,8 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.30.2"))
-    implementation(platform("org.testcontainers:testcontainers-bom:1.21.4"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.31.0"))
+    implementation(platform("org.testcontainers:testcontainers-bom:2.0.3"))
 
     implementation("org.jspecify:jspecify:1.0.0")
     implementation("org.postgresql:postgresql:42.7.10")

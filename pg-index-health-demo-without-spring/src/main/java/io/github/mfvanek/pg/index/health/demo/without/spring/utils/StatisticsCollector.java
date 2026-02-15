@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2025. Ivan Vakhrushev and others.
+ * Copyright (c) 2019-2026. Ivan Vakhrushev and others.
  * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
@@ -34,16 +34,17 @@ public final class StatisticsCollector {
     public static ZonedDateTime resetStatistics(final DataSource dataSource,
                                                 final String databaseUrl) {
         final PgConnection pgConnection = PgConnectionImpl.of(dataSource, PgHostImpl.ofUrl(databaseUrl));
-        final HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection);
-        final DatabaseManagement databaseManagement = new DatabaseManagementImpl(haPgConnection, StatisticsMaintenanceOnHostImpl::new);
-        databaseManagement.resetStatistics();
-        waitForStatisticsCollector(dataSource);
-        final Optional<OffsetDateTime> resetTimestamp = databaseManagement.getLastStatsResetTimestamp();
-        final ZonedDateTime zonedDateTime = resetTimestamp
-            .orElseThrow(IllegalStateException::new)
-            .atZoneSameInstant(ClockHolder.clock().getZone());
-        log.info("Last statistics reset was at {}", zonedDateTime);
-        return zonedDateTime;
+        try (HighAvailabilityPgConnection haPgConnection = HighAvailabilityPgConnectionImpl.of(pgConnection)) {
+            final DatabaseManagement databaseManagement = new DatabaseManagementImpl(haPgConnection, StatisticsMaintenanceOnHostImpl::new);
+            databaseManagement.resetStatistics();
+            waitForStatisticsCollector(dataSource);
+            final Optional<OffsetDateTime> resetTimestamp = databaseManagement.getLastStatsResetTimestamp();
+            final ZonedDateTime zonedDateTime = resetTimestamp
+                .orElseThrow(IllegalStateException::new)
+                .atZoneSameInstant(ClockHolder.clock().getZone());
+            log.info("Last statistics reset was at {}", zonedDateTime);
+            return zonedDateTime;
+        }
     }
 
     @SneakyThrows

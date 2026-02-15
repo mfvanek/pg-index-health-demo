@@ -17,13 +17,12 @@ dependencies {
     implementation(libs.liquibase.sessionlock)
     implementation("org.apache.commons:commons-dbcp2:2.14.0")
     implementation("org.testcontainers:testcontainers")
-    implementation("org.testcontainers:postgresql")
+    implementation("org.testcontainers:testcontainers-postgresql")
     implementation("ch.qos.logback:logback-classic:1.5.29")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.assertj:assertj-core")
-    testImplementation("org.testcontainers:junit-jupiter")
     testImplementation(platform("org.mockito:mockito-bom:5.21.0"))
     testImplementation("org.mockito:mockito-core")
 

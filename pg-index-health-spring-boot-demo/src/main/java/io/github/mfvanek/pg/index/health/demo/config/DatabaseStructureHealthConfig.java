@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2025. Ivan Vakhrushev and others.
+ * Copyright (c) 2019-2026. Ivan Vakhrushev and others.
  * https://github.com/mfvanek/pg-index-health-demo
  *
  * Licensed under the Apache License 2.0
@@ -45,7 +45,7 @@ public class DatabaseStructureHealthConfig {
         return new StandardHealthLogger(connectionCredentials, highAvailabilityPgConnectionFactory, new StandardChecksOnCluster());
     }
 
-    @Bean
+    @Bean(destroyMethod = "close")
     public HighAvailabilityPgConnection highAvailabilityPgConnection(
         final ConnectionCredentials connectionCredentials,
         final HighAvailabilityPgConnectionFactory highAvailabilityPgConnectionFactory) {

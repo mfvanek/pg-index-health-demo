@@ -22,7 +22,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
     implementation("org.testcontainers:testcontainers")
-    implementation("org.testcontainers:postgresql")
+    implementation("org.testcontainers:testcontainers-postgresql")
     implementation("io.github.mfvanek:pg-index-health")
     implementation("io.github.mfvanek:pg-index-health-logger")
     implementation("io.github.mfvanek:pg-index-health-generator")
@@ -36,7 +36,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webflux")
-    testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("io.github.mfvanek:pg-index-health-test-starter")
     testImplementation("org.apache.httpcomponents.client5:httpclient5")
 
