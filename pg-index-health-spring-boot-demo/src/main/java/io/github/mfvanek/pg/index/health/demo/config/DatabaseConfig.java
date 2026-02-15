@@ -12,9 +12,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.testcontainers.containers.JdbcDatabaseContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import javax.sql.DataSource;
 
@@ -23,8 +22,8 @@ public class DatabaseConfig {
 
     @SuppressWarnings({"java:S2095", "java:S1452"})
     @Bean(initMethod = "start", destroyMethod = "stop")
-    public JdbcDatabaseContainer<?> jdbcDatabaseContainer() {
-        return new PostgreSQLContainer<>("postgres:18.0")
+    public PostgreSQLContainer postgreSqlContainer() {
+        return new PostgreSQLContainer("postgres:18.0")
             .withDatabaseName("demo_for_pg_index_health")
             .withUsername("demo_user")
             .withPassword("myUniquePassword")
@@ -32,13 +31,13 @@ public class DatabaseConfig {
     }
 
     @Bean
-    public DataSource dataSource(final JdbcDatabaseContainer<?> jdbcDatabaseContainer,
+    public DataSource dataSource(final PostgreSQLContainer postgreSqlContainer,
                                  final Environment environment) {
-        ConfigurableEnvironmentMutator.addDatasourceUrlIfNeed(jdbcDatabaseContainer, environment);
+        ConfigurableEnvironmentMutator.addDatasourceUrlIfNeed(postgreSqlContainer, environment);
         final HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(jdbcDatabaseContainer.getJdbcUrl());
-        hikariConfig.setUsername(jdbcDatabaseContainer.getUsername());
-        hikariConfig.setPassword(jdbcDatabaseContainer.getPassword());
+        hikariConfig.setJdbcUrl(postgreSqlContainer.getJdbcUrl());
+        hikariConfig.setUsername(postgreSqlContainer.getUsername());
+        hikariConfig.setPassword(postgreSqlContainer.getPassword());
         return new HikariDataSource(hikariConfig);
     }
 }

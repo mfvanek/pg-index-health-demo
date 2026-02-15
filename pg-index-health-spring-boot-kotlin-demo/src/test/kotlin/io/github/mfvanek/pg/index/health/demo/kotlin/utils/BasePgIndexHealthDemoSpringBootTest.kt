@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.postgresql.PostgreSQLContainer
 import java.time.Clock
 
 @SpringBootTest(
@@ -55,7 +55,7 @@ abstract class BasePgIndexHealthDemoSpringBootTest {
 
     companion object {
 
-        private val postgres: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:18.0")
+        private val postgres: PostgreSQLContainer = PostgreSQLContainer("postgres:18.0")
 
         @JvmStatic
         @DynamicPropertySource
