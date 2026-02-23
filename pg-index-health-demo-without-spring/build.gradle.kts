@@ -18,7 +18,7 @@ dependencies {
     implementation("org.apache.commons:commons-dbcp2:2.14.0")
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:testcontainers-postgresql")
-    implementation("ch.qos.logback:logback-classic:1.5.31")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
