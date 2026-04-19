@@ -24,9 +24,9 @@ plugins {
 }
 
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.47.0")
+    errorprone("com.google.errorprone:error_prone_core:2.49.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.29")
-    errorprone("com.uber.nullaway:nullaway:0.13.1")
+    errorprone("com.uber.nullaway:nullaway:0.13.3")
 
     spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.17")
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
@@ -61,11 +61,11 @@ tasks {
 }
 
 lombok {
-    version = "1.18.42"
+    version = "1.18.44"
 }
 
 checkstyle {
-    toolVersion = "13.2.0"
+    toolVersion = "13.4.0"
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     maxWarnings = 0
@@ -73,7 +73,7 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.21.0"
+    toolVersion = "7.23.0"
     isConsoleOutput = true
     ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
     ruleSets = listOf()
