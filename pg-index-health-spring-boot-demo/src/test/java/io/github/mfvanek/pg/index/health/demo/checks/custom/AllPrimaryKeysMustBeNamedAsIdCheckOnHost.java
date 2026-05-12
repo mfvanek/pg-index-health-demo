@@ -8,7 +8,6 @@
 package io.github.mfvanek.pg.index.health.demo.checks.custom;
 
 import io.github.mfvanek.pg.connection.PgConnection;
-import io.github.mfvanek.pg.core.checks.common.ResultSetExtractor;
 import io.github.mfvanek.pg.core.checks.common.StandardCheckInfo;
 import io.github.mfvanek.pg.core.checks.extractors.TableWithColumnsExtractor;
 import io.github.mfvanek.pg.core.checks.host.AbstractCheckOnHost;
@@ -24,7 +23,6 @@ import java.util.Objects;
 public class AllPrimaryKeysMustBeNamedAsIdCheckOnHost extends AbstractCheckOnHost<TableWithColumns> {
 
     private final JdbcClient jdbcClient;
-    private final ResultSetExtractor<TableWithColumns> extractor = TableWithColumnsExtractor.of();
 
     public AllPrimaryKeysMustBeNamedAsIdCheckOnHost(final PgConnection pgConnection, final JdbcClient jdbcClient) {
         super(TableWithColumns.class, pgConnection,
@@ -44,7 +42,8 @@ public class AllPrimaryKeysMustBeNamedAsIdCheckOnHost extends AbstractCheckOnHos
                     nsp.nspname = :schema_name_param::text
                 group by pc.relname, pc.oid, c.conkey
                 having bool_and(col.attname <> 'id') /* the primary key is not named 'id' */
-                order by table_name;"""));
+                order by table_name;"""),
+            TableWithColumnsExtractor.of());
         this.jdbcClient = Objects.requireNonNull(jdbcClient, "jdbcClient cannot be null");
     }
 
@@ -52,7 +51,7 @@ public class AllPrimaryKeysMustBeNamedAsIdCheckOnHost extends AbstractCheckOnHos
     protected List<TableWithColumns> doCheck(final PgContext pgContext) {
         return jdbcClient.sql(checkInfo.getSqlQuery())
             .param("schema_name_param", pgContext.getSchemaName())
-            .query(extractor::mapRow)
+            .query(rowMapper::mapRow)
             .list();
     }
 }
