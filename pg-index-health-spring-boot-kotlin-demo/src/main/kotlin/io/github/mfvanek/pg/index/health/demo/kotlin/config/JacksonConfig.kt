@@ -7,7 +7,7 @@
 
 package io.github.mfvanek.pg.index.health.demo.kotlin.config
 
-import io.github.mfvanek.pg.model.jackson.PgIndexHealthModelModule
+import io.github.mfvanek.pg.model.jackson2.PgIndexHealthModelModule
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

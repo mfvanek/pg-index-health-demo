@@ -14,7 +14,7 @@ configurations.configureEach {
 }
 
 dependencies {
-    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.40.0"))
+    implementation(platform("io.github.mfvanek:pg-index-health-bom:0.41.0"))
     implementation(platform("org.testcontainers:testcontainers-bom:2.0.4"))
 
     implementation("org.jspecify:jspecify:1.0.0")

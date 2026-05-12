@@ -42,14 +42,13 @@ class AllPrimaryKeysMustBeNamedAsIdCheckOnHost(
                 having bool_and(col.attname <> 'id') /* the primary key is not named 'id' */
                 order by table_name;
         """.trimIndent()
-    )
+    ),
+    TableWithColumnsExtractor.of()
 ) {
-    private val extractor = TableWithColumnsExtractor.of()
-
     override fun doCheck(pgContext: PgContext): List<TableWithColumns> {
         return jdbcClient.sql(checkInfo.getSqlQuery())
             .param("schema_name_param", pgContext.schemaName)
-            .query<TableWithColumns> { rs: ResultSet, rowNum: Int -> extractor.mapRow(rs, rowNum) }
+            .query<TableWithColumns> { rs: ResultSet, rowNum: Int -> rowMapper.mapRow(rs, rowNum) }
             .list()
     }
 }

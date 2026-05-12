@@ -13,10 +13,7 @@ import io.github.mfvanek.pg.core.checks.extractors.ColumnWithTypeExtractor;
 import io.github.mfvanek.pg.core.checks.host.AbstractCheckOnHost;
 import io.github.mfvanek.pg.core.utils.NamedParametersParser;
 import io.github.mfvanek.pg.model.column.ColumnWithType;
-import io.github.mfvanek.pg.model.context.PgContext;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.List;
 
 @NullMarked
 public class AllDateTimeColumnsShouldEndWithAtCheckOnHost extends AbstractCheckOnHost<ColumnWithType> {
@@ -41,11 +38,7 @@ public class AllDateTimeColumnsShouldEndWithAtCheckOnHost extends AbstractCheckO
                     col.atttypid in ('timestamp without time zone'::regtype, 'timestamp with time zone'::regtype) and
                     right(col.attname, length('_at')) != '_at' and /* should end with _at */
                     nsp.nspname = :schema_name_param::text
-                order by table_name, column_name;""")));
-    }
-
-    @Override
-    protected List<ColumnWithType> doCheck(final PgContext pgContext) {
-        return executeQuery(pgContext, ColumnWithTypeExtractor.of());
+                order by table_name, column_name;""")),
+            ColumnWithTypeExtractor.of());
     }
 }

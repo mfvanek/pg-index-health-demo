@@ -13,7 +13,6 @@ import io.github.mfvanek.pg.core.checks.extractors.ColumnWithTypeExtractor
 import io.github.mfvanek.pg.core.checks.host.AbstractCheckOnHost
 import io.github.mfvanek.pg.core.utils.NamedParametersParser
 import io.github.mfvanek.pg.model.column.ColumnWithType
-import io.github.mfvanek.pg.model.context.PgContext
 
 class AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection: PgConnection) : AbstractCheckOnHost<ColumnWithType>(
     ColumnWithType::class.java,
@@ -42,9 +41,6 @@ class AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection: PgConnection) :
                 order by table_name, column_name;
             """.trimIndent()
         )
-    )
-) {
-    override fun doCheck(pgContext: PgContext): List<ColumnWithType> {
-        return executeQuery(pgContext, ColumnWithTypeExtractor.of())
-    }
-}
+    ),
+    ColumnWithTypeExtractor.of()
+)
