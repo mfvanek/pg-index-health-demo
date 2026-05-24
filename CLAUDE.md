@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## General Rules
+
+- **Never commit changes** unless the user explicitly asks to commit. Make all edits and stop — do not stage or commit on your own initiative.
+
 ## Project Overview
 
 Demo project showcasing the [pg-index-health](https://github.com/mfvanek/pg-index-health) library, which identifies and reports common PostgreSQL database structural problems (missing indexes, duplicated indexes, tables without PKs, etc.).
@@ -125,15 +129,17 @@ Coverage is enforced via `jacocoTestCoverageVerification` and blocks the `check`
 
 All `pg-index-health-*` library versions are managed via `pg-index-health-bom` in `java-common-deps.gradle.kts`. Testcontainers versions are managed via `testcontainers-bom`. Don't pin individual artifact versions for these — update the BOM version instead.
 
-## Linting (Super-Linter)
+## Linting (SQLFluff via Super-Linter)
 
-Run locally with Docker (use `cmd` on Windows):
+SQL migrations are linted with **SQLFluff** (config: `.github/linters/.sqlfluff`), run through the super-linter Docker image:
 
-```shell
-docker run ^
-  -e RUN_LOCAL=true ^
-  -e USE_FIND_ALGORITHM=true ^
-  -e VALIDATE_SQLFLUFF=true ^
-  -v "%cd%":/tmp/lint ^
+Run locally with Docker from the repo root (PowerShell):
+
+```powershell
+docker run `
+  -e RUN_LOCAL=true `
+  -e USE_FIND_ALGORITHM=true `
+  -e VALIDATE_SQLFLUFF=true `
+  -v "${PWD}:/tmp/lint" `
   ghcr.io/super-linter/super-linter:slim-v8.6.0
 ```
