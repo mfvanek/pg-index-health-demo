@@ -51,7 +51,7 @@ import static org.assertj.core.api.InstanceOfAssertFactories.list;
 
 class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
 
-    private static final int SKIPPED_CHECKS_COUNT = 4; // indexes with bloat, tables with bloat, unused indexes, tables with missing indexes
+    private static final int SKIPPED_CHECKS_COUNT = 5; // indexes with bloat, tables with bloat, unused indexes, tables with missing indexes, tables with no data
     private static final int CUSTOM_CHECKS_COUNT = 2;
     private static final String BUYER_TABLE = "buyer";
     private static final String ORDER_ITEM_TABLE = "order_item";
