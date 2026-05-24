@@ -64,7 +64,13 @@ The `pg-index-health-demo.java-conventions` plugin stacks these tools on every J
 | ErrorProne + NullAway | inline in `java-conventions.gradle.kts` |
 | Forbidden APIs | `config/forbidden-apis/forbidden-apis.txt` |
 
-For Kotlin modules, Detekt is used instead of Checkstyle/PMD/SpotBugs (config: `config/detekt/detekt.yml`).
+For the Kotlin module (`pg-index-health-spring-boot-kotlin-demo`), **Detekt** replaces Checkstyle/PMD/SpotBugs (config: `config/detekt/detekt.yml`).
+Detekt runs automatically as part of `test` with `autoCorrect = true`, so it fixes formatting issues in place.
+Run it explicitly:
+
+```bash
+./gradlew :pg-index-health-spring-boot-kotlin-demo:detekt
+```
 
 **Forbidden patterns to avoid:**
 - `Collections.emptyList/emptyMap/emptySet`, `Collections.singleton*`, `Arrays.asList`, `Collections.unmodifiable*` — use `List.of()`, `Map.of()`, `Set.of()` instead
@@ -83,6 +89,16 @@ All modules use **Testcontainers** with **PostgreSQL 18.0** — no external data
 - **Spring Boot modules**: `DatabaseConfig` bean starts a `PostgreSQLContainer` and wires it as the `DataSource`; tests use `@ActiveProfiles("test")` and extend `BasePgIndexHealthDemoSpringBootTest`.
 
 Migrations are always run via Liquibase before tests execute. The `db-migrations` module holds all SQL under `src/main/resources/db/changelog/sql/`.
+
+### Typical Workflow: Updating pg-index-health Version
+
+Work on this project usually starts by bumping the `pg-index-health-bom` version in `buildSrc/src/main/kotlin/pg-index-health-demo.java-common-deps.gradle.kts`.
+
+New library versions typically introduce new database checks. When that happens:
+1. Update the BOM version in `java-common-deps.gradle.kts`
+2. Run the tests — `DatabaseStructureStaticAnalysisTest` will fail because the total check count no longer matches `Diagnostic.values().length + CUSTOM_CHECKS_COUNT`
+3. Update `DatabaseStructureStaticAnalysisTest` in **all three modules** to expect the new checks and their findings
+4. The goal is to make all deviations in the `demo` schema visible — **do not fix the violations**, just update the test assertions to document them
 
 ### Key Test: `DatabaseStructureStaticAnalysisTest`
 
