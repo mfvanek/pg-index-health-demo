@@ -99,6 +99,7 @@ New library versions typically introduce new database checks. When that happens:
 2. Run the tests — `DatabaseStructureStaticAnalysisTest` will fail because the total check count no longer matches `Diagnostic.values().length + CUSTOM_CHECKS_COUNT`
 3. Update `DatabaseStructureStaticAnalysisTest` in **all three modules** to expect the new checks and their findings
 4. The goal is to make all deviations in the `demo` schema visible — **do not fix the violations**, just update the test assertions to document them
+5. Once all tests pass, run mutation tests (`./gradlew pitest`) to verify mutation coverage is still met
 
 ### Key Test: `DatabaseStructureStaticAnalysisTest`
 
