@@ -15,7 +15,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v6
+                uses: actions/checkout@v7
                 with:
                     fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
             -   name: Set up JDK 21
@@ -51,7 +51,7 @@ jobs:
                 run: ./gradlew build
             -   name: Upload coverage to Codecov
                 if: matrix.type == 'sonar'
-                uses: codecov/codecov-action@v6
+                uses: codecov/codecov-action@v7
                 with:
                     token: ${{ secrets.CODECOV_TOKEN }}
                     fail_ci_if_error: true
