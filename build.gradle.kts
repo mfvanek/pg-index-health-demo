@@ -9,7 +9,7 @@ plugins {
 
 allprojects {
     group = "io.github.mfvanek"
-    version = "0.41.0"
+    version = "0.41.1"
 
     repositories {
         mavenCentral()

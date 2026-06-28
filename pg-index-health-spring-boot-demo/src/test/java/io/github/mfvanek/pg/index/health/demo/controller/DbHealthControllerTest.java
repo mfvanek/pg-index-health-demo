@@ -70,7 +70,12 @@ class DbHealthControllerTest extends BasePgIndexHealthDemoSpringBootTest {
                 "tables_where_all_columns_nullable_except_pk:0",
                 "columns_with_char_type:0",
                 "tables_with_inheritance:0",
-                "foreign_keys_with_null_values:0"
+                "foreign_keys_with_null_values:0",
+                "tables_with_no_data:1",
+                "self_referenced_foreign_keys:0",
+                "columns_with_blob_type:0",
+                "tables_with_incrementing_columns:0",
+                "columns_with_inconsistent_types:0"
             );
     }
 }
