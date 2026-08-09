@@ -35,9 +35,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/db/statistics")
 @Tag(name = "Database Statistics", description = "Endpoints for managing database statistics")
-class DbStatisticsController(
-    private val statisticsCollectorService: StatisticsCollectorService
-) {
+class DbStatisticsController(private val statisticsCollectorService: StatisticsCollectorService) {
 
     @Operation(
         summary = "Get last statistics reset date",
@@ -99,15 +97,13 @@ class DbStatisticsController(
         ]
     )
     @PostMapping("/reset")
-    fun doReset(@RequestBody wait: Boolean): ResponseEntity<StatisticsResetResponse> {
-        return if (wait) {
-            val timestamp = statisticsCollectorService.resetStatistics()
-            ResponseEntity.ok().body(StatisticsResetResponse(timestamp))
-        } else {
-            statisticsCollectorService.resetStatisticsNoWait()
-            val timestamp = statisticsCollectorService.getLastStatsResetTimestamp()
-            ResponseEntity.accepted().body(StatisticsResetResponse(timestamp))
-        }
+    fun doReset(@RequestBody wait: Boolean): ResponseEntity<StatisticsResetResponse> = if (wait) {
+        val timestamp = statisticsCollectorService.resetStatistics()
+        ResponseEntity.ok().body(StatisticsResetResponse(timestamp))
+    } else {
+        statisticsCollectorService.resetStatisticsNoWait()
+        val timestamp = statisticsCollectorService.getLastStatsResetTimestamp()
+        ResponseEntity.accepted().body(StatisticsResetResponse(timestamp))
     }
 
     /**
@@ -118,10 +114,8 @@ class DbStatisticsController(
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(StatisticsResetException::class)
-    fun handleStatisticsException(statisticsResetException: StatisticsResetException): MigrationError {
-        return MigrationError(
-            HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "Statistics reset failed: ${statisticsResetException.message}"
-        )
-    }
+    fun handleStatisticsException(statisticsResetException: StatisticsResetException): MigrationError = MigrationError(
+        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        "Statistics reset failed: ${statisticsResetException.message}"
+    )
 }

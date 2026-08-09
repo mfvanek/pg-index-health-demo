@@ -13,7 +13,7 @@ plugins {
     id("jacoco")
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.spring")
-    id("io.gitlab.arturbosch.detekt")
+    id("dev.detekt")
     id("pg-index-health-demo.forbidden-apis")
     id("pg-index-health-demo.java-compilation")
     id("pg-index-health-demo.java-common-deps")
@@ -39,10 +39,10 @@ tasks.withType<KotlinCompile> {
 }
 
 detekt {
-    toolVersion = libs.findVersion("detekt").get().requiredVersion
+    toolVersion.set(libs.findVersion("detekt").get().requiredVersion)
     config.setFrom(file("${rootDir}/config/detekt/detekt.yml"))
-    buildUponDefaultConfig = true
-    autoCorrect = true
+    buildUponDefaultConfig.set(true)
+    autoCorrect.set(true)
 }
 
 tasks {

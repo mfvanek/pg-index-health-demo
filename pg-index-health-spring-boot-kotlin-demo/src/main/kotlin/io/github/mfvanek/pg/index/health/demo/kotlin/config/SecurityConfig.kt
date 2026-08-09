@@ -45,13 +45,11 @@ class SecurityConfig {
      */
     @Bean
     @Throws(Exception::class)
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        return http
-            .csrf { obj: AbstractHttpConfigurer<*, HttpSecurity> -> obj.disable() } // NOSONAR
-            .authorizeHttpRequests { authz -> authz.anyRequest().authenticated() }
-            .httpBasic(Customizer.withDefaults())
-            .build()
-    }
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain = http
+        .csrf { obj: AbstractHttpConfigurer<*, HttpSecurity> -> obj.disable() } // NOSONAR
+        .authorizeHttpRequests { authz -> authz.anyRequest().authenticated() }
+        .httpBasic(Customizer.withDefaults())
+        .build()
 
     /**
      * Configures CORS (Cross-Origin Resource Sharing) settings.
@@ -62,9 +60,7 @@ class SecurityConfig {
      * @return configured [WebMvcConfigurer] instance
      */
     @Bean
-    fun corsConfigurer(): WebMvcConfigurer {
-        return CorsConfigurer()
-    }
+    fun corsConfigurer(): WebMvcConfigurer = CorsConfigurer()
 
     private class CorsConfigurer : WebMvcConfigurer {
         override fun addCorsMappings(registry: CorsRegistry) {

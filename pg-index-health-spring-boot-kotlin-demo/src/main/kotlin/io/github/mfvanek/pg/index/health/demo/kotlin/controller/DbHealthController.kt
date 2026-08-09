@@ -26,9 +26,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/db/health")
 @Tag(name = "Database Health", description = "Endpoints for checking database health")
-class DbHealthController(
-    private val databaseHealthService: DatabaseHealthService
-) {
+class DbHealthController(private val databaseHealthService: DatabaseHealthService) {
 
     /**
      * Collects health data from the database.
@@ -50,7 +48,5 @@ class DbHealthController(
         ]
     )
     @GetMapping
-    fun collectHealthData(): DatabaseHealthResponse {
-        return databaseHealthService.collectHealthData()
-    }
+    fun collectHealthData(): DatabaseHealthResponse = databaseHealthService.collectHealthData()
 }

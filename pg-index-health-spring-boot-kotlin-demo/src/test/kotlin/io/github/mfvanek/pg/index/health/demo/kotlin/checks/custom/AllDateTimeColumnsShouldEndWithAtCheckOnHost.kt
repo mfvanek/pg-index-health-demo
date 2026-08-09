@@ -14,13 +14,14 @@ import io.github.mfvanek.pg.core.checks.host.AbstractCheckOnHost
 import io.github.mfvanek.pg.core.utils.NamedParametersParser
 import io.github.mfvanek.pg.model.column.ColumnWithType
 
-class AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection: PgConnection) : AbstractCheckOnHost<ColumnWithType>(
-    ColumnWithType::class.java,
-    pgConnection,
-    StandardCheckInfo.ofStatic(
-        "ALL_DATETIME_COLUMNS_SHOULD_END_WITH_AT",
-        NamedParametersParser.parse(
-            """
+class AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection: PgConnection) :
+    AbstractCheckOnHost<ColumnWithType>(
+        ColumnWithType::class.java,
+        pgConnection,
+        StandardCheckInfo.ofStatic(
+            "ALL_DATETIME_COLUMNS_SHOULD_END_WITH_AT",
+            NamedParametersParser.parse(
+                """
                 select
                     t.oid::regclass::text as table_name,
                     col.attnotnull as column_not_null,
@@ -39,8 +40,8 @@ class AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection: PgConnection) :
                     right(col.attname, length('_at')) != '_at' and /* should end with _at */
                     nsp.nspname = :schema_name_param::text
                 order by table_name, column_name;
-            """.trimIndent()
-        )
-    ),
-    ColumnWithTypeExtractor.of()
-)
+                """.trimIndent()
+            )
+        ),
+        ColumnWithTypeExtractor.of()
+    )

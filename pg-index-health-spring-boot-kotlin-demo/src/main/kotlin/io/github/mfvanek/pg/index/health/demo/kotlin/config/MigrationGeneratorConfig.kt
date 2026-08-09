@@ -21,14 +21,11 @@ import org.springframework.context.annotation.Configuration
 class MigrationGeneratorConfig {
 
     @Bean
-    fun dbMigrationGenerator(): DbMigrationGenerator<ForeignKey> {
-        return ForeignKeyMigrationGenerator(GeneratingOptions.builder().build())
-    }
+    fun dbMigrationGenerator(): DbMigrationGenerator<ForeignKey> =
+        ForeignKeyMigrationGenerator(GeneratingOptions.builder().build())
 
     @Bean
     fun foreignKeysNotCoveredWithIndex(
-        haPgConnection: HighAvailabilityPgConnection
-    ): DatabaseCheckOnCluster<ForeignKey> {
-        return ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection)
-    }
+        haPgConnection: HighAvailabilityPgConnection,
+    ): DatabaseCheckOnCluster<ForeignKey> = ForeignKeysNotCoveredWithIndexCheckOnCluster(haPgConnection)
 }
