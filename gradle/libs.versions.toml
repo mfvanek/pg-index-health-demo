@@ -1,6 +1,6 @@
 [versions]
 detekt = "1.23.8"
-spring-boot-v3 = "3.5.13"
+spring-boot-v3 = "3.5.16"
 
 [libraries]
 detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
@@ -9,10 +9,10 @@ detekt-libraries = { group = "io.gitlab.arturbosch.detekt", name = "detekt-rules
 spring-boot-v3-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot-v3" }
 springdoc-openapi-bom = "org.springdoc:springdoc-openapi-bom:2.8.17"
 commons-lang3 = "org.apache.commons:commons-lang3:3.20.0"
-liquibase-core = "org.liquibase:liquibase-core:5.0.2"
+liquibase-core = "org.liquibase:liquibase-core:5.0.3"
 liquibase-sessionlock = "com.github.blagerweij:liquibase-sessionlock:1.6.9"
 netty-all = "io.netty:netty-all:4.2.16.Final"
-kotlin-logging = "io.github.oshai:kotlin-logging-jvm:7.0.3"
+kotlin-logging = "io.github.oshai:kotlin-logging-jvm:8.0.4"
 
 [plugins]
 spring-boot-v3 = { id = "org.springframework.boot", version.ref = "spring-boot-v3" }
