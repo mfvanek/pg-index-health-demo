@@ -20,5 +20,5 @@ class ForeignKeyMigrationResponse(
         description = "List of generated migration scripts",
         example = "[\"ALTER TABLE orders ADD CONSTRAINT fk_orders_buyer_id FOREIGN KEY (buyer_id) REFERENCES buyer(id);\"]"
     )
-    val generatedMigrations: List<String>
+    val generatedMigrations: List<String>,
 )

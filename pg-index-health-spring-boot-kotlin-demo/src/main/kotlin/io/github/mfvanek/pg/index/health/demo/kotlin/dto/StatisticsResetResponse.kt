@@ -16,5 +16,5 @@ class StatisticsResetResponse(
         description = "Timestamp of the statistics reset operation",
         example = "2025-09-11T17:00:00+03:00"
     )
-    val resetTimestamp: OffsetDateTime
+    val resetTimestamp: OffsetDateTime,
 )

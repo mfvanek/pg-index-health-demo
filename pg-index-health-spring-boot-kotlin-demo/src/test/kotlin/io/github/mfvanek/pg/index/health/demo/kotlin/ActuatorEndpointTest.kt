@@ -46,11 +46,7 @@ class ActuatorEndpointTest : BasePgIndexHealthDemoSpringBootTest() {
         ],
         delimiter = '|'
     )
-    fun actuatorEndpointShouldReturnOk(
-        endpointName: String,
-        expectedSubstring: String,
-        mediaType: String
-    ) {
+    fun actuatorEndpointShouldReturnOk(endpointName: String, expectedSubstring: String, mediaType: String) {
         val result = actuatorClient.get()
             .uri { uriBuilder ->
                 uriBuilder.path(endpointName).build()

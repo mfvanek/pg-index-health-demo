@@ -4,12 +4,12 @@ plugins {
     id("java")
     id("org.sonarqube")
     id("jacoco-report-aggregation")
-    id("com.github.ben-manes.versions") version "0.58.0"
+    id("io.github.ben-manes.versions") version "0.61.0"
 }
 
 allprojects {
     group = "io.github.mfvanek"
-    version = "0.41.1"
+    version = "0.41.2"
 
     repositories {
         mavenCentral()
@@ -27,7 +27,7 @@ dependencies {
 
 tasks {
     wrapper {
-        gradleVersion = "9.3.1"
+        gradleVersion = "9.6.1"
     }
 
     check {

@@ -35,7 +35,7 @@ class DbMigrationGeneratorService(
     private val dataSource: DataSource,
     private val dbMigrationGenerator: DbMigrationGenerator<ForeignKey>,
     private val foreignKeysNotCoveredWithIndex: DatabaseCheckOnCluster<ForeignKey>,
-    private val pgContext: PgContext
+    private val pgContext: PgContext,
 ) {
     /**
      * Generates migrations for foreign keys and validates the result.
@@ -63,9 +63,7 @@ class DbMigrationGeneratorService(
      *
      * @return list of foreign keys without indexes
      */
-    internal fun getForeignKeysFromDb(): List<ForeignKey> {
-        return foreignKeysNotCoveredWithIndex.check(pgContext)
-    }
+    internal fun getForeignKeysFromDb(): List<ForeignKey> = foreignKeysNotCoveredWithIndex.check(pgContext)
 
     /**
      * Generates migration scripts for the given foreign keys.

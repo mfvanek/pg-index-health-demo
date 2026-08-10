@@ -28,7 +28,7 @@ import java.time.Clock
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ActiveProfiles("test")
-@Suppress("UnnecessaryAbstractClass")
+@Suppress("UnnecessaryAbstractClass", "AbstractClassCanBeConcreteClass")
 abstract class BasePgIndexHealthDemoSpringBootTest {
 
     @Autowired

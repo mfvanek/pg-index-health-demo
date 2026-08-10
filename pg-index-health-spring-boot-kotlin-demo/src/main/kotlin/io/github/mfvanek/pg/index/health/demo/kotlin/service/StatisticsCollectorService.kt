@@ -35,16 +35,14 @@ private val logger = KotlinLogging.logger {}
 class StatisticsCollectorService(
     private val jdbcTemplate: JdbcTemplate,
     private val databaseManagement: DatabaseManagement,
-    private val statisticsProperties: StatisticsProperties
+    private val statisticsProperties: StatisticsProperties,
 ) {
     /**
      * Gets the last statistics reset timestamp.
      *
      * @return the last reset timestamp
      */
-    fun getLastStatsResetTimestamp(): OffsetDateTime {
-        return getLastStatsResetTimestampInner()
-    }
+    fun getLastStatsResetTimestamp(): OffsetDateTime = getLastStatsResetTimestampInner()
 
     /**
      * Resets statistics without waiting for completion.

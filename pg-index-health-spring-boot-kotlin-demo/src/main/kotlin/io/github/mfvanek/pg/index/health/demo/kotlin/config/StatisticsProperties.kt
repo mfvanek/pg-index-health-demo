@@ -17,5 +17,5 @@ class StatisticsProperties(
     val vacuumResultPollingAttempts: Int,
 
     @DefaultValue("100ms")
-    val pollingInterval: Duration
+    val pollingInterval: Duration,
 )

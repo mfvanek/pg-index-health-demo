@@ -17,16 +17,12 @@ class CustomChecksConfig {
 
     @Bean
     fun allDateTimeColumnsShouldEndWithAtCheckOnHost(
-        pgConnection: PgConnection
-    ): AllDateTimeColumnsShouldEndWithAtCheckOnHost {
-        return AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection)
-    }
+        pgConnection: PgConnection,
+    ): AllDateTimeColumnsShouldEndWithAtCheckOnHost = AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection)
 
     @Bean
     fun allPrimaryKeysMustBeNamedAsIdCheckOnHost(
         pgConnection: PgConnection,
-        jdbcClient: JdbcClient
-    ): AllPrimaryKeysMustBeNamedAsIdCheckOnHost {
-        return AllPrimaryKeysMustBeNamedAsIdCheckOnHost(pgConnection, jdbcClient)
-    }
+        jdbcClient: JdbcClient,
+    ): AllPrimaryKeysMustBeNamedAsIdCheckOnHost = AllPrimaryKeysMustBeNamedAsIdCheckOnHost(pgConnection, jdbcClient)
 }

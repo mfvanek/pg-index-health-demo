@@ -31,50 +31,40 @@ class DatabaseStructureHealthConfig {
     fun connectionCredentials(
         @Value("\${spring.datasource.url}") url: String,
         @Value("\${spring.datasource.username}") username: String,
-        @Value("\${spring.datasource.password}") password: String
-    ): ConnectionCredentials {
-        return ConnectionCredentials.ofUrl(
-            url,
-            username,
-            password
-        )
-    }
+        @Value("\${spring.datasource.password}") password: String,
+    ): ConnectionCredentials = ConnectionCredentials.ofUrl(
+        url,
+        username,
+        password
+    )
 
     @Bean
-    fun highAvailabilityPgConnectionFactory(): HighAvailabilityPgConnectionFactory {
-        return HighAvailabilityPgConnectionFactoryImpl(
+    fun highAvailabilityPgConnectionFactory(): HighAvailabilityPgConnectionFactory =
+        HighAvailabilityPgConnectionFactoryImpl(
             PgConnectionFactoryImpl(),
             PrimaryHostDeterminerImpl()
         )
-    }
 
     @Bean
     fun healthLogger(
         connectionCredentials: ConnectionCredentials,
-        highAvailabilityPgConnectionFactory: HighAvailabilityPgConnectionFactory
-    ): HealthLogger {
-        return StandardHealthLogger(
-            connectionCredentials,
-            highAvailabilityPgConnectionFactory,
-            StandardChecksOnCluster()
-        )
-    }
+        highAvailabilityPgConnectionFactory: HighAvailabilityPgConnectionFactory,
+    ): HealthLogger = StandardHealthLogger(
+        connectionCredentials,
+        highAvailabilityPgConnectionFactory,
+        StandardChecksOnCluster()
+    )
 
     @Bean(destroyMethod = "close")
     fun highAvailabilityPgConnection(
         connectionCredentials: ConnectionCredentials,
-        highAvailabilityPgConnectionFactory: HighAvailabilityPgConnectionFactory
-    ): HighAvailabilityPgConnection {
-        return highAvailabilityPgConnectionFactory.of(connectionCredentials)
-    }
+        highAvailabilityPgConnectionFactory: HighAvailabilityPgConnectionFactory,
+    ): HighAvailabilityPgConnection = highAvailabilityPgConnectionFactory.of(connectionCredentials)
 
     @Bean
-    fun databaseManagement(highAvailabilityPgConnection: HighAvailabilityPgConnection): DatabaseManagement {
-        return DatabaseManagementImpl(highAvailabilityPgConnection, ::StatisticsMaintenanceOnHostImpl)
-    }
+    fun databaseManagement(highAvailabilityPgConnection: HighAvailabilityPgConnection): DatabaseManagement =
+        DatabaseManagementImpl(highAvailabilityPgConnection, ::StatisticsMaintenanceOnHostImpl)
 
     @Bean
-    fun pgContext(): PgContext {
-        return PgContext.of("demo")
-    }
+    fun pgContext(): PgContext = PgContext.of("demo")
 }

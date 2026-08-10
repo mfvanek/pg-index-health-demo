@@ -95,7 +95,6 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             .allMatch(CheckTypeAware::isStatic);
     }
 
-    @SuppressWarnings("PMD.UnitTestShouldIncludeAssert")
     @Test
     void databaseStructureCheckForPublicSchema() {
         checks.forEach(check ->

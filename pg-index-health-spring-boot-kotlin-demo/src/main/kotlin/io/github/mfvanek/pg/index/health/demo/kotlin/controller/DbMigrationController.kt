@@ -31,9 +31,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/db/migration")
 @Tag(name = "Database Migration", description = "Endpoints for generating database migrations")
-class DbMigrationController(
-    private val dbMigrationGeneratorService: DbMigrationGeneratorService
-) {
+class DbMigrationController(private val dbMigrationGeneratorService: DbMigrationGeneratorService) {
 
     /**
      * Generates migrations with foreign keys checked.
@@ -65,9 +63,8 @@ class DbMigrationController(
         ]
     )
     @PostMapping("/generate")
-    fun generateMigrationsWithForeignKeysChecked(): ForeignKeyMigrationResponse {
-        return dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()
-    }
+    fun generateMigrationsWithForeignKeysChecked(): ForeignKeyMigrationResponse =
+        dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked()
 
     /**
      * Handles migration exceptions.
@@ -77,10 +74,8 @@ class DbMigrationController(
      */
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
     @ExceptionHandler(MigrationException::class)
-    fun handleMigrationException(migrationException: MigrationException): MigrationError {
-        return MigrationError(
-            HttpStatus.EXPECTATION_FAILED.value(),
-            "Migrations failed: ${migrationException.message}"
-        )
-    }
+    fun handleMigrationException(migrationException: MigrationException): MigrationError = MigrationError(
+        HttpStatus.EXPECTATION_FAILED.value(),
+        "Migrations failed: ${migrationException.message}"
+    )
 }

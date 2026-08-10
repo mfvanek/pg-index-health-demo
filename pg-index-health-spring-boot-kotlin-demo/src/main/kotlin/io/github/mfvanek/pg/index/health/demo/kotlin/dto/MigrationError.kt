@@ -15,5 +15,5 @@ class MigrationError(
     val statusCode: Int,
 
     @field:Schema(description = "Error message describing the issue", example = "Invalid migration script format")
-    val message: String
+    val message: String,
 )

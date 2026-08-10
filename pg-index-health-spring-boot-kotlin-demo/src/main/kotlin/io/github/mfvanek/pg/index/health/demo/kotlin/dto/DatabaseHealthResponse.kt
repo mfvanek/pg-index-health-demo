@@ -14,5 +14,5 @@ class DatabaseHealthResponse(
     @field:Schema(
         description = "List of health data entries in format 'check_name:count'"
     )
-    val healthData: List<String>
+    val healthData: List<String>,
 )
