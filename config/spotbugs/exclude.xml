@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
     <Match>
-        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2,RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE,SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE,BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"/>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2,CRLF_INJECTION_LOGS"/>
     </Match>
     <Match>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE,UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"/>
         <Class name="~.*Test"/>
+    </Match>
+    <Match>
+        <Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE,SQL_INJECTION_JDBC"/>
+        <Or>
+            <Class name="io.github.mfvanek.pg.index.health.demo.without.spring.utils.MigrationsGenerator"/>
+            <Class name="io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService"/>
+        </Or>
     </Match>
     <Match>
         <Bug pattern="MDM_THREAD_YIELD"/>
@@ -18,15 +25,6 @@
     <Match>
         <Bug pattern="PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS,SIL_SQL_IN_LOOP"/>
         <Class name="io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService"/>
-    </Match>
-    <Match>
-        <Bug pattern="CRLF_INJECTION_LOGS,SQL_INJECTION_JDBC"/>
-    </Match>
-    <Match>
-        <Bug pattern="EI_EXPOSE_REP2"/>
-        <Or>
-            <Class name="io.github.mfvanek.pg.index.health.demo.service.StatisticsCollectorService"/>
-        </Or>
     </Match>
     <Match>
         <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
