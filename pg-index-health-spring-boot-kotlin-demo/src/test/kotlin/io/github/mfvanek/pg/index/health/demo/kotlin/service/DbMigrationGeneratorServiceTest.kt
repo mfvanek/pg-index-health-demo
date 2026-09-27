@@ -22,7 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
@@ -30,7 +30,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.sql.Connection
 import java.sql.Statement
 import javax.sql.DataSource
-import org.mockito.Mockito.`when` as mockWhen
 
 @ExtendWith(OutputCaptureExtension::class)
 class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
@@ -51,12 +50,12 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @BeforeEach
     fun setUp() {
-        `when`(foreignKeysNotCoveredWithIndex.check(pgContext)).thenReturn(mockForeignKeys)
+        whenever(foreignKeysNotCoveredWithIndex.check(pgContext)).thenReturn(mockForeignKeys)
     }
 
     @Test
     fun throwsMigrationExceptionWhenEmptyMigrationString(capturedOutput: CapturedOutput) {
-        `when`(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(emptyList())
+        whenever(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(emptyList())
 
         assertThatThrownBy { dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked() }
             .isInstanceOf(MigrationException::class.java)
@@ -68,7 +67,7 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun logsAboutSqlExceptionWhenBadMigrationStringAndThrowsExceptionAfter(capturedOutput: CapturedOutput) {
-        `when`(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("select * from payments"))
+        whenever(dbMigrationGenerator.generate(mockForeignKeys)).thenReturn(listOf("select * from payments"))
 
         assertThatThrownBy { dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked() }
             .isInstanceOf(MigrationException::class.java)
@@ -96,16 +95,14 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
             mockPgContext
         )
 
-        `when`(
-            mockForeignKeysNotCoveredWithIndex.check(mockPgContext)
-        ).thenReturn(mockForeignKeys).thenReturn(emptyList())
-        `when`(
-            mockDbMigrationGenerator.generate(mockForeignKeys)
-        ).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
+        whenever(mockForeignKeysNotCoveredWithIndex.check(mockPgContext))
+            .thenReturn(mockForeignKeys).thenReturn(emptyList())
+        whenever(mockDbMigrationGenerator.generate(mockForeignKeys))
+            .thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
 
-        `when`(mockDataSource.connection).thenReturn(mockConnection)
-        `when`(mockConnection.createStatement()).thenReturn(mockStatement)
-        `when`(mockStatement.execute(any(String::class.java))).thenReturn(true)
+        whenever(mockDataSource.connection).thenReturn(mockConnection)
+        whenever(mockConnection.createStatement()).thenReturn(mockStatement)
+        whenever(mockStatement.execute(any(String::class.java))).thenReturn(true)
 
         assertThatCode { dbMigrationGeneratorServiceWithMocks.generateMigrationsWithForeignKeysChecked() }
             .doesNotThrowAnyException()
@@ -132,12 +129,12 @@ class DbMigrationGeneratorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
             mockPgContext
         )
 
-        `when`(mockForeignKeysNotCoveredWithIndex.check(mockPgContext)).thenReturn(mockForeignKeys)
-        `when`(
-            mockDbMigrationGenerator.generate(mockForeignKeys)
-        ).thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
+        whenever(mockForeignKeysNotCoveredWithIndex.check(mockPgContext))
+            .thenReturn(mockForeignKeys)
+        whenever(mockDbMigrationGenerator.generate(mockForeignKeys))
+            .thenReturn(listOf("CREATE INDEX IF NOT EXISTS test_idx ON test_table (test_column);"))
 
-        mockWhen(mockDataSource.connection).thenThrow(java.sql.SQLException("Connection failed"))
+        whenever(mockDataSource.connection).thenThrow(java.sql.SQLException("Connection failed"))
 
         assertThatThrownBy { dbMigrationGeneratorServiceWithMockDataSource.generateMigrationsWithForeignKeysChecked() }
             .isInstanceOf(MigrationException::class.java)

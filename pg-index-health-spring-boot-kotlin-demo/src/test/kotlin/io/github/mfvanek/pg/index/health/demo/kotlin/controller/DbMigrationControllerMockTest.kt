@@ -13,7 +13,7 @@ import io.github.mfvanek.pg.index.health.demo.kotlin.service.DbMigrationGenerato
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
+import org.mockito.kotlin.whenever
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
@@ -26,7 +26,7 @@ class DbMigrationControllerMockTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun `returns migration error when keys after are not empty`() {
         val migrationException = MigrationException("There should be no foreign keys not covered by some index")
-        Mockito.`when`(dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked())
+        whenever(dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked())
             .thenThrow(migrationException)
 
         val result = webTestClient

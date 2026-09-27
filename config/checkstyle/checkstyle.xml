@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE module PUBLIC
-        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
-        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
     <property name="severity" value="warning"/>
@@ -10,7 +11,7 @@
         <property name="fileNamePattern" value="module\-info\.java$"/>
     </module>
     <module name="SuppressWarningsFilter"/>
-    <!-- <module name="JavadocPackage"/> invalid -->
+    <!-- <module name="JavadocPackage"/> invalid due to tests and test fixtures -->
     <module name="FileTabCharacter"/>
     <module name="FileLength"/>
     <module name="LineLength">
@@ -18,24 +19,56 @@
         <property name="max" value="199"/>
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
+    <!-- <module name="LineEnding"/> useless -->
     <module name="Header">
         <property name="header"
               value="/*\n * Copyright (c) 2019-2026. Ivan Vakhrushev and others.\n * https://github.com/mfvanek/pg-index-health-demo\n *\n * Licensed under the Apache License 2.0\n */"/>
         <property name="fileExtensions" value="java"/>
     </module>
+    <!-- <module name="MultiFileRegexpHeader"/> useless -->
+    <!-- <module name="RegexpHeader"/> invalid -->
+    <!-- <module name="RegexpMultiline"/> invalid -->
+    <!-- <module name="RegexpOnFilename"/> invalid -->
+    <!-- <module name="RegexpSingleline"/> invalid -->
+    <!-- <module name="RegexpSinglelineJava"/> invalid -->
     <module name="NewlineAtEndOfFile"/>
     <module name="OrderedProperties"/>
     <module name="Translation"/>
     <module name="UniqueProperties"/>
     <module name="TreeWalker">
         <module name="SuppressWarningsHolder"/>
+        <module name="AbbreviationAsWordInName">
+            <property name="ignoreFinal" value="false"/>
+            <property name="allowedAbbreviationLength" value="0"/>
+            <property name="allowedAbbreviations" value="SSD,SQL"/>
+            <property name="tokens"
+                      value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF, PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF, PATTERN_VARIABLE_DEF, RECORD_DEF, RECORD_COMPONENT_DEF"/>
+        </module>
         <module name="AbstractClassName">
             <property name="ignoreName" value="true"/>
         </module>
+        <module name="AnnotatedDeclarationVisibility"/>
+        <module name="AnnotationLocation">
+            <property name="id" value="AnnotationLocationMostCases"/>
+            <property name="tokens"
+                      value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF,
+                      RECORD_DEF, COMPACT_CTOR_DEF"/>
+        </module>
+        <module name="AnnotationLocation">
+            <property name="id" value="AnnotationLocationVariables"/>
+            <property name="tokens" value="VARIABLE_DEF"/>
+            <property name="allowSamelineMultipleAnnotations" value="true"/>
+        </module>
+        <!--<module name="AnnotationOnSameLine"/> invalid -->
+        <module name="AnnotationUseStyle"/>
         <module name="AnonInnerLength"/>
+        <!-- <module name="ArrayBracketNoWhitespace"/> invalid -->
+        <module name="ArrayTypeStyle"/>
         <!--<module name="AvoidInlineConditionals"/> invalid -->
         <module name="AvoidNestedBlocks"/>
+        <module name="AvoidModuleImport"/>
         <module name="BooleanExpressionComplexity"/>
+        <module name="ConstructorsDeclarationGrouping"/>
         <module name="ClassDataAbstractionCoupling"/>
         <module name="ClassFanOutComplexity"/>
         <!-- <module name="ClassMemberImpliedModifier"/> invalid -->
@@ -51,23 +84,41 @@
         <module name="EqualsHashCode"/>
         <module name="ExecutableStatementCount"/>
         <module name="ExplicitInitialization"/>
+        <module name="ExpressionOverBlockLambda"/>
         <!-- <module name="FinalClass"/> invalid -->
         <module name="FinalLocalVariable"/>
         <module name="FinalParameters"/>
-        <!-- <module name="HiddenField"/> invalid -->
-        <!-- <module name="HideUtilityClassConstructor"/> invalid -->
+        <!-- <module name="GoogleMethodName"/> useless -->
+        <module name="GoogleNonConstantFieldName"/>
+        <module name="HexLiteralCase"/>
+        <!-- <module name="HiddenField"/> useless -->
+        <!-- <module name="HideUtilityClassConstructor"/> useless -->
+        <module name="IllegalBlockTag"/>
+        <module name="IllegalSymbol"/>
         <module name="IllegalCatch"/>
         <module name="IllegalIdentifierName"/>
         <module name="IllegalInstantiation"/>
         <module name="IllegalThrows"/>
         <module name="IllegalType"/>
+        <!-- <module name="ImportControl"/> not applicable -->
         <module name="InnerAssignment"/>
         <module name="InnerTypeLast"/>
         <module name="InterfaceIsType"/>
         <!-- <module name="InterfaceMemberImpliedModifier"/> invalid -->
+        <module name="InappropriateJavadocBlockTagsOnField"/>
+        <module name="InappropriateJavadocBlockTagsOnPackage"/>
+        <module name="InappropriateJavadocBlockTagsOnType"/>
         <module name="JavaNCSS"/>
+        <module name="JavadocEndCommentDelimiter"/>
+        <module name="JavadocLeadingAsteriskAlign"/>
+        <!-- <module name="JavadocLinkFirstOccurrence"/> useless -->
+        <module name="JavadocLinkWellKnownApi"/>
+        <module name="JavadocNoErrorInThrowsTag"/>
+        <!-- <module name="JavadocParamOrder"/> useless -->
+        <module name="JavadocRegexp"/>
+        <!-- <module name="JavadocThrowsOrder"/> useless -->
         <module name="LambdaBodyLength">
-            <property name="max" value="30"/>
+            <property name="max" value="35"/>
         </module>
         <module name="LocalFinalVariableName"/>
         <!-- <module name="MagicNumber"/> invalid -->
@@ -76,9 +127,14 @@
         <module name="MethodLength"/>
         <!-- <module name="MissingCtor"/> invalid -->
         <module name="MissingDeprecated"/>
+        <!-- <module name="MissingNullCaseInSwitch"/> invalid -->
         <module name="MissingOverride"/>
+        <module name="MissingOverrideOnRecordAccessor"/>
         <module name="ModifiedControlVariable"/>
+        <module name="ModuleDirectiveOrder"/>
+        <module name="ModuleImportOrder"/>
         <!-- <module name="MultipleStringLiterals"/> invalid -->
+        <module name="MultilineCommentLeadingAsteriskPresence"/>
         <module name="MutableException"/>
         <module name="NestedForDepth"/>
         <module name="NestedIfDepth"/>
@@ -86,6 +142,7 @@
         <module name="NoCodeInFile"/>
         <module name="NoWhitespaceAfter"/>
         <module name="NPathComplexity"/>
+        <module name="NumericalPrefixesInfixesSuffixesCharacterCase"/>
         <module name="OuterTypeFilename"/>
         <module name="OuterTypeNumber"/>
         <module name="PackageAnnotation"/>
@@ -95,6 +152,8 @@
             <property name="max" value="12"/>
             <property name="ignoreOverriddenMethods" value="true"/>
         </module>
+        <!-- <module name="PreferCodeOrSnippetJavadocInlineTag"/> invalid -->
+        <module name="PreferLiteralJavadocInlineTag"/>
         <module name="RecordComponentNumber"/>
         <module name="RequireThis"/>
         <module name="ReturnCount">
@@ -108,18 +167,32 @@
         <module name="SuperClone"/>
         <module name="SuperFinalize"/>
         <module name="SuppressWarnings"/>
+        <!-- <module name="TextBlockGoogleStyleFormatting"/> invalid -->
         <module name="ThrowsCount"/>
         <module name="TodoComment"/>
         <!-- <module name="TrailingComment"/> invalid -->
         <module name="TypecastParenPad"/>
-        <!-- <module name="UncommentedMain"/> invalid -->
+        <module name="TypeBodyPadding">
+            <property name="atEndOfBody" value="false"/>
+        </module>
+        <!-- <module name="UncommentedMain"/> useless -->
+        <module name="UnnecessaryFullyQualifiedType"/>
+        <module name="UnnecessaryNullCheckWithInstanceOf"/>
         <module name="UnnecessaryParentheses"/>
         <module name="UnnecessarySemicolonInEnumeration"/>
         <module name="UnnecessarySemicolonInTryWithResources"/>
         <module name="UnnecessarySemicolonAfterOuterTypeDeclaration"/>
         <module name="UnnecessarySemicolonAfterTypeMemberDeclaration"/>
+        <module name="UnnecessaryTypeArgumentsWithRecordPattern"/>
+        <!-- <module name="UnusedCatchParameterShouldBeUnnamed"/> invalid -->
+        <!-- <module name="UnusedLambdaParameterShouldBeUnnamed"/> invalid -->
+        <!-- <module name="UnusedTryResourceShouldBeUnnamed"> invalid -->
         <module name="UnusedLocalVariable"/>
+        <module name="UnusedPrivateField"/>
+        <module name="UseEnhancedSwitch"/>
         <!-- <module name="VisibilityModifier"/> invalid -->
+        <module name="WhenShouldBeUsed"/>
+        <module name="WhitespaceBeforeEmptyBody"/>
         <module name="IllegalToken"/>
         <module name="IllegalTokenText"/>
         <module name="AvoidEscapedUnicodeCharacters"/>
@@ -141,7 +214,7 @@
         </module>
         <module name="WhitespaceAfter"/>
         <module name="WhitespaceAround"/>
-        <module name="ArrayTrailingComma"/>
+        <!--<module name="ArrayTrailingComma"/> invalid due to NoArrayTrailingComma-->
         <module name="NoArrayTrailingComma"/>
         <module name="NoEnumTrailingComma"/>
         <module name="AvoidDoubleBraceInitialization"/>
@@ -149,7 +222,6 @@
         <module name="EmptyStatement"/>
         <module name="OneStatementPerLine"/>
         <module name="MultipleVariableDeclarations"/>
-        <module name="ArrayTypeStyle"/>
         <module name="MissingSwitchDefault"/>
         <module name="DefaultComesLast"/>
         <module name="FallThrough"/>
@@ -189,6 +261,7 @@
             <property name="tokens" value="METHOD_REF"/>
             <property name="option" value="nl"/>
         </module>
+        <module name="SealedShouldHavePermitsList"/>
         <module name="PackageName"/>
         <module name="TypeName"/>
         <module name="MemberName"/>
@@ -197,6 +270,7 @@
         <module name="CatchParameterName"/>
         <module name="LocalVariableName"/>
         <module name="PatternVariableName"/>
+        <module name="PatternVariableAssignment"/>
         <module name="ClassTypeParameterName"/>
         <module name="RecordComponentName"/>
         <module name="RecordTypeParameterName"/>
@@ -204,21 +278,7 @@
         <module name="InterfaceTypeParameterName"/>
         <module name="NoFinalizer"/>
         <module name="GenericWhitespace"/>
-        <module name="Indentation">
-            <property name="basicOffset" value="4"/>
-            <property name="braceAdjustment" value="4"/>
-            <property name="caseIndent" value="4"/>
-            <property name="throwsIndent" value="4"/>
-            <property name="lineWrappingIndentation" value="4"/>
-            <property name="arrayInitIndent" value="4"/>
-        </module>
-        <module name="AbbreviationAsWordInName">
-            <property name="ignoreFinal" value="false"/>
-            <property name="allowedAbbreviationLength" value="0"/>
-            <property name="allowedAbbreviations" value="SSD"/>
-            <property name="tokens"
-                      value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF, PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF, PATTERN_VARIABLE_DEF, RECORD_DEF, RECORD_COMPONENT_DEF"/>
-        </module>
+        <module name="Indentation"/>
         <!-- <module name="OverloadMethodsDeclarationOrder"/> invalid -->
         <module name="VariableDeclarationUsageDistance"/>
         <!-- <module name="ImportOrder"/> invalid -->
@@ -235,8 +295,10 @@
             <property name="regexp" value="true"/>
             <property name="illegalClasses"
                       value="^org\.springframework\.lang\.(NonNull|Nullable), ^org\.jetbrains\.annotations\.(NotNull|Nullable),
-                ^io\.micrometer\.core\.lang\.(NonNull|Nullable),
                 ^javax\.annotation\.(Nonnull|Nullable),
+                ^javax\.annotation\.concurrent\.Immutable,
+                ^javax\.annotation\.concurrent\.ThreadSafe,
+                ^io\.micrometer\.core\.lang\.(NonNull|Nullable),
                 ^org\.elasticsearch\.common\.Nullable, ^org\.apache\.thrift\.annotation\.Nullable,
                 ^org\.junit\.Test, ^org\.junit\.jupiter\.api\.Assertions, ^org\.junit\.Test, ^org\.junit\.jupiter\.api\.Assertions\..*,
                 ^org\.springframework\.boot\.test\.web\.client\.TestRestTemplate,^org\.springframework\.web\.client\.RestTemplate,^javax\.transaction\.Transactional,
@@ -249,6 +311,11 @@
             <property name="illegalClasses"
                       value="^java\.io\.BufferedInputStream"/>
         </module>
+        <module name="IllegalImport">
+            <property name="id" value="IllegalImportMockito"/>
+            <property name="illegalClasses" value="^org\.mockito\.Mockito$"/>
+            <property name="regexp" value="true"/>
+        </module>
         <module name="MethodParamPad"/>
         <module name="NoWhitespaceBefore"/>
         <module name="NoWhitespaceBeforeCaseDefaultColon"/>
@@ -256,19 +323,6 @@
         <module name="OperatorWrap">
             <property name="option" value="EOL"/>
         </module>
-        <module name="AnnotationLocation">
-            <property name="id" value="AnnotationLocationMostCases"/>
-            <property name="tokens"
-                      value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF,
-                      RECORD_DEF, COMPACT_CTOR_DEF"/>
-        </module>
-        <module name="AnnotationLocation">
-            <property name="id" value="AnnotationLocationVariables"/>
-            <property name="tokens" value="VARIABLE_DEF"/>
-            <property name="allowSamelineMultipleAnnotations" value="true"/>
-        </module>
-        <!--<module name="AnnotationOnSameLine"/> invalid -->
-        <module name="AnnotationUseStyle"/>
         <module name="NonEmptyAtclauseDescription"/>
         <module name="InvalidJavadocPosition"/>
         <module name="JavadocBlockTagLocation"/>
@@ -277,7 +331,6 @@
         <module name="JavadocMissingWhitespaceAfterAsterisk"/>
         <module name="JavadocTagContinuationIndentation"/>
         <!-- <module name="JavadocParagraph"/> invalid -->
-        <module name="JavadocStyle"/>
         <module name="SummaryJavadoc">
             <property name="forbiddenSummaryFragments"
                       value="^@return the *|^This method returns |^A [{]@code [a-zA-Z0-9]+[}]( is a )"/>
@@ -288,13 +341,12 @@
             <property name="target" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
         </module>
         <module name="JavadocMethod">
-            <property name="accessModifiers" value="public"/>
+            <property name="accessModifiers" value="public, protected"/>
             <property name="allowMissingParamTags" value="true"/>
             <property name="allowMissingReturnTag" value="true"/>
             <property name="allowedAnnotations" value="Override, Test"/>
-            <property name="tokens" value="METHOD_DEF, CTOR_DEF, ANNOTATION_FIELD_DEF, COMPACT_CTOR_DEF"/>
         </module>
-        <!-- <module name="MissingJavadocMethod"/> invalid -->
+        <!-- <module name="MissingJavadocMethod"/> invalid right now -->
         <module name="MissingJavadocPackage"/>
         <module name="JavadocType"/>
         <!-- <module name="JavadocVariable"/> invalid -->
@@ -304,7 +356,7 @@
         <module name="ConstantName"/>
         <module name="SingleLineJavadoc"/>
         <module name="EmptyCatchBlock">
-            <property name="exceptionVariableName" value="expected"/>
+            <property name="exceptionVariableName" value="expected|ignore"/>
         </module>
         <module name="CommentsIndentation">
             <property name="tokens" value="SINGLE_LINE_COMMENT, BLOCK_COMMENT_BEGIN"/>

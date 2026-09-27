@@ -11,12 +11,12 @@ import io.github.mfvanek.pg.index.health.demo.dto.MigrationError;
 import io.github.mfvanek.pg.index.health.demo.service.DbMigrationGeneratorService;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 class DbMigrationControllerMockTest extends BasePgIndexHealthDemoSpringBootTest {
 
@@ -26,7 +26,7 @@ class DbMigrationControllerMockTest extends BasePgIndexHealthDemoSpringBootTest 
     @Test
     void returnsMigrationErrorWhenKeysAfterAreNotEmpty() {
         final IllegalStateException illegalStateException = new IllegalStateException("There should be no foreign keys not covered by the index");
-        Mockito.when(dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked())
+        when(dbMigrationGeneratorService.generateMigrationsWithForeignKeysChecked())
             .thenThrow(illegalStateException);
 
         final MigrationError result = webTestClient

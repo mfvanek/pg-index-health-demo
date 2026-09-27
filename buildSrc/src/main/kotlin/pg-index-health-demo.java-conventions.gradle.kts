@@ -65,7 +65,7 @@ lombok {
 }
 
 checkstyle {
-    toolVersion = "13.8.0"
+    toolVersion = "14.1.0"
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     maxWarnings = 0
@@ -73,14 +73,14 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.26.0"
+    toolVersion = "7.27.0"
     isConsoleOutput = true
     ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
     ruleSets = listOf()
 }
 
 spotbugs {
-    toolVersion.set("4.10.3")
+    toolVersion.set("4.10.4")
     showProgress.set(true)
     effort.set(Effort.MAX)
     reportLevel.set(Confidence.LOW)
