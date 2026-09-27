@@ -38,6 +38,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.testcontainers:testcontainers")
     testImplementation("org.testcontainers:testcontainers-postgresql")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:6.4.0")
 
     // https://github.com/netty/netty/issues/11020
     if (osdetector.arch == "aarch_64") {

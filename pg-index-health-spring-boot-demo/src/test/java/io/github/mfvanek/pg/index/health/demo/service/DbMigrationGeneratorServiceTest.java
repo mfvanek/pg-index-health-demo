@@ -13,7 +13,6 @@ import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
@@ -23,6 +22,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(OutputCaptureExtension.class)
 class DbMigrationGeneratorServiceTest extends BasePgIndexHealthDemoSpringBootTest {
@@ -36,7 +36,7 @@ class DbMigrationGeneratorServiceTest extends BasePgIndexHealthDemoSpringBootTes
     @Test
     void throwsIllegalStateExceptionWhenEmptyMigrationString(final CapturedOutput output) {
         final List<ForeignKey> foreignKeys = dbMigrationGeneratorService.getForeignKeysFromDb();
-        Mockito.when(dbMigrationGenerator.generate(foreignKeys)).thenReturn(List.of());
+        when(dbMigrationGenerator.generate(foreignKeys)).thenReturn(List.of());
 
         assertThatThrownBy(dbMigrationGeneratorService::generateMigrationsWithForeignKeysChecked)
             .isInstanceOf(IllegalStateException.class)
@@ -47,7 +47,7 @@ class DbMigrationGeneratorServiceTest extends BasePgIndexHealthDemoSpringBootTes
     @Test
     void logsAboutSqlExceptionWhenBadMigrationStringAndThrowsExceptionAfter(final CapturedOutput output) {
         final List<ForeignKey> foreignKeys = dbMigrationGeneratorService.getForeignKeysFromDb();
-        Mockito.when(dbMigrationGenerator.generate(foreignKeys)).thenReturn(List.of("select * from payments"));
+        when(dbMigrationGenerator.generate(foreignKeys)).thenReturn(List.of("select * from payments"));
 
         assertThatThrownBy(dbMigrationGeneratorService::generateMigrationsWithForeignKeysChecked)
             .isInstanceOf(IllegalStateException.class)

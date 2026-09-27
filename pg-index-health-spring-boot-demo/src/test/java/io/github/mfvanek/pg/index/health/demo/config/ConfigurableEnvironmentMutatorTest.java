@@ -8,17 +8,19 @@
 package io.github.mfvanek.pg.index.health.demo.config;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.core.env.Environment;
 import org.springframework.mock.env.MockEnvironment;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import static io.github.mfvanek.pg.index.health.demo.config.ConfigurableEnvironmentMutator.DATASOURCE_URL_PROP_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ConfigurableEnvironmentMutatorTest {
 
-    private final PostgreSQLContainer postgreSqlContainer = Mockito.mock(PostgreSQLContainer.class);
+    private final PostgreSQLContainer postgreSqlContainer = mock(PostgreSQLContainer.class);
 
     @Test
     void shouldNotAddPropIfExist() {
@@ -32,8 +34,8 @@ class ConfigurableEnvironmentMutatorTest {
 
     @Test
     void shouldNotAddPropIfInvalidType() {
-        final Environment environment = Mockito.mock(Environment.class);
-        Mockito.when(environment.getProperty(Mockito.anyString())).thenReturn(null);
+        final Environment environment = mock(Environment.class);
+        when(environment.getProperty(anyString())).thenReturn(null);
 
         assertThat(ConfigurableEnvironmentMutator.addDatasourceUrlIfNeed(postgreSqlContainer, environment))
             .isFalse();
@@ -42,7 +44,7 @@ class ConfigurableEnvironmentMutatorTest {
     @Test
     void shouldAddProperty() {
         final MockEnvironment environment = new MockEnvironment();
-        Mockito.when(postgreSqlContainer.getJdbcUrl()).thenReturn("added_url");
+        when(postgreSqlContainer.getJdbcUrl()).thenReturn("added_url");
 
         assertThat(ConfigurableEnvironmentMutator.addDatasourceUrlIfNeed(postgreSqlContainer, environment))
             .isTrue();

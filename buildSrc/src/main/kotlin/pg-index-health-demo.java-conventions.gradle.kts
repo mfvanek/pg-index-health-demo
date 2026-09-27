@@ -26,9 +26,9 @@ plugins {
 dependencies {
     errorprone("com.google.errorprone:error_prone_core:2.50.0")
     errorprone("jp.skypencil.errorprone.slf4j:errorprone-slf4j:0.1.29")
-    errorprone("com.uber.nullaway:nullaway:0.13.8")
+    errorprone("com.uber.nullaway:nullaway:0.14.2")
 
-    spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.18")
+    spotbugsSlf4j("org.slf4j:slf4j-simple:2.0.20")
     spotbugsPlugins("jp.skypencil.findbugs.slf4j:bug-pattern:1.5.0")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
     spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.7.4")
@@ -61,11 +61,11 @@ tasks {
 }
 
 lombok {
-    version = "1.18.46"
+    version = "1.18.48"
 }
 
 checkstyle {
-    toolVersion = "13.8.0"
+    toolVersion = "14.3.0"
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     isIgnoreFailures = false
     maxWarnings = 0
@@ -73,14 +73,14 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "7.26.0"
+    toolVersion = "7.28.0"
     isConsoleOutput = true
     ruleSetFiles = files("${rootDir}/config/pmd/pmd.xml")
     ruleSets = listOf()
 }
 
 spotbugs {
-    toolVersion.set("4.10.3")
+    toolVersion.set("4.10.4")
     showProgress.set(true)
     effort.set(Effort.MAX)
     reportLevel.set(Confidence.LOW)

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
@@ -41,7 +41,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun getLastStatsResetTimestampShouldReturnCorrectValue() {
         val expectedTimestamp = OffsetDateTime.now(clock.zone)
-        `when`(databaseManagement.lastStatsResetTimestamp)
+        whenever(databaseManagement.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
         val result = statisticsCollectorService.getLastStatsResetTimestamp()
@@ -50,7 +50,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun getLastStatsResetTimestampShouldReturnMinWhenNotAvailable() {
-        `when`(databaseManagement.lastStatsResetTimestamp)
+        whenever(databaseManagement.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.empty())
 
         val result = statisticsCollectorService.getLastStatsResetTimestamp()
@@ -60,7 +60,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun getLastStatsResetTimestampShouldReturnCorrectValueAndLogTraceMessage(capturedOutput: CapturedOutput) {
         val expectedTimestamp = OffsetDateTime.now(clock.zone)
-        `when`(databaseManagement.lastStatsResetTimestamp)
+        whenever(databaseManagement.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
         val result = statisticsCollectorService.getLastStatsResetTimestamp()
@@ -72,11 +72,11 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun resetStatisticsShouldCallWaitForStatisticsCollector() {
         val expectedTimestamp = OffsetDateTime.now(clock.zone)
-        `when`(databaseManagement.resetStatistics()).thenReturn(true)
-        `when`(databaseManagement.lastStatsResetTimestamp)
+        whenever(databaseManagement.resetStatistics()).thenReturn(true)
+        whenever(databaseManagement.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
-        `when`(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
+        whenever(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
 
         statisticsCollectorService.resetStatistics()
 
@@ -86,8 +86,8 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun resetStatisticsShouldReturnTimestampWhenSuccessful() {
         val expectedTimestamp = OffsetDateTime.now(clock.zone)
-        `when`(databaseManagement.resetStatistics()).thenReturn(true)
-        `when`(databaseManagement.lastStatsResetTimestamp)
+        whenever(databaseManagement.resetStatistics()).thenReturn(true)
+        whenever(databaseManagement.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
         val result = statisticsCollectorService.resetStatistics()
@@ -97,7 +97,7 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
 
     @Test
     fun resetStatisticsShouldThrowExceptionWhenFailed() {
-        `when`(databaseManagement.resetStatistics()).thenReturn(false)
+        whenever(databaseManagement.resetStatistics()).thenReturn(false)
 
         assertThatThrownBy { statisticsCollectorService.resetStatistics() }
             .isInstanceOf(StatisticsResetException::class.java)
@@ -107,8 +107,8 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun resetStatisticsShouldCallJdbcTemplateExecute() {
         val expectedTimestamp = OffsetDateTime.now(clock.zone)
-        `when`(databaseManagement.resetStatistics()).thenReturn(true)
-        `when`(databaseManagement.lastStatsResetTimestamp)
+        whenever(databaseManagement.resetStatistics()).thenReturn(true)
+        whenever(databaseManagement.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
         statisticsCollectorService.resetStatistics()
@@ -119,14 +119,14 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun resetStatisticsShouldTakeSomeTimeDueToWaitingForVacuumAnalyze() {
         val expectedTimestamp = OffsetDateTime.now(clock.zone)
-        `when`(databaseManagement.resetStatistics()).thenReturn(true)
-        `when`(databaseManagement.lastStatsResetTimestamp)
+        whenever(databaseManagement.resetStatistics()).thenReturn(true)
+        whenever(databaseManagement.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
-        `when`(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
+        whenever(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
 
         // Mock the query that checks for active vacuum operations to return 1 first (active), then 0 (completed)
-        `when`(
+        whenever(
             jdbcTemplate.queryForObject(
                 "select count(*) from pg_stat_progress_vacuum where datname = current_database()",
                 Int::class.java
@@ -146,14 +146,14 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun resetStatisticsShouldHandleMaxAttemptsReached() {
         val expectedTimestamp = OffsetDateTime.now(clock.zone)
-        `when`(databaseManagement.resetStatistics()).thenReturn(true)
-        `when`(databaseManagement.lastStatsResetTimestamp)
+        whenever(databaseManagement.resetStatistics()).thenReturn(true)
+        whenever(databaseManagement.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
-        `when`(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
+        whenever(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
 
         // Mock the query to always return 1 (active vacuum), forcing max attempts to be reached
-        `when`(
+        whenever(
             jdbcTemplate.queryForObject(
                 "select count(*) from pg_stat_progress_vacuum where datname = current_database()",
                 Int::class.java
@@ -172,14 +172,14 @@ class StatisticsCollectorServiceTest : BasePgIndexHealthDemoSpringBootTest() {
     @Test
     fun resetStatisticsShouldHandleNullQueryResult() {
         val expectedTimestamp = OffsetDateTime.now(clock.zone)
-        `when`(databaseManagement.resetStatistics()).thenReturn(true)
-        `when`(databaseManagement.lastStatsResetTimestamp)
+        whenever(databaseManagement.resetStatistics()).thenReturn(true)
+        whenever(databaseManagement.lastStatsResetTimestamp)
             .thenReturn(java.util.Optional.of(expectedTimestamp))
 
-        `when`(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
+        whenever(jdbcTemplate.execute("vacuum analyze;")).thenAnswer { _ -> }
 
         // Mock the query to return null first, then 0 (completed)
-        `when`(
+        whenever(
             jdbcTemplate.queryForObject(
                 "select count(*) from pg_stat_progress_vacuum where datname = current_database()",
                 Int::class.java

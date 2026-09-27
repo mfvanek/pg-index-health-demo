@@ -11,12 +11,12 @@ import io.github.mfvanek.pg.health.checks.management.DatabaseManagement;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 class DbStatisticsControllerMockTest extends BasePgIndexHealthDemoSpringBootTest {
 
@@ -26,7 +26,7 @@ class DbStatisticsControllerMockTest extends BasePgIndexHealthDemoSpringBootTest
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
     void shouldReturnErrorWhenResetStatisticsUnsuccessful(final boolean wait) {
-        Mockito.when(databaseManagement.resetStatistics())
+        when(databaseManagement.resetStatistics())
             .thenReturn(Boolean.FALSE);
         final Object result = webTestClient.post()
             .uri(uriBuilder -> uriBuilder

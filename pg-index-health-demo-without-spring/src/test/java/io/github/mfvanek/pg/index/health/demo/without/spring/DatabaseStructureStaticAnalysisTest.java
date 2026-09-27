@@ -72,6 +72,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
         this.checks = List.copyOf(all);
     }
 
+    @SuppressWarnings("PMD.CheckResultSet")
     @Test
     @DisplayName("Always check PostgreSQL version in your tests")
     void checkPostgresVersion() throws SQLException {
