@@ -6,10 +6,9 @@
     <description>PMD configuration</description>
 
     <rule ref="category/java/bestpractices.xml">
-        <exclude name="UnitTestContainsTooManyAsserts"/>
-        <exclude name="UnitTestAssertionsShouldIncludeMessage"/>
-        <exclude name="GuardLogStatement"/>
-        <exclude name="CheckResultSet"/> <!-- false positive. broken since v.7.0.0 -->
+        <exclude name="UnitTestContainsTooManyAsserts"/> <!-- useless -->
+        <exclude name="GuardLogStatement"/> <!-- useless -->
+        <exclude name="ImplicitFunctionalInterface"/> <!-- useless -->
     </rule>
 
     <rule ref="category/java/bestpractices.xml/AbstractClassWithoutAbstractMethod">
@@ -25,11 +24,14 @@
     </rule>
 
     <rule ref="category/java/codestyle.xml">
-        <exclude name="OnlyOneReturn"/>
-        <exclude name="AtLeastOneConstructor"/>
-        <exclude name="CommentDefaultAccessModifier"/>
-        <exclude name="LongVariable"/>
-        <exclude name="CallSuperInConstructor"/>
+        <exclude name="OnlyOneReturn"/> <!-- useless -->
+        <exclude name="AtLeastOneConstructor"/> <!-- useless -->
+        <exclude name="CommentDefaultAccessModifier"/> <!-- useless -->
+        <exclude name="LongVariable"/> <!-- useless -->
+        <exclude name="ShortVariable"/> <!-- useless -->
+        <exclude name="CallSuperInConstructor"/> <!-- useless -->
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract"/> <!-- useless -->
+        <exclude name="UnnecessaryConstructor"/> <!-- useless -->
     </rule>
 
     <rule ref="category/java/codestyle.xml/ClassNamingConventions">
@@ -54,17 +56,23 @@
 
     <rule ref="category/java/codestyle.xml/FieldNamingConventions">
         <properties>
-            <property name="exclusions" value="serialVersionUID|logger"/>
+            <property name="exclusions" value="serialVersionUID, logger"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/TooManyStaticImports">
+        <properties>
+            <property name="maximumStaticImports" value="8" />
         </properties>
     </rule>
 
     <rule ref="category/java/design.xml">
-        <exclude name="LawOfDemeter"/>
-        <exclude name="LoosePackageCoupling"/>
-        <exclude name="AvoidCatchingGenericException"/>
-        <exclude name="UseUtilityClass"/>
-        <exclude name="ExcessiveImports"/>
-        <exclude name="CouplingBetweenObjects"/>
+        <exclude name="LawOfDemeter"/> <!-- useless -->
+        <exclude name="LoosePackageCoupling"/> <!-- useless -->
+        <exclude name="DataClass"/> <!-- useless -->
+        <exclude name="TooManyMethods"/> <!-- useless -->
+        <exclude name="ExcessiveImports"/> <!-- useless -->
+        <exclude name="CouplingBetweenObjects"/> <!-- useless -->
     </rule>
 
     <rule ref="category/java/design.xml/TooManyFields">
@@ -73,19 +81,33 @@
         </properties>
     </rule>
 
+    <rule ref="category/java/design.xml/SimplifyBooleanReturns">
+        <properties>
+            <property name="violationSuppressXPath" value="./ancestor::*[@Name = 'equals'] | ./ancestor::*[@Name = 'hashCode'] | ./ancestor::*[@Name = 'test']"/>
+        </properties>
+    </rule>
+
     <rule ref="category/java/documentation.xml">
-        <exclude name="CommentRequired"/>
-        <exclude name="CommentSize"/>
+        <exclude name="CommentRequired"/> <!-- useless -->
+        <exclude name="CommentSize"/> <!-- useless -->
+        <exclude name="UncommentedEmptyConstructor"/> <!-- useless -->
     </rule>
 
     <rule ref="category/java/multithreading.xml">
-        <exclude name="UseConcurrentHashMap"/>
-        <exclude name="DoNotUseThreads"/> <!-- false positive. broken since v.7.0.0 -->
+        <exclude name="UseConcurrentHashMap"/> <!-- useless -->
+        <exclude name="DoNotUseThreads"/> <!-- useless -->
     </rule>
 
     <rule ref="category/java/performance.xml"/>
 
     <rule ref="category/java/security.xml"/>
 
-    <rule ref="category/java/errorprone.xml"/>
+    <rule ref="category/java/errorprone.xml">
+        <exclude name="AvoidLiteralsInIfCondition"/> <!-- useless -->
+        <exclude name="EqualsNull"/> <!-- useless -->
+        <exclude name="AvoidDuplicateLiterals"/> <!-- useless -->
+        <exclude name="NullAssignment"/> <!-- useless -->
+        <exclude name="ConstructorCallsOverridableMethod"/> <!-- useless -->
+        <exclude name="AvoidCatchingGenericException"/> <!-- useless -->
+    </rule>
 </ruleset>
