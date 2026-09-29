@@ -15,7 +15,7 @@ dependencies {
     implementation("info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.19.0")
     implementation("org.gradle:test-retry-gradle-plugin:1.6.4")
 
-    implementation("io.freefair.gradle:lombok-plugin:9.5.0")
+    implementation("io.freefair.gradle:lombok-plugin:9.7.0")
     implementation("de.thetaphi:forbiddenapis:3.11")
     val kotlinVersion = "2.4.10"
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
