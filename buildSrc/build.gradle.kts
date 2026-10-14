@@ -17,7 +17,7 @@ dependencies {
 
     implementation("io.freefair.gradle:lombok-plugin:9.5.0")
     implementation("de.thetaphi:forbiddenapis:3.11")
-    val kotlinVersion = "2.4.10"
+    val kotlinVersion = "2.4.21"
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     implementation("org.jetbrains.kotlin.plugin.spring:org.jetbrains.kotlin.plugin.spring.gradle.plugin:$kotlinVersion")
     implementation(libs.detekt)
