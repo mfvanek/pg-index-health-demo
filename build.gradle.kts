@@ -4,7 +4,7 @@ plugins {
     id("java")
     id("org.sonarqube")
     id("jacoco-report-aggregation")
-    id("io.github.ben-manes.versions") version "0.64.0"
+    id("io.github.ben-manes.versions") version "0.66.0"
 }
 
 allprojects {
