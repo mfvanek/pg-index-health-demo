@@ -10,10 +10,11 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.utils
 import io.github.mfvanek.pg.index.health.demo.kotlin.checks.custom.CustomChecksConfig
 import org.junit.jupiter.api.BeforeAll
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.security.SecurityProperties
+import org.springframework.boot.security.autoconfigure.SecurityProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalManagementPort
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
 import org.springframework.http.HttpHeaders
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.ActiveProfiles
@@ -27,6 +28,7 @@ import java.time.Clock
     classes = [CustomChecksConfig::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+@AutoConfigureWebTestClient
 @ActiveProfiles("test")
 @Suppress("UnnecessaryAbstractClass", "AbstractClassCanBeConcreteClass")
 abstract class BasePgIndexHealthDemoSpringBootTest {

@@ -7,12 +7,13 @@
 
 package io.github.mfvanek.pg.index.health.demo.config;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,9 +24,9 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
     private ObjectMapper objectMapper;
 
     @Test
-    void deserializeShouldWork() throws JsonProcessingException {
-        assertThat(objectMapper.getRegisteredModuleIds())
-            .hasSizeGreaterThan(1)
+    void deserializeShouldWork() {
+        assertThat(objectMapper.registeredModules())
+            .extracting(JacksonModule::getModuleName)
             .contains("PgIndexHealthModelModule");
 
         final ForeignKey original = ForeignKey.ofNotNullColumn("users", "fk_user_role", "role_id");
@@ -45,7 +46,7 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
             {"columns":[{"tableName":"users","columnName":"role_id","notNull":true}]}""";
 
         assertThatThrownBy(() -> objectMapper.readValue(json, ForeignKey.class))
-            .isInstanceOf(JsonProcessingException.class)
+            .isInstanceOf(JacksonException.class)
             .hasMessageStartingWith("Missing required field: constraint");
     }
 

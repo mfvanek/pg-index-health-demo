@@ -32,7 +32,7 @@ class DbMigrationControllerTest : BasePgIndexHealthDemoSpringBootTest() {
             .headers { httpHeaders: HttpHeaders? -> this.setUpBasicAuth(httpHeaders!!) }
             .exchange()
             .expectStatus().isOk()
-            .expectBody<ForeignKeyMigrationResponse?>(ForeignKeyMigrationResponse::class.java)
+            .expectBody(ForeignKeyMigrationResponse::class.java)
             .returnResult()
             .getResponseBody()
 

@@ -15,8 +15,8 @@ The project has three demo modules that all share the same Liquibase migrations 
 
 - **`db-migrations`** — shared Liquibase SQL migrations applied by all other modules
 - **`pg-index-health-demo-without-spring`** — plain Java, no Spring; uses Apache DBCP2 and Testcontainers directly
-- **`pg-index-health-spring-boot-demo`** — Spring Boot 3 + Java; full REST API with actuator, security, OpenAPI
-- **`pg-index-health-spring-boot-kotlin-demo`** — Spring Boot 3 + Kotlin; feature-parity with the Java Spring Boot demo
+- **`pg-index-health-spring-boot-demo`** — Spring Boot 4 + Java; full REST API with actuator, security, OpenAPI
+- **`pg-index-health-spring-boot-kotlin-demo`** — Spring Boot 4 + Kotlin; feature-parity with the Java Spring Boot demo
 
 ## Build Commands
 

@@ -7,8 +7,8 @@
 
 package io.github.mfvanek.pg.index.health.demo.config;
 
-import io.github.mfvanek.pg.model.jackson2.PgIndexHealthModelModule;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import io.github.mfvanek.pg.model.jackson3.PgIndexHealthModelModule;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class JacksonConfig {
 
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer customizer() {
-        return builder -> builder.modulesToInstall(new PgIndexHealthModelModule());
+    public JsonMapperBuilderCustomizer customizer() {
+        return builder -> builder.addModule(new PgIndexHealthModelModule());
     }
 }
