@@ -4,13 +4,13 @@ plugins {
     id("pg-index-health-demo.java-conventions")
     id("pg-index-health-demo.forbidden-apis")
     id("pg-index-health-demo.pitest")
-    alias(libs.plugins.spring.boot.v3)
+    alias(libs.plugins.spring.boot.v4)
     alias(libs.plugins.osdetector)
 }
 
 dependencies {
     implementation(project(":db-migrations"))
-    implementation(platform(libs.spring.boot.v3.dependencies))
+    implementation(platform(libs.spring.boot.v4.dependencies))
     implementation(platform(libs.springdoc.openapi.bom))
 
     implementation(libs.commons.lang3)
@@ -18,24 +18,25 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-liquibase")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
     implementation("org.testcontainers:testcontainers")
     implementation("org.testcontainers:testcontainers-postgresql")
     implementation("io.github.mfvanek:pg-index-health")
     implementation("io.github.mfvanek:pg-index-health-logger")
     implementation("io.github.mfvanek:pg-index-health-generator")
-    implementation("io.github.mfvanek:pg-index-health-model-jackson2-module")
-    implementation(libs.liquibase.core)
+    implementation("io.github.mfvanek:pg-index-health-model-jackson3-module")
     implementation(libs.liquibase.sessionlock)
 
-    annotationProcessor(platform(libs.spring.boot.v3.dependencies))
+    annotationProcessor(platform(libs.spring.boot.v4.dependencies))
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webflux")
+    testImplementation("org.springframework.boot:spring-boot-webtestclient")
     testImplementation("io.github.mfvanek:pg-index-health-test-starter")
     testImplementation("org.apache.httpcomponents.client5:httpclient5")
 

@@ -26,7 +26,7 @@ cd pg-index-health-demo
 |-------------------------------------------|----------|------------------------------------------------------|
 | `db-migrations`                           | SQL      | Shared Liquibase migrations used by all demo modules |
 | `pg-index-health-demo-without-spring`     | Java     | Standalone demo, no Spring                           |
-| `pg-index-health-spring-boot-demo`        | Java     | Spring Boot 3 REST API demo                          |
+| `pg-index-health-spring-boot-demo`        | Java     | Spring Boot 4 REST API demo                          |
 | `pg-index-health-spring-boot-kotlin-demo` | Kotlin   | Kotlin equivalent of the Spring Boot demo            |
 
 ## Making Changes

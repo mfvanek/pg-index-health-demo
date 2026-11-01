@@ -38,7 +38,7 @@ class ActuatorEndpointTest extends BasePgIndexHealthDemoSpringBootTest {
     @ParameterizedTest
     @CsvSource(value = {
         "prometheus|jvm_threads_live_threads|text/plain",
-        "health|{\"status\":\"UP\",\"groups\":[\"liveness\",\"readiness\"]}|application/json",
+        "health|{\"groups\":[\"liveness\",\"readiness\"],\"status\":\"UP\"}|application/json",
         "health/liveness|{\"status\":\"UP\"}|application/json",
         "health/readiness|{\"status\":\"UP\"}|application/json",
         "liquibase|{\"contexts\":{\"pg-index-health-spring-boot-demo\":{\"liquibaseBeans\":{\"liquibase\":{\"changeSets\"|application/json",
