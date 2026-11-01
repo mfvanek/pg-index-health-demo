@@ -29,6 +29,7 @@ tasks {
     test {
         useJUnitPlatform()
         maxParallelForks = 1
+        systemProperty("user.language", "en")
         finalizedBy(jacocoTestReport, jacocoTestCoverageVerification)
 
         retry {

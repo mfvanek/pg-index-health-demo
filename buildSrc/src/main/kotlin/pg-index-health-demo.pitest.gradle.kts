@@ -23,6 +23,7 @@ pitest {
     junit5PluginVersion = "1.2.3"
     pitestVersion = "1.30.0"
     threads = 4
+    jvmArgs.add("-Duser.language=en")
     if (System.getenv("STRYKER_DASHBOARD_API_KEY") != null) {
         outputFormats.set(setOf("stryker-dashboard"))
     } else {
