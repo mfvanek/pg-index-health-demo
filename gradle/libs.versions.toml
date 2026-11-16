@@ -12,7 +12,7 @@ commons-lang3 = "org.apache.commons:commons-lang3:3.21.0"
 liquibase-core = "org.liquibase:liquibase-core:5.0.4"
 liquibase-sessionlock = "com.github.blagerweij:liquibase-sessionlock:1.6.9"
 netty-all = "io.netty:netty-all:4.2.20.Final"
-kotlin-logging = "io.github.oshai:kotlin-logging-jvm:8.0.4"
+kotlin-logging = "io.github.oshai:kotlin-logging-jvm:8.0.7"
 
 [plugins]
 spring-boot-v4 = { id = "org.springframework.boot", version.ref = "spring-boot-v4" }
