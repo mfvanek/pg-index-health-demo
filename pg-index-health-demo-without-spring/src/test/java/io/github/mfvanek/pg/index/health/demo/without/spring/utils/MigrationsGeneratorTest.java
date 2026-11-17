@@ -35,7 +35,7 @@ class MigrationsGeneratorTest extends DatabaseAwareTestBase {
     void generateMigrationsShouldWork() {
         final List<ForeignKey> foreignKeys = MigrationsGenerator.getForeignKeysNotCoveredWithIndex(getConnectionFactory(), getConnectionCredentials());
         assertThat(foreignKeys)
-            .hasSize(5);
+            .hasSize(6);
         MigrationsGenerator.generateMigrations(getDataSource(), foreignKeys);
         assertThat(MigrationsGenerator.getForeignKeysNotCoveredWithIndex(getConnectionFactory(), getConnectionCredentials()))
             .isEmpty();

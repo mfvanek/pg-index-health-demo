@@ -13,6 +13,7 @@ import io.github.mfvanek.pg.connection.factory.HighAvailabilityPgConnectionFacto
 import io.github.mfvanek.pg.generator.DbMigrationGenerator;
 import io.github.mfvanek.pg.generator.ForeignKeyMigrationGenerator;
 import io.github.mfvanek.pg.generator.GeneratingOptions;
+import io.github.mfvanek.pg.generator.IdxPosition;
 import io.github.mfvanek.pg.health.checks.cluster.ForeignKeysNotCoveredWithIndexCheckOnCluster;
 import io.github.mfvanek.pg.health.checks.common.DatabaseCheckOnCluster;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
@@ -41,7 +42,12 @@ public class MigrationsGenerator {
     @SuppressWarnings("StringSplitter")
     @SneakyThrows
     public static void generateMigrations(final DataSource dataSource, final List<ForeignKey> foreignKeys) {
-        final DbMigrationGenerator<ForeignKey> generator = new ForeignKeyMigrationGenerator(GeneratingOptions.builder().build());
+        // Partial indexes do not cover foreign keys, so include nulls.
+        // Use the idx_ prefix to avoid clashing with indexes auto-named by PostgreSQL.
+        final DbMigrationGenerator<ForeignKey> generator = new ForeignKeyMigrationGenerator(GeneratingOptions.builder()
+            .includeNulls()
+            .withIdxPosition(IdxPosition.PREFIX)
+            .build());
         final List<String> generatedMigrations = generator.generate(foreignKeys);
         log.info("Generated migrations: {}", generatedMigrations);
         try (Connection connection = dataSource.getConnection()) {

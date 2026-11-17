@@ -47,7 +47,7 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
             "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_with_missing_indexes\t0",
             "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_without_primary_key\t1",
             "2000-01-01T00:00:00Z\tdb_indexes_health\tduplicated_indexes\t2",
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tforeign_keys_without_index\t5",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tforeign_keys_without_index\t6",
             "2000-01-01T00:00:00Z\tdb_indexes_health\tbloated_indexes\t0",
             "2000-01-01T00:00:00Z\tdb_indexes_health\tindexes_with_null_values\t1",
             "2000-01-01T00:00:00Z\tdb_indexes_health\tintersected_indexes\t3",
@@ -89,7 +89,9 @@ class HealthDataCollectorTest extends DatabaseAwareTestBase {
             "2000-01-01T00:00:00Z\tdb_indexes_health\ttables_with_incrementing_columns\t0",
             "2000-01-01T00:00:00Z\tdb_indexes_health\tcolumns_with_inconsistent_types\t0",
             "2000-01-01T00:00:00Z\tdb_indexes_health\tunlogged_tables\t0",
-            "2000-01-01T00:00:00Z\tdb_indexes_health\tunlogged_sequences\t0");
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tunlogged_sequences\t0",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tcolumns_with_enum_type\t0",
+            "2000-01-01T00:00:00Z\tdb_indexes_health\tcyclic_foreign_keys\t0");
         final List<String> healthData = HealthDataCollector.collectHealthData(getConnectionFactory(), getConnectionCredentials());
         assertThat(healthData)
             .hasSameSizeAs(Diagnostic.values())

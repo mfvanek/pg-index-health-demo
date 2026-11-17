@@ -127,7 +127,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
 
                     "FOREIGN_KEYS_WITHOUT_INDEX" ->
                         checksAssert
-                            .hasSize(5)
+                            .hasSize(6)
                             // HOW TO FIX: create indexes on columns under foreign key constraint
                             .containsExactly(
                                 ForeignKey.ofNotNullColumn(
@@ -149,6 +149,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                     "warehouse_id"
                                 ),
                                 ForeignKey.ofNotNullColumn(ctx, ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
+                                ForeignKey.ofNullableColumn(ctx, ORDERS_TABLE, "orders_courier_id_fkey", "courier_id"),
                                 ForeignKey.ofNullableColumn(ctx, "payment", "payment_order_id_fkey", ORDER_ID_COLUMN)
                             )
 
