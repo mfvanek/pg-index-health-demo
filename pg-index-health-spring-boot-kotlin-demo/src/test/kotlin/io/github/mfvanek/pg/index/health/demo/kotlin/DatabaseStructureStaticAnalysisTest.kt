@@ -54,7 +54,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
     fun checkPostgresVersion() {
         val pgVersion: String? = jdbcTemplate.queryForObject("select version();", String::class.java)
         assertThat(pgVersion)
-            .startsWith("PostgreSQL 18.0")
+            .startsWith("PostgreSQL 18.7")
     }
 
     @Test
@@ -133,13 +133,13 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                 ForeignKey.ofNotNullColumn(
                                     ctx,
                                     ORDER_ITEM_TABLE,
-                                    "order_item_order_id_fkey",
+                                    "order_item_order_id_fk_duplicate",
                                     ORDER_ID_COLUMN
                                 ),
                                 ForeignKey.ofNotNullColumn(
                                     ctx,
                                     ORDER_ITEM_TABLE,
-                                    "order_item_order_id_fk_duplicate",
+                                    "order_item_order_id_fkey",
                                     ORDER_ID_COLUMN
                                 ),
                                 ForeignKey.ofNotNullColumn(

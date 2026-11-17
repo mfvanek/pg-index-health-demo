@@ -81,7 +81,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
             try (ResultSet resultSet = statement.executeQuery("select version();")) {
                 resultSet.next();
                 final String pgVersion = resultSet.getString(1);
-                assertThat(pgVersion).startsWith("PostgreSQL 18.0");
+                assertThat(pgVersion).startsWith("PostgreSQL 18.7");
             }
         }
     }
@@ -161,8 +161,8 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                         .hasSize(5)
                         // HOW TO FIX: create indexes on columns under foreign key constraint
                         .containsExactly(
-                            ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN),
                             ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_order_id_fk_duplicate", ORDER_ID_COLUMN),
+                            ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN),
                             ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_warehouse_id_fk", "warehouse_id"),
                             ForeignKey.ofNotNullColumn(ctx, ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
                             ForeignKey.ofNullableColumn(ctx, "payment", "payment_order_id_fkey", ORDER_ID_COLUMN));
