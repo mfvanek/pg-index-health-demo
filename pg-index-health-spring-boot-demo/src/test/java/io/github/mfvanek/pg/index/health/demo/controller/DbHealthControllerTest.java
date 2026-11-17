@@ -35,7 +35,7 @@ class DbHealthControllerTest extends BasePgIndexHealthDemoSpringBootTest {
                 "tables_with_missing_indexes:0",
                 "tables_without_primary_key:1",
                 "duplicated_indexes:2",
-                "foreign_keys_without_index:6",
+                "foreign_keys_without_index:5",
                 "bloated_indexes:0",
                 "indexes_with_null_values:1",
                 "intersected_indexes:3",

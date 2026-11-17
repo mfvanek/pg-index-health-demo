@@ -158,14 +158,13 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
 
                     case "FOREIGN_KEYS_WITHOUT_INDEX" -> checksAssert
                         .asInstanceOf(list(ForeignKey.class))
-                        .hasSize(6)
+                        .hasSize(5)
                         // HOW TO FIX: create indexes on columns under foreign key constraint
                         .containsExactly(
-                            ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN),
                             ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_order_id_fk_duplicate", ORDER_ID_COLUMN),
+                            ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_order_id_fkey", ORDER_ID_COLUMN),
                             ForeignKey.ofNotNullColumn(ctx, ORDER_ITEM_TABLE, "order_item_warehouse_id_fk", "warehouse_id"),
                             ForeignKey.ofNotNullColumn(ctx, ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
-                            ForeignKey.ofNullableColumn(ctx, ORDERS_TABLE, "orders_courier_id_fkey", "courier_id"),
                             ForeignKey.ofNullableColumn(ctx, "payment", "payment_order_id_fkey", ORDER_ID_COLUMN));
 
                     case "TABLES_WITHOUT_PRIMARY_KEY" -> checksAssert
