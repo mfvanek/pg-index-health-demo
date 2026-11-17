@@ -54,7 +54,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
     fun checkPostgresVersion() {
         val pgVersion: String? = jdbcTemplate.queryForObject("select version();", String::class.java)
         assertThat(pgVersion)
-            .startsWith("PostgreSQL 18.0")
+            .startsWith("PostgreSQL 18.7")
     }
 
     @Test
