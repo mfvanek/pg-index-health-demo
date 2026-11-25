@@ -202,7 +202,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                         .asInstanceOf(list(IndexWithColumns.class))
                         .hasSize(1)
                         .containsExactly(
-                            IndexWithColumns.of(ctx, ORDER_ITEM_TABLE, "order_item_categories_idx", 8_192L, Column.ofNullable(ctx, ORDER_ITEM_TABLE, "categories", "text[]"))
+                            IndexWithColumns.of(ctx, ORDER_ITEM_TABLE, "order_item_categories_idx", 8_192L, Column.ofNullable(ctx, ORDER_ITEM_TABLE, "categories", PgColumnType.TEXT.getArrayType()))
                         );
 
                     case "SEQUENCE_OVERFLOW" -> checksAssert
@@ -297,7 +297,7 @@ class DatabaseStructureStaticAnalysisTest extends DatabaseAwareTestBase {
                         .containsExactly(
                             TableWithColumns.of(
                                 Table.of(ctx, REPORTS_TABLE),
-                                Column.ofNotNull(ctx, REPORTS_TABLE, "report_date", PgColumnType.DATE),
+                                Column.ofDate(ctx, REPORTS_TABLE, "report_date"),
                                 Column.ofBigint(ctx, REPORTS_TABLE, "shop_id"))
                         );
 

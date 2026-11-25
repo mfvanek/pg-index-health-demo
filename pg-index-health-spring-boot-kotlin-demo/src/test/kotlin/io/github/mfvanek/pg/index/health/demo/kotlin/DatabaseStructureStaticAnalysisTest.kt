@@ -206,7 +206,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                                     ORDER_ITEM_TABLE,
                                     "order_item_categories_idx",
                                     8_192L,
-                                    Column.ofNullable(ctx, ORDER_ITEM_TABLE, "categories", "text[]")
+                                    Column.ofNullable(ctx, ORDER_ITEM_TABLE, "categories", PgColumnType.TEXT.arrayType)
                                 )
                             )
 
@@ -331,7 +331,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .containsExactly(
                                 TableWithColumns.of(
                                     Table.of(ctx, REPORTS_TABLE),
-                                    Column.ofNotNull(ctx, REPORTS_TABLE, "report_date", PgColumnType.DATE),
+                                    Column.ofDate(ctx, REPORTS_TABLE, "report_date"),
                                     Column.ofBigint(ctx, REPORTS_TABLE, "shop_id")
                                 )
                             )
