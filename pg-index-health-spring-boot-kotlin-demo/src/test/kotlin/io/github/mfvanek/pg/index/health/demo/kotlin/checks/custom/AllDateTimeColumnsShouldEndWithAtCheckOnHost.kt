@@ -9,14 +9,14 @@ package io.github.mfvanek.pg.index.health.demo.kotlin.checks.custom
 
 import io.github.mfvanek.pg.connection.PgConnection
 import io.github.mfvanek.pg.core.checks.common.StandardCheckInfo
-import io.github.mfvanek.pg.core.checks.extractors.ColumnWithTypeExtractor
+import io.github.mfvanek.pg.core.checks.extractors.ColumnExtractor
 import io.github.mfvanek.pg.core.checks.host.AbstractCheckOnHost
 import io.github.mfvanek.pg.core.utils.NamedParametersParser
-import io.github.mfvanek.pg.model.column.ColumnWithType
+import io.github.mfvanek.pg.model.column.Column
 
 class AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection: PgConnection) :
-    AbstractCheckOnHost<ColumnWithType>(
-        ColumnWithType::class.java,
+    AbstractCheckOnHost<Column>(
+        Column::class.java,
         pgConnection,
         StandardCheckInfo.ofStatic(
             "ALL_DATETIME_COLUMNS_SHOULD_END_WITH_AT",
@@ -43,5 +43,5 @@ class AllDateTimeColumnsShouldEndWithAtCheckOnHost(pgConnection: PgConnection) :
                 """.trimIndent()
             )
         ),
-        ColumnWithTypeExtractor.of()
+        ColumnExtractor.of()
     )
