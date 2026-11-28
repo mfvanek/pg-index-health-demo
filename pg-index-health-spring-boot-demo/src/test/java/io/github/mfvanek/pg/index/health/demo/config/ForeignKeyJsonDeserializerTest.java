@@ -9,6 +9,7 @@ package io.github.mfvanek.pg.index.health.demo.config;
 
 import io.github.mfvanek.pg.index.health.demo.utils.BasePgIndexHealthDemoSpringBootTest;
 import io.github.mfvanek.pg.model.constraint.ForeignKey;
+import io.github.mfvanek.pg.model.context.PgContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import tools.jackson.core.JacksonException;
@@ -29,12 +30,12 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
             .extracting(JacksonModule::getModuleName)
             .contains("PgIndexHealthModelModule");
 
-        final ForeignKey original = ForeignKey.ofNotNullColumn("users", "fk_user_role", "role_id");
+        final ForeignKey original = ForeignKey.ofBigint(PgContext.ofDefault(), "users", "fk_user_role", "role_id");
         final String json = objectMapper.writeValueAsString(original);
         assertThat(json)
             .isEqualTo("""
                 {"constraint":{"tableName":"users","constraintName":"fk_user_role","constraintType":"FOREIGN_KEY"},\
-                "columns":[{"tableName":"users","columnName":"role_id","notNull":true}]}""");
+                "columns":[{"tableName":"users","columnName":"role_id","notNull":true,"columnType":"bigint"}]}""");
         final ForeignKey restored = objectMapper.readValue(json, ForeignKey.class);
         assertThat(restored)
             .isEqualTo(original);
@@ -43,7 +44,7 @@ class ForeignKeyJsonDeserializerTest extends BasePgIndexHealthDemoSpringBootTest
     @Test
     void deserializeShouldThrowExceptionWhenNoColumns() {
         final String json = """
-            {"columns":[{"tableName":"users","columnName":"role_id","notNull":true}]}""";
+            {"columns":[{"tableName":"users","columnName":"role_id","notNull":true,"columnType":"bigint"}]}""";
 
         assertThatThrownBy(() -> objectMapper.readValue(json, ForeignKey.class))
             .isInstanceOf(JacksonException.class)

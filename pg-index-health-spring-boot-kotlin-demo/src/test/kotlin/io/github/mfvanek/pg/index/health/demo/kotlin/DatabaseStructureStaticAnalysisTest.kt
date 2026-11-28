@@ -12,7 +12,7 @@ import io.github.mfvanek.pg.core.checks.common.Diagnostic
 import io.github.mfvanek.pg.index.health.demo.kotlin.utils.BasePgIndexHealthDemoSpringBootTest
 import io.github.mfvanek.pg.model.column.Column
 import io.github.mfvanek.pg.model.column.ColumnWithSerialType
-import io.github.mfvanek.pg.model.column.ColumnWithType
+import io.github.mfvanek.pg.model.column.PgColumnType
 import io.github.mfvanek.pg.model.constraint.Constraint
 import io.github.mfvanek.pg.model.constraint.ConstraintType
 import io.github.mfvanek.pg.model.constraint.DuplicatedForeignKeys
@@ -54,7 +54,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
     fun checkPostgresVersion() {
         val pgVersion: String? = jdbcTemplate.queryForObject("select version();", String::class.java)
         assertThat(pgVersion)
-            .startsWith("PostgreSQL 18.7")
+            .startsWith("PostgreSQL 19.0")
     }
 
     @Test
@@ -130,26 +130,26 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .hasSize(5)
                             // HOW TO FIX: create indexes on columns under foreign key constraint
                             .containsExactly(
-                                ForeignKey.ofNotNullColumn(
+                                ForeignKey.ofBigint(
                                     ctx,
                                     ORDER_ITEM_TABLE,
                                     "order_item_order_id_fk_duplicate",
                                     ORDER_ID_COLUMN
                                 ),
-                                ForeignKey.ofNotNullColumn(
+                                ForeignKey.ofBigint(
                                     ctx,
                                     ORDER_ITEM_TABLE,
                                     "order_item_order_id_fkey",
                                     ORDER_ID_COLUMN
                                 ),
-                                ForeignKey.ofNotNullColumn(
+                                ForeignKey.ofInteger(
                                     ctx,
                                     ORDER_ITEM_TABLE,
                                     "order_item_warehouse_id_fk",
                                     "warehouse_id"
                                 ),
-                                ForeignKey.ofNotNullColumn(ctx, ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
-                                ForeignKey.ofNullableColumn(ctx, "payment", "payment_order_id_fkey", ORDER_ID_COLUMN)
+                                ForeignKey.ofBigint(ctx, ORDERS_TABLE, "orders_buyer_id_fkey", "buyer_id"),
+                                ForeignKey.ofNullableBigint(ctx, "payment", "payment_order_id_fkey", ORDER_ID_COLUMN)
                             )
 
                     "TABLES_WITHOUT_PRIMARY_KEY" ->
@@ -166,9 +166,9 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .hasSize(1)
                             // HOW TO FIX: consider excluding null values from the index if it's possible
                             .containsExactly(
-                                IndexWithColumns.ofSingle(
+                                IndexWithColumns.of(
                                     Index.of(ctx, BUYER_TABLE, "i_buyer_middle_name", 16_384L),
-                                    Column.ofNullable(ctx, BUYER_TABLE, "middle_name")
+                                    Column.ofNullableVarchar(ctx, BUYER_TABLE, "middle_name")
                                 )
                             )
 
@@ -176,12 +176,12 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                         checksAssert
                             .hasSize(1)
                             .containsExactly(
-                                IndexWithColumns.ofSingle(
+                                IndexWithColumns.of(
                                     ctx,
                                     ORDERS_TABLE,
                                     "i_orders_preorder",
                                     8_192L,
-                                    Column.ofNotNull(ctx, ORDERS_TABLE, "preorder")
+                                    Column.ofBoolean(ctx, ORDERS_TABLE, "preorder")
                                 )
                             )
 
@@ -201,12 +201,12 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                         checksAssert
                             .hasSize(1)
                             .containsExactly(
-                                IndexWithColumns.ofSingle(
+                                IndexWithColumns.of(
                                     ctx,
                                     ORDER_ITEM_TABLE,
                                     "order_item_categories_idx",
                                     8_192L,
-                                    Column.ofNullable(ctx, ORDER_ITEM_TABLE, "categories")
+                                    Column.ofNullable(ctx, ORDER_ITEM_TABLE, "categories", PgColumnType.TEXT.arrayType)
                                 )
                             )
 
@@ -223,7 +223,8 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .containsExactly(
                                 ColumnWithSerialType.ofBigSerial(
                                     ctx,
-                                    Column.ofNotNull(ctx, COURIER_TABLE, "id"),
+                                    COURIER_TABLE,
+                                    "id",
                                     "courier_id_seq"
                                 )
                             )
@@ -233,13 +234,13 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .hasSize(1)
                             .containsExactly(
                                 DuplicatedForeignKeys.of(
-                                    ForeignKey.ofNotNullColumn(
+                                    ForeignKey.ofBigint(
                                         ctx,
                                         ORDER_ITEM_TABLE,
                                         "order_item_order_id_fk_duplicate",
                                         ORDER_ID_COLUMN
                                     ),
-                                    ForeignKey.ofNotNullColumn(
+                                    ForeignKey.ofBigint(
                                         ctx,
                                         ORDER_ITEM_TABLE,
                                         "order_item_order_id_fkey",
@@ -263,7 +264,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                         checksAssert
                             .hasSize(1)
                             .containsExactly(
-                                ForeignKey.ofNotNullColumn(
+                                ForeignKey.ofInteger(
                                     ctx,
                                     ORDER_ITEM_TABLE,
                                     "order_item_warehouse_id_fk",
@@ -283,7 +284,7 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                         checksAssert
                             .hasSize(1)
                             .containsExactly(
-                                TableWithColumns.ofNotNullColumn(ctx, DICTIONARY_TABLE, "\"dict-id\"")
+                                TableWithColumns.ofBigint(ctx, DICTIONARY_TABLE, "\"dict-id\"")
                             )
 
                     "OBJECTS_NOT_FOLLOWING_NAMING_CONVENTION" ->
@@ -303,25 +304,25 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                         checksAssert
                             .hasSize(1)
                             .containsExactly(
-                                Column.ofNotNull(ctx, DICTIONARY_TABLE, "\"dict-id\"")
+                                Column.ofBigint(ctx, DICTIONARY_TABLE, "\"dict-id\"")
                             )
 
                     "COLUMNS_WITH_FIXED_LENGTH_VARCHAR" ->
                         checksAssert
                             .hasSize(12)
                             .containsExactly(
-                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, BUYER_TABLE, "email")),
-                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, BUYER_TABLE, "first_name")),
-                                ColumnWithType.ofVarchar(Column.ofNullable(ctx, BUYER_TABLE, "ip_address")),
-                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, BUYER_TABLE, "last_name")),
-                                ColumnWithType.ofVarchar(Column.ofNullable(ctx, BUYER_TABLE, "middle_name")),
-                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, BUYER_TABLE, "phone")),
-                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, COURIER_TABLE, "email")),
-                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, COURIER_TABLE, "first_name")),
-                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, COURIER_TABLE, "last_name")),
-                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, COURIER_TABLE, "phone")),
-                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, ORDER_ITEM_TABLE, "sku")),
-                                ColumnWithType.ofVarchar(Column.ofNotNull(ctx, "warehouse", "name"))
+                                Column.ofVarchar(ctx, BUYER_TABLE, "email"),
+                                Column.ofVarchar(ctx, BUYER_TABLE, "first_name"),
+                                Column.ofNullableVarchar(ctx, BUYER_TABLE, "ip_address"),
+                                Column.ofVarchar(ctx, BUYER_TABLE, "last_name"),
+                                Column.ofNullableVarchar(ctx, BUYER_TABLE, "middle_name"),
+                                Column.ofVarchar(ctx, BUYER_TABLE, "phone"),
+                                Column.ofVarchar(ctx, COURIER_TABLE, "email"),
+                                Column.ofVarchar(ctx, COURIER_TABLE, "first_name"),
+                                Column.ofVarchar(ctx, COURIER_TABLE, "last_name"),
+                                Column.ofVarchar(ctx, COURIER_TABLE, "phone"),
+                                Column.ofVarchar(ctx, ORDER_ITEM_TABLE, "sku"),
+                                Column.ofVarchar(ctx, "warehouse", "name")
                             )
 
                     "ALL_PRIMARY_KEYS_MUST_BE_NAMED_AS_ID" ->
@@ -330,10 +331,8 @@ internal class DatabaseStructureStaticAnalysisTest : BasePgIndexHealthDemoSpring
                             .containsExactly(
                                 TableWithColumns.of(
                                     Table.of(ctx, REPORTS_TABLE),
-                                    listOf(
-                                        Column.ofNotNull(ctx, REPORTS_TABLE, "report_date"),
-                                        Column.ofNotNull(ctx, REPORTS_TABLE, "shop_id")
-                                    )
+                                    Column.ofDate(ctx, REPORTS_TABLE, "report_date"),
+                                    Column.ofBigint(ctx, REPORTS_TABLE, "shop_id")
                                 )
                             )
 
